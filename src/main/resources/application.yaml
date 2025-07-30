@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: sofia
+
+  data:
+    redis:
+      client-name: cache
+      connect-timeout: 5000
+      host: localhost
+
+  datasource:
+    url: jdbc:postgresql://localhost:5444/db_sofia
+    username: user_sofia
+    password: P455W0RD_S0F14
+
+    hikari:
+      maximum-pool-size: 20
+
+  jpa:
+    properties:
+      hibernate:
+        format-sql: true
+        jdbc:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+
+    # database: postgresql
+    # generate-ddl: false
+    # show-sql: true
+    # hibernate:
+      # ddl-auto: false
+
+  security:
+    user:
+      name: admin
+      password: SPR1NG_4DM1N
+
+server:
+  port: 8080

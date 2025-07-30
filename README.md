@@ -12,7 +12,7 @@ O SAF.IA é um software de agronegócio voltado ao público rural de média e pe
 - CRUD para Agricultor
 - CRUD para Produto
 - CRUD para Empresa
-- Painél Administrativo
+- Painel Administrativo
 - Autenticação e Autorização
 - Coleta de dados de Clima via API
 - Armazenamento de dados de Clima
@@ -50,10 +50,7 @@ Para iniciar o projeto, será necessário os seguintes comandos:
 
 ```sh
 # Executando via Maven
-./mvnw run:spring-boot
-
-# Executando via Gradle
-./gradlew bootRun
+./mvnw spring-boot:run
 ```
 
 ## Testes
@@ -62,10 +59,7 @@ Para realizar os testes, será necessário os seguintes comandos:
 
 ```sh
 # Executando via Maven
-./mvnw test:spring-boot
-
-# Executando via Gradle
-./gradlew test
+./mvnw test
 ```
 
 ## Tecnologias
@@ -76,7 +70,7 @@ Para a realização deste projeto, foram utilizadas as seguintes tecnologias:
 - Thymeleaf
 - HTMX
 - JavaScript
-- Maven ou Gradle
+- Maven
 - Java
 - SpringBoot
 - LOG4J2
@@ -85,6 +79,7 @@ Para a realização deste projeto, foram utilizadas as seguintes tecnologias:
 - PostgreSQL
 - Dbeaver
 - JasperSoft Studio ou IText
+- JUnit5
 - Docker
 - Docker Compose
 
