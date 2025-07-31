@@ -2,11 +2,22 @@ spring:
   application:
     name: sofia
 
-  data:
-    redis:
-      client-name: cache
-      connect-timeout: 5000
-      host: localhost
+  # cache:
+  #   redis:
+  #     key-prefix: "sofia:"
+  #     time-to-live: 20000
+  #     cache-null-values: false
+  #     use-key-prefix: true
+
+  # data:
+  #   redis:
+  #     database: 0
+  #     host: localhost
+  #     port: 6379
+  #     client-name: sofia-cache
+  #     username: default
+  #     connect-timeout: 60000
+
 
   datasource:
     url: jdbc:postgresql://localhost:5444/db_sofia
@@ -27,7 +38,7 @@ spring:
     # generate-ddl: false
     # show-sql: true
     # hibernate:
-      # ddl-auto: false
+    #   ddl-auto: false
 
   security:
     user:
