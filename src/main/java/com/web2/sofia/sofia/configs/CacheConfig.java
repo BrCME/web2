@@ -4,9 +4,6 @@ import java.time.Duration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.support.ConversionServiceFactory;
-import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -29,16 +26,6 @@ public class CacheConfig {
 				.cacheDefaults(cacheConfiguration())
 				.build();
 	}
-
-	// @Bean
-	// RedisTemplate<String, String> redisTemplate(RedisConnectionFactory
-	// cacheConnectionFactory) {
-	// RedisTemplate<String, String> template = new RedisTemplate<>();
-
-	// template.setConnectionFactory(cacheConnectionFactory);
-
-	// return template;
-	// }
 
 	@Bean
 	RedisCacheConfiguration cacheConfiguration() {
