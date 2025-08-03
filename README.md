@@ -8,18 +8,22 @@ O SAF.IA é um software de agronegócio voltado ao público rural de média e pe
 
 ## Requisitos
 
-- CRUD para Usuário
-- CRUD para Agricultor
-- CRUD para Produto
-- CRUD para Empresa
-- Painel Administrativo
-- Autenticação e Autorização
-- Coleta de dados de Clima via API
-- Armazenamento de dados de Clima
-- Cache
-- Migrations
-- MPA ou SPA
-- Geração de Relatórios
+- [ ] CRUD para Usuário
+- [ ] CRUD para Agricultor
+- [ ] CRUD para Produto
+- [ ] CRUD para Empresa
+- [ ] Painel Administrativo
+- [ ] Autenticação e Autorização
+- [ ] Coleta de dados de Clima via API
+- [ ] Armazenamento de dados de Clima
+- [ ] Logging
+- [ ] Telemetria
+- [ ] Docker
+- [ ] Testes Unitários
+- [x] Cache
+- [x] Migrations
+- [ ] MPA (Multi-Page Application)
+- [ ] Geração de Relatórios
 
 ## Recursos Disponíveis
 
@@ -49,7 +53,7 @@ Para instalar o projeto é necessário
 Para iniciar o projeto, será necessário os seguintes comandos:
 
 ```sh
-# Executando via Maven
+# Executando via Maven Wrapper
 ./mvnw spring-boot:run
 ```
 
@@ -58,7 +62,7 @@ Para iniciar o projeto, será necessário os seguintes comandos:
 Para realizar os testes, será necessário os seguintes comandos:
 
 ```sh
-# Executando via Maven
+# Executando via Maven Wrapper
 ./mvnw test
 ```
 
