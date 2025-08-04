@@ -1,4 +1,4 @@
-package com.web2.sofia.sofia.errors.exceptions;
+package com.web2.sofia.sofia.exceptions;
 
 public class DomainException extends Exception {
 	public DomainException() {
