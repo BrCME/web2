@@ -1,6 +1,7 @@
 spring:
   application:
     name: sofia
+    version: 1.0.0
 
   # cache:
   #   redis:
@@ -22,30 +23,41 @@ spring:
     url: jdbc:postgresql://localhost:5444/db_sofia
     username: user_sofia
     password: P455W0RD_S0F14
+    driver-class-name: org.postgresql.Driver
 
     hikari:
+      pool-name: sofia-connection-pool
+      max-lifetime: 1800000
       maximum-pool-size: 20
 
-  lifecycle:
-    timeout-per-shutdown-phase: "30s"
-
   jpa:
+    show-sql: true
+    generate-ddl: false
+    open-in-view: false
     properties:
       hibernate:
         format-sql: true
-        jdbc:
-          dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
 
-    # database: postgresql
-    # generate-ddl: false
-    # show-sql: true
-    # hibernate:
-    #   ddl-auto: false
+  lifecycle:
+    timeout-per-shutdown-phase: "30s"
 
   security:
     user:
       name: admin
       password: SPR1NG_4DM1N
 
+management:
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
 server:
   port: 8080
+
+  error:
+    whitelabel:
+      enabled: true
+    # include-message: never
+    # include-stacktrace: never

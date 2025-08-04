@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.web2.sofia.sofia.errors.exceptions.DomainException;
+import com.web2.sofia.sofia.exceptions.DomainException;
 import com.web2.sofia.sofia.models.Endereco;
 import com.web2.sofia.sofia.repositories.ConsumerEnderecoRepository;
 import com.web2.sofia.sofia.repositories.EnderecoRepository;
@@ -16,7 +16,7 @@ import com.web2.sofia.sofia.repositories.adapters.ViaCepEnderecoRepository;
 @Service
 public class EnderecoService {
 	private static final Logger logger = LoggerFactory.getLogger(EnderecoService.class);
-	
+
 	private final ConsumerEnderecoRepository apiEnderecoRepository;
 	private final EnderecoRepository jpaEnderecoRepository;
 
@@ -38,7 +38,7 @@ public class EnderecoService {
 			if (!endereco.isPresent()) {
 				throw new DomainException("Não existe endereço para o CEP informado");
 			}
-			
+
 			logger.info("Endereço buscado via API: {}", endereco.get());
 			jpaEnderecoRepository.save(endereco.get());
 		}

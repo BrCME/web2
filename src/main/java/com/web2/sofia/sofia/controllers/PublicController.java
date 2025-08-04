@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.web2.sofia.sofia.errors.exceptions.DomainException;
+import com.web2.sofia.sofia.exceptions.DomainException;
 import com.web2.sofia.sofia.models.Endereco;
 import com.web2.sofia.sofia.models.Fazenda;
 import com.web2.sofia.sofia.services.EnderecoService;
