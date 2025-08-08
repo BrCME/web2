@@ -10,11 +10,11 @@
 		<relativePath />
 		<!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.web2.sofia</groupId>
-	<artifactId>sofia</artifactId>
+	<groupId>com.web2.safia</groupId>
+	<artifactId>safia</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>sofia</name>
-	<description>SOF.IA o software para o seu agronegocio!</description>
+	<name>safia</name>
+	<description>SAF.IA o software para o seu agronegocio!</description>
 	<url />
 	<licenses>
 		<license />

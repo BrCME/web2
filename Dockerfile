@@ -4,9 +4,9 @@ FROM openjdk:21
 
 VOLUME /tmp
 
-COPY . /usr/src/sofia
+COPY . /usr/src/safia
 
-WORKDIR /usr/src/sofia
+WORKDIR /usr/src/safia
 
 # RUN ./mvnw test
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Properties>
+	</Properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT" follow="true">
+			<PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}" charset="${sys:CONSOLE_LOG_CHARSET}" />
+		</Console>
+		<RollingFile name="File" fileName="${sys:FILE_LOG_FILENAME}" filePattern="${sys:FILE_LOG_FILEPATTERN}">
+		</RollingFile>
+	</Appenders>
+</Configuration>
