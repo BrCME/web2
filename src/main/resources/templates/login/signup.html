@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login | SAF.IA</title>
+</head>
+
+<body>
+	<h1>Bem-vindo ao SAF.IA!</h1>
+	<h2>Faça o seu cadastro para começar a utiliza o sistema</h2>
+
+	<hr>
+
+	<form action="" method="post">
+		<fieldset>
+			<legend>Dados de Usuário</legend>
+
+			<label for="nome">Nome:</label>
+			<input id="nome" name="nome" type="text">
+
+			<br>
+
+			<label for="senha">Senha:</label>
+			<input id="senha" name="senha" type="password">
+
+			<br>
+
+			<label for="email">Email:</label>
+			<input id="email" name="email" type="email">
+
+			<br>
+
+			<label for="telefone">Telefone:</label>
+			<input id="telefone" name="telefone" type="text" pattern="\d{11}" placeholder="11912345678">
+		</fieldset>
+
+		<fieldset>
+			<legend>Dados da Fazenda</legend>
+
+			<label for="nome-fazenda">Nome da Fazenda:</label>
+			<input id="nome-fazenda" name="nome-fazenda" type="text">
+
+			<br>
+
+			<label for="nome-fazenda">Nome da Fazenda:</label>
+			<input id="nome-fazenda" name="nome-fazenda" type="text">
+
+			<br>
+		</fieldset>
+
+
+		<fieldset>
+			<legend>Dados do Cultivo</legend>
+
+			<label for="cultivo">O que você está cultivando?</label>
+			<select name="cultivo" id="cultivo">
+				<option value="teste">Teste</option>
+			</select>
+
+			<label for="planejamento">O que você planeja cultivar?</label>
+			<select name="planejamento" id="planejamento">
+				<option value="teste">Teste</option>
+			</select>
+		</fieldset>
+
+		<input type="submit" value="Finalizar o cadastro">
+	</form>
+</body>
+
+</html>
