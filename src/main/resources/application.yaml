@@ -1,11 +1,11 @@
 spring:
   application:
-    name: sofia
+    name: safia
     version: 1.0.0
 
   # cache:
   #   redis:
-  #     key-prefix: "sofia:"
+  #     key-prefix: "safia:"
   #     time-to-live: 20000
   #     cache-null-values: false
   #     use-key-prefix: true
@@ -15,23 +15,23 @@ spring:
   #     database: 0
   #     host: localhost
   #     port: 6379
-  #     client-name: sofia-cache
+  #     client-name: safia-cache
   #     username: default
   #     connect-timeout: 60000
 
   datasource:
-    url: jdbc:postgresql://localhost:5444/db_sofia
-    username: user_sofia
-    password: P455W0RD_S0F14
+    url: jdbc:postgresql://localhost:5444/db_safia
+    username: user_safia
+    password: P455W0RD_S4F14
     driver-class-name: org.postgresql.Driver
 
     hikari:
-      pool-name: sofia-connection-pool
+      pool-name: safia-connection-pool
       max-lifetime: 1800000
       maximum-pool-size: 20
 
   jpa:
-    show-sql: true
+    show-sql: false
     generate-ddl: false
     open-in-view: false
     properties:
