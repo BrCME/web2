@@ -1,13 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration>
+<Configuration status="WARN">
 	<Properties>
+		<Property name="APP_NAME">safia</Property>
+		<Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+		<Property name="LOG_LEVEL_PATTERN">%5p</Property>
+		<Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd'T'HH:mm:ss.SSSXXX</Property>
+		<Property name="CONSOLE_LOG_PATTERN">%clr{%highlight{${sys:LOG_LEVEL_PATTERN}}} %clr{%-30.30c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+		<Property name="FILE_LOG_PATTERN">%d{${sys:LOG_DATEFORMAT_PATTERN}} ${sys:LOG_LEVEL_PATTERN} %pid --- %esb{${sys:APPLICATION_NAME:-}}%esb{${sys:APPLICATION_GROUP:-}}[%t] ${sys:LOG_CORRELATION_PATTERN:-}%-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+		<Property name="LOG_FILE">logs/${APP_NAME}.log</Property>
+		<Property name="LOG_PATH">logs</Property>
+		<Property name="OLD_FILENAMES_PATTERN">${sys:LOG_PATH}/$${date:yyyy-MM}/${APP_NAME}-%d{yyyy-MM-dd-HH}-%i.log.gz</Property>
+		<Property name="ROLLING_FILE_MAX_SIZE">10 MB</Property>
+		<Property name="MAX_NUMBER_OF_ROLLING_FILES">5</Property>
 	</Properties>
 
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT" follow="true">
 			<PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}" charset="${sys:CONSOLE_LOG_CHARSET}" />
 		</Console>
-		<RollingFile name="File" fileName="${sys:FILE_LOG_FILENAME}" filePattern="${sys:FILE_LOG_FILEPATTERN}">
+		<RollingFile name="File" fileName="${sys:LOG_FILE}" filePattern="${sys:OLD_FILENAME_PATTERN}">
+			<PatternLayout pattern="${sys:FILE_LOG_PATTERN}" charset="${sys:FILE_LOG_CHARSET}" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${MAX_NUMBER_OF_ROLLING_FILES}" />
 		</RollingFile>
 	</Appenders>
+	<Loggers>
+		<AsyncLogger name="com.web2.safia" level="trace" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="File" />
+		</AsyncLogger>
+
+		<AsyncLogger name="org.hibernate" level="info" additivity="false">
+			<AppenderRef ref="Console" />
+		</AsyncLogger>
+
+		<AsyncLogger name="org.hibernate.SQL" level="debug" additivity="false">
+			<AppenderRef ref="Console"/>
+		</AsyncLogger>
+
+		<AsyncLogger name="org.hibernate.stat" level="debug" additivity="false">
+			<AppenderRef ref="Console" />
+		</AsyncLogger>
+
+		<AsyncLogger name="org.hibernate.SQL_SHOW" level="info" additivity="false">
+			<AppenderRef ref="Console" />
+		</AsyncLogger>
+
+		<AsyncLogger name="org.hibernate.cache" level="debug" additivity="false">
+			<AppenderRef ref="Console" />
+		</AsyncLogger>
+
+		<AsyncLogger name="org.hibernate" level="error" additivity="false">
+			<AppenderRef ref="File" />
+		</AsyncLogger>
+
+		<AsyncLogger name="logging.leve.web" level="debug">
+			<AppenderRef ref="Console" />
+		</AsyncLogger>
+
+		<AsyncLogger name="org.apache.catalina.startup.DigesterFactory" level="error" />
+
+		<AsyncLogger name="org.apache.catalina.util.LifecycleBase" level="error" />
+		
+		<AsyncLogger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
+		
+		<AsyncLogger name="org.apache.sshd.common.util.SecurityUtils" level="warn" />
+		
+		<AsyncLogger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+		
+		<AsyncLogger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error" />
+		
+		<AsyncLogger name="org.hibernate.validator.internal.util.Version" level="warn" />
+		
+		<AsyncLogger name="org.springframework.boot.actuate.endpoint.jmx" level="warn" />
+
+		<AsyncRoot>
+			<AppenderRef ref="Console"/>
+			<AppenderRef ref="File"/>
+		</AsyncRoot>
+	</Loggers>
 </Configuration>

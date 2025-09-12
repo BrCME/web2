@@ -1,3 +1,9 @@
+logging:
+  log4j2:
+    config:
+      override:
+      -  log4j2-spring.xml
+
 spring:
   application:
     name: safia
@@ -47,6 +53,7 @@ spring:
       name: admin
       password: SPR1NG_4DM1N
 
+
 management:
   prometheus:
     metrics:
@@ -55,6 +62,11 @@ management:
 
 server:
   port: 8080
+
+  tomcat:
+    max-connections: 256
+    threads:
+      max: 20
 
   error:
     whitelabel:
