@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 public class AuditService {
 	AuditService() {}
 	
-	@EventListener()
 	void updateHistory() {
 
 	}
