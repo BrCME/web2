@@ -15,6 +15,6 @@ public class GlobalExceptionHandler {
 	public String handleExceptions(Exception ex) {
 		logger.error("Exceção encontrada: {}", ex.getMessage());
 
-		return "error/404.html";
+		return "error.html";
 	}
 }

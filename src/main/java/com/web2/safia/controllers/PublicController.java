@@ -22,6 +22,11 @@ public class PublicController {
 		this.enderecoService = enderecoService;
 	}
 
+	@GetMapping("/")
+	public String getLandingPage() {
+		return "index.html";
+	}
+
 	@GetMapping("sign-up")
 	public String signUp() {
 		return "/login/signup.html";
