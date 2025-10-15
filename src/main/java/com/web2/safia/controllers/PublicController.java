@@ -43,4 +43,9 @@ public class PublicController {
 
 		return "/login/index.html";
 	}
+
+	@GetMapping("/kanban")
+	public String kanban() {
+		return "/kanban/index.html";
+	}
 }
