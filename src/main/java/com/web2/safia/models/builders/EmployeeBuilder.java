@@ -4,49 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.springframework.util.StringUtils;
+import com.web2.safia.models.Employee;
 
-import com.web2.safia.models.Customer;
-
-public class CustomerBuilder extends Builder<Customer> {
-	public CustomerBuilder withId(UUID id) {
-		if (id == null) {
-			throw new IllegalArgumentException("Id não pode ser nulo");
-		}
-
+public class EmployeeBuilder extends Builder<Employee> {
+	public EmployeeBuilder withId(UUID id) {
 		instance.setId(id);
 		return this;
 	}
 
-	public CustomerBuilder withName(String name) {
-		if (!StringUtils.hasText(name)) {
-			throw new IllegalArgumentException("Nome não pode ser nulo");
-		}
-
-		instance.setName(name);
-		return this;
-	}
-
-	public CustomerBuilder withEmail(String email) {
-
-		instance.setEmail(email);
-		return this;
-
-	}
-
-	public CustomerBuilder withPassword(String password) {
-
-		instance.setPassword(password);
-		return this;
-
-	}
-
-	public CustomerBuilder withBirthDate(LocalDate birthDate) {
-		instance.setBirthDate(birthDate);
-		return this;
-	}
-
-	public CustomerBuilder withCreator(Customer creator) {
+	public EmployeeBuilder withCreator(Employee creator) {
 		if (creator == null) {
 			throw new IllegalArgumentException("Criador não pode ser nulo");
 		}
@@ -55,7 +21,7 @@ public class CustomerBuilder extends Builder<Customer> {
 		return this;
 	}
 
-	public CustomerBuilder withCreatingAt(LocalDateTime creationDateTime) {
+	public EmployeeBuilder withCreatingAt(LocalDateTime creationDateTime) {
 		if (creationDateTime == null) {
 			throw new IllegalArgumentException("Data de criação não pode ser nula");
 		}
@@ -68,7 +34,7 @@ public class CustomerBuilder extends Builder<Customer> {
 		return this;
 	}
 
-	public CustomerBuilder withUpdatingAt(LocalDateTime updatingDateTime) {
+	public EmployeeBuilder withUpdatingAt(LocalDateTime updatingDateTime) {
 		if (updatingDateTime == null) {
 			throw new IllegalArgumentException("Data de atualização não pode ser nula");
 		}
@@ -81,7 +47,7 @@ public class CustomerBuilder extends Builder<Customer> {
 		return this;
 	}
 
-	public CustomerBuilder withDeletingAt(LocalDateTime deletingDateTime) {
+	public EmployeeBuilder withDeletingAt(LocalDateTime deletingDateTime) {
 		if (deletingDateTime == null) {
 			throw new IllegalArgumentException("Data de deleção não pode ser nula");
 		}
@@ -94,15 +60,37 @@ public class CustomerBuilder extends Builder<Customer> {
 		return this;
 	}
 
-	@Override
-	public CustomerBuilder builder() {
-		instance = new Customer();
+	public EmployeeBuilder withName(String name) {
+		instance.setName(name);
+		return this;
+	}
+
+	public EmployeeBuilder withEmail(String email) {
+		instance.setEmail(email);
+		return this;
+
+	}
+
+	public EmployeeBuilder withPassword(String password) {
+		instance.setPassword(password);
+		return this;
+
+	}
+
+	public EmployeeBuilder withBirthDate(LocalDate birthDate) {
+		instance.setBirthDate(birthDate);
 		return this;
 	}
 
 	@Override
-	public Customer build() {
-		Customer c = instance;
+	public EmployeeBuilder builder() {
+		instance = new Employee();
+		return this;
+	}
+
+	@Override
+	public Employee build() {
+		Employee c = instance;
 		reset();
 		return c;
 	}

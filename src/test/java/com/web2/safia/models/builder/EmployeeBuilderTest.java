@@ -6,20 +6,20 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.web2.safia.models.Customer;
-import com.web2.safia.models.builders.CustomerBuilder;
+import com.web2.safia.models.Employee;
+import com.web2.safia.models.builders.EmployeeBuilder;
 
-class CustomerBuilderTest {
-	private CustomerBuilder underTest;
+class EmployeeBuilderTest {
+	private EmployeeBuilder underTest;
 
 	@BeforeEach
 	void setUp() {
-		underTest = new CustomerBuilder();
+		underTest = new EmployeeBuilder();
 	}
 
 	@Test
-	void givenEmptyArguments_whenBuilding_thenReturnEmptyCustomer() {
-		Customer result = underTest
+	void givenEmptyArguments_whenBuilding_thenReturnEmptyEmployee() {
+		Employee result = underTest
 				.builder()
 				.build();
 
