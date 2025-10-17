@@ -21,8 +21,8 @@ public abstract class Base implements Serializable {
 
 	@CreatedBy
 	@Column(name = "created_by")
-	protected Customer creator;
-	
+	protected Employee creator;
+
 	@CreatedDate
 	@Column(name = "created_at", nullable = false)
 	protected LocalDateTime createdAt;
@@ -33,6 +33,23 @@ public abstract class Base implements Serializable {
 	@Column(name = "deleted_at")
 	protected LocalDateTime deletedAt;
 
+	protected Base() {
+	}
+
+	protected Base(
+			UUID id,
+			Employee creator,
+			LocalDateTime createdAt,
+			LocalDateTime updatedAt,
+			LocalDateTime deletedAt) {
+
+		this.id = id;
+		this.creator = creator;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
+	}
+
 	public UUID getId() {
 		return id;
 	}
@@ -41,11 +58,11 @@ public abstract class Base implements Serializable {
 		this.id = id;
 	}
 
-	public Customer getCreator() {
+	public Employee getCreator() {
 		return creator;
 	}
 
-	public void setCreator(Customer creator) {
+	public void setCreator(Employee creator) {
 		this.creator = creator;
 	}
 
