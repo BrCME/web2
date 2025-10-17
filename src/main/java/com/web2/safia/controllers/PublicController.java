@@ -14,7 +14,7 @@ import com.web2.safia.services.EnderecoService;
 @Controller
 @RequestMapping("/public")
 public class PublicController {
-	private static final Logger logger = LoggerFactory.getLogger(PublicController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	private final EnderecoService enderecoService;
 
