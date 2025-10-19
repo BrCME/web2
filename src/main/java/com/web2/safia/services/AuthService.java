@@ -2,13 +2,14 @@ package com.web2.safia.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.web2.safia.dtos.AuthLoginDto;
 import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Employee;
 import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
+import com.web2.safia.repositories.adapters.JpaRoleRepository;
 
 @Service
 public class AuthService {
@@ -16,13 +17,16 @@ public class AuthService {
 
 	// private final BCryptPasswordEncoder passwordEncoder;
 	private final JpaEmployeeRepository employeeRepository;
+	private final JpaRoleRepository roleRepository;
 
 	public AuthService(
 			// BCryptPasswordEncoder passwordEncoder,
-			JpaEmployeeRepository employeeRepository) {
+			JpaEmployeeRepository employeeRepository,
+			JpaRoleRepository roleRepository) {
 
 		// this.passwordEncoder = passwordEncoder;
 		this.employeeRepository = employeeRepository;
+		this.roleRepository = roleRepository;
 	}
 
 	public Employee login(AuthLoginDto authLoginDto) throws DomainException {
