@@ -43,11 +43,11 @@ public abstract class Base implements Serializable {
 			LocalDateTime updatedAt,
 			LocalDateTime deletedAt) {
 
-		this.id = id;
-		this.creator = creator;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
-		this.deletedAt = deletedAt;
+		setId(id);
+		setCreator(creator);
+		setCreatedAt(createdAt);
+		setUpdatedAt(updatedAt);
+		setDeletedAt(deletedAt);
 	}
 
 	public UUID getId() {
