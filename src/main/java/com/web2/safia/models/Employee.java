@@ -8,7 +8,10 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -47,8 +50,12 @@ public class Employee extends Base {
 	@ManyToMany(mappedBy = "employees")
 	private Set<Project> projects = new HashSet<>();
 
-	// @ManyToMany
-	// private List<Task> tasks = new LinkedList<>();
+	@OneToMany(mappedBy = "employee")
+	private Set<Work> works = new HashSet<>();
+
+	@ManyToMany
+	@JoinTable(name = "work", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "task_id"))
+	private Set<Task> tasks = new HashSet<>();
 
 	public Employee() {
 		super();
