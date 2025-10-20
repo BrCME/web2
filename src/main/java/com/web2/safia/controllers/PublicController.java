@@ -37,6 +37,11 @@ public class PublicController {
 		return "/login/signin.html";
 	}
 
+	@GetMapping("/tracker")
+	public String tracker() {
+		return "/tracker/index.html";
+	}
+
 	@GetMapping("/cep/{cep}")
 	public String teste2(@PathVariable(name = "cep") String cep) {
 		try {
