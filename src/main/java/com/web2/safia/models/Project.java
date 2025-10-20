@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -36,11 +37,9 @@ public class Project extends Base {
 	@ElementCollection
 	private Set<Employee> employees = new HashSet<>();
 
-	// @ManyToMany
-	// @JoinTable(name = "project_tasks", joinColumns = @JoinColumn(name =
-	// "project_id"), inverseJoinColumns = @JoinColumn(name = "task_id"))
-	// @ElementCollection
-	// private Set<Task> tasks;
+	@OneToMany(mappedBy = "project")
+	@ElementCollection
+	private Set<Task> tasks = new HashSet<>();
 
 	public Project() {
 		super();
