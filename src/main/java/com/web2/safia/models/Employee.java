@@ -2,10 +2,14 @@ package com.web2.safia.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -38,8 +42,8 @@ public class Employee extends Base {
 	@Past(message = "Data de nascimento deve estar no passado")
 	private LocalDate birthDate;
 
-	// @ManyToMany
-	// private List<Team> teams = new LinkedList<>();
+	@ManyToMany(mappedBy = "employees")
+	private Set<Team> teams = new HashSet<>();
 
 	// @ManyToMany
 	// private List<Role> roles = new LinkedList<>();
@@ -130,6 +134,18 @@ public class Employee extends Base {
 			@Valid @Past(message = "Data de nascimento deve estar no passado") LocalDate birthDate) {
 
 		this.birthDate = birthDate;
+	}
+
+	public Set<Team> getAllTeams() {
+		return Set.copyOf(teams);
+	}
+
+	public void addTeam(Team team) {
+		teams.add(team);
+	}
+
+	public void removeTeam(Team team) {
+		teams.remove(team);
 	}
 
 	@Override
