@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -45,8 +44,8 @@ public class Employee extends Base {
 	@ManyToMany(mappedBy = "employees")
 	private Set<Team> teams = new HashSet<>();
 
-	// @ManyToMany
-	// private List<Role> roles = new LinkedList<>();
+	@ManyToMany(mappedBy = "employees")
+	private Set<Project> projects = new HashSet<>();
 
 	// @ManyToMany
 	// private List<Task> tasks = new LinkedList<>();
@@ -146,6 +145,18 @@ public class Employee extends Base {
 
 	public void removeTeam(Team team) {
 		teams.remove(team);
+	}
+
+	public Set<Project> getAllProjects() {
+		return Set.copyOf(projects);
+	}
+
+	public void addProject(Project project) {
+		projects.add(project);
+	}
+
+	public void removeProject(Project project) {
+		projects.remove(project);
 	}
 
 	@Override
