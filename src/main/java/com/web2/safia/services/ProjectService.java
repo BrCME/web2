@@ -18,6 +18,7 @@ public class ProjectService {
 	private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
 
 	private final JpaProjectRepository projectRepository;
+	
 
 	public ProjectService(JpaProjectRepository projectRepository) {
 		this.projectRepository = projectRepository;

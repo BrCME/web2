@@ -25,8 +25,16 @@ public class Commit extends Base {
     }
 
     public Commit(
+            @NotBlank(message = "Descrição não pode ser vazia") String description,
+            CommitType type) {
+
+        this.description = description;
+        this.type = type;
+    }
+
+    public Commit(
             UUID id,
-            Employee creator,
+            UUID creator,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             LocalDateTime deletedAt,

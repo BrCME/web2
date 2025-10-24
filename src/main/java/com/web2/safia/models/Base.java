@@ -6,14 +6,18 @@ import java.util.UUID;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Base implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -23,12 +27,13 @@ public abstract class Base implements Serializable {
 
 	@CreatedBy
 	@Column(name = "created_by")
-	protected Employee creator;
+	protected UUID creator;
 
 	@CreatedDate
 	@Column(name = "created_at", nullable = false)
 	protected LocalDateTime createdAt;
 
+	@LastModifiedDate
 	@Column(name = "updated_at", updatable = true)
 	protected LocalDateTime updatedAt;
 
@@ -40,7 +45,7 @@ public abstract class Base implements Serializable {
 
 	protected Base(
 			UUID id,
-			Employee creator,
+			UUID creator,
 			LocalDateTime createdAt,
 			LocalDateTime updatedAt,
 			LocalDateTime deletedAt) {
@@ -60,11 +65,11 @@ public abstract class Base implements Serializable {
 		this.id = id;
 	}
 
-	public Employee getCreator() {
+	public UUID getCreator() {
 		return creator;
 	}
 
-	public void setCreator(Employee creator) {
+	public void setCreator(UUID creator) {
 		this.creator = creator;
 	}
 

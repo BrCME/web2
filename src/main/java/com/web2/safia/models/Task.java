@@ -50,7 +50,7 @@ public class Task extends Base {
 	}
 
 	public Task(UUID id,
-			Employee creator,
+			UUID creator,
 			LocalDateTime createdAt,
 			LocalDateTime updatedAt,
 			LocalDateTime deletedAt,

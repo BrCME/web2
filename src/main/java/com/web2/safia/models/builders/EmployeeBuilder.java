@@ -12,7 +12,7 @@ public class EmployeeBuilder extends Builder<Employee> {
 		return this;
 	}
 
-	public EmployeeBuilder withCreator(Employee creator) {
+	public EmployeeBuilder withCreator(UUID creator) {
 		if (creator == null) {
 			throw new IllegalArgumentException("Criador não pode ser nulo");
 		}
