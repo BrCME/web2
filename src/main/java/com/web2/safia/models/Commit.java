@@ -3,6 +3,9 @@ package com.web2.safia.models;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,8 +19,9 @@ public class Commit extends Base {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "type", nullable = false)
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
     @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
     private CommitType type;
 
     public Commit() {
@@ -34,7 +38,7 @@ public class Commit extends Base {
 
     public Commit(
             UUID id,
-            UUID creator,
+            Employee creator,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             LocalDateTime deletedAt,

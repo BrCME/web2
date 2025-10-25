@@ -19,8 +19,8 @@ public class Role implements Serializable {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	protected UUID id;
 
-	@Column(name = "type", nullable = false)
 	@Enumerated(EnumType.STRING)
+	@Column(name = "type", nullable = false)
 	private RoleType type;
 
 	public Role() {

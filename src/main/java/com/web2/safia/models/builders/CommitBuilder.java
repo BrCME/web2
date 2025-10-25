@@ -1,18 +1,19 @@
 package com.web2.safia.models.builders;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.web2.safia.models.Commit;
+import com.web2.safia.models.CommitType;
 import com.web2.safia.models.Employee;
 
-public class EmployeeBuilder extends Builder<Employee> {
-	public EmployeeBuilder withId(UUID id) {
+public class CommitBuilder extends Builder<Commit> {
+	public CommitBuilder withId(UUID id) {
 		instance.setId(id);
 		return this;
 	}
 
-	public EmployeeBuilder withCreator(Employee creator) {
+	public CommitBuilder withCreator(Employee creator) {
 		if (creator == null) {
 			throw new IllegalArgumentException("Criador não pode ser nulo");
 		}
@@ -21,7 +22,7 @@ public class EmployeeBuilder extends Builder<Employee> {
 		return this;
 	}
 
-	public EmployeeBuilder withCreatingAt(LocalDateTime creationDateTime) {
+	public CommitBuilder withCreatingAt(LocalDateTime creationDateTime) {
 		if (creationDateTime == null) {
 			throw new IllegalArgumentException("Data de criação não pode ser nula");
 		}
@@ -34,7 +35,7 @@ public class EmployeeBuilder extends Builder<Employee> {
 		return this;
 	}
 
-	public EmployeeBuilder withUpdatingAt(LocalDateTime updatingDateTime) {
+	public CommitBuilder withUpdatingAt(LocalDateTime updatingDateTime) {
 		if (updatingDateTime == null) {
 			throw new IllegalArgumentException("Data de atualização não pode ser nula");
 		}
@@ -47,7 +48,7 @@ public class EmployeeBuilder extends Builder<Employee> {
 		return this;
 	}
 
-	public EmployeeBuilder withDeletingAt(LocalDateTime deletingDateTime) {
+	public CommitBuilder withDeletingAt(LocalDateTime deletingDateTime) {
 		if (deletingDateTime == null) {
 			throw new IllegalArgumentException("Data de deleção não pode ser nula");
 		}
@@ -60,38 +61,26 @@ public class EmployeeBuilder extends Builder<Employee> {
 		return this;
 	}
 
-	public EmployeeBuilder withName(String name) {
-		instance.setName(name);
+	public CommitBuilder withDescription(String description) {
+		instance.setDescription(description);
 		return this;
 	}
 
-	public EmployeeBuilder withEmail(String email) {
-		instance.setEmail(email);
-		return this;
-
-	}
-
-	public EmployeeBuilder withPassword(String password) {
-		instance.setPassword(password);
-		return this;
-
-	}
-
-	public EmployeeBuilder withBirthDate(LocalDate birthDate) {
-		instance.setBirthDate(birthDate);
+	public CommitBuilder withType(CommitType type) {
+		instance.setType(type);
 		return this;
 	}
 
 	@Override
-	public EmployeeBuilder builder() {
-		instance = new Employee();
+	public CommitBuilder builder() {
+		instance = new Commit();
 		return this;
 	}
 
 	@Override
-	public Employee build() {
-		Employee c = instance;
+	public Commit build() {
+		var builded = instance;
 		reset();
-		return c;
+		return builded;
 	}
 }

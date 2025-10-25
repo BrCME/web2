@@ -29,6 +29,7 @@ public class Task extends Base {
 	private String description;
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "status", nullable = false)
 	private TaskStatus status;
 
 	@NotNull(message = "Projeto é obrigatório")
@@ -50,7 +51,7 @@ public class Task extends Base {
 	}
 
 	public Task(UUID id,
-			UUID creator,
+			Employee creator,
 			LocalDateTime createdAt,
 			LocalDateTime updatedAt,
 			LocalDateTime deletedAt,

@@ -41,6 +41,10 @@ spring:
     generate-ddl: false
     open-in-view: false
     properties:
+      jakarta:
+        persistence:
+          validation:
+            mode: none
       hibernate:
         format-sql: true
         ddl-auto: none
@@ -52,7 +56,6 @@ spring:
     user:
       name: admin
       password: SPR1NG_4DM1N
-
 
 management:
   prometheus:

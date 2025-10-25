@@ -47,7 +47,7 @@ public class Project extends Base {
 
 	public Project(
 			UUID id,
-			UUID creator,
+			Employee creator,
 			LocalDateTime createdAt,
 			LocalDateTime updatedAt,
 			LocalDateTime deletedAt,

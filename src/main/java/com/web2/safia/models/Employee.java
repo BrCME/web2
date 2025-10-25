@@ -62,7 +62,7 @@ public class Employee extends Base {
 	}
 
 	public Employee(UUID id,
-			UUID creator,
+			Employee creator,
 			LocalDateTime createdAt,
 			LocalDateTime updatedAt,
 			LocalDateTime deletedAt,

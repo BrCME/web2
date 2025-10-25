@@ -40,7 +40,7 @@ public class Team extends Base {
 
 	public Team(
 			UUID id,
-			UUID creator,
+			Employee creator,
 			LocalDateTime createdAt,
 			LocalDateTime updatedAt,
 			LocalDateTime deletedAt,
