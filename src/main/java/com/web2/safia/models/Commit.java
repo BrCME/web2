@@ -14,7 +14,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-public class Commit extends Base {
+public class Commit extends BaseModel {
     @NotBlank(message = "Descrição não pode ser vazia")
     @Column(name = "description", nullable = false)
     private String description;

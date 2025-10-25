@@ -19,7 +19,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 @Entity
-public class Employee extends Base {
+public class Employee extends BaseModel {
 	@Column(name = "name", nullable = false)
 	@NotBlank(message = "Nome é obrigatório")
 	private String name;
@@ -61,7 +61,8 @@ public class Employee extends Base {
 		super();
 	}
 
-	public Employee(UUID id,
+	public Employee(
+			UUID id,
 			Employee creator,
 			LocalDateTime createdAt,
 			LocalDateTime updatedAt,

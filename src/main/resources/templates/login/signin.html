@@ -16,7 +16,10 @@
 
 		<hr class="my-6 text-gray-200">
 
-		<form class="flex flex-col" method="post">
+		<!-- 
+		<form action="#" th:action="@{/employee}" th:object="${employee}" method="post" class="flex flex-col">
+		-->
+		<form action="#" th:action="@{/auth/login}" th:object="${employee}" method="post" class="flex flex-col">
 			<fieldset class="mb-4">
 				<legend class="font-bold text-gray-200 text-left mb-4">Faça seu login:</legend>
 

@@ -19,7 +19,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class Task extends Base {
+public class Task extends BaseModel {
 	@NotBlank(message = "Nome é obrigatório")
 	@Column(name = "name", nullable = false)
 	private String name;

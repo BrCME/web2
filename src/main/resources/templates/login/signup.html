@@ -16,21 +16,24 @@
 			utiliza o sistema e começe a botar sua produtividade em dia!</h2>
 
 		<hr class="my-6 text-gray-200">
+		<!-- 
+			<form th:hx-post="@{/employee/create}" hx-target="#main" hx-swap="outerHTML" th:object="${employee}"
+		-->
 
-		<form class="flex flex-col" action="" method="post">
+		<form action="#" th:action="@{/employee}" th:object="${employee}" method="post" class="flex flex-col">
 			<fieldset class="mb-4">
 				<legend class="font-bold text-gray-200 text-left mb-4">Dados de Login</legend>
 
 				<span class="my-2 ms-4 h-6 flex">
 					<label class="font-bold text-left text-gray-200" for="email">Email:</label>
 					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="email"
-						name="email" type="email">
+						name="email" type="email" th:field="*{email}">
 				</span>
 
 				<span class="my-2 ms-4 h-6 flex">
 					<label class="font-bold text-left text-gray-200" for="senha">Senha:</label>
 					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="senha"
-						name="senha" type="password">
+						name="senha" type="password" th:field="*{password}">
 				</span>
 			</fieldset>
 
@@ -40,25 +43,25 @@
 				<span class="my-2 ms-4 h-6 flex">
 					<label class="font-bold text-left text-gray-200" for="nome">Nome:</label>
 					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="nome"
-						name="nome" type="text">
+						name="nome" type="text" th:field="*{name}">
 				</span>
 
 				<span class="my-2 ms-4 h-6 flex">
 					<label class="font-bold text-left text-gray-200" for="cpf">CPF:</label>
 					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="cpf"
-						name="cpf" type="text" pattern="\d{11}" placeholder="11122233344">
+						name="cpf" type="text" pattern="\d{11}" placeholder="11122233344" th:field="*{cpf}">
 				</span>
 
 				<span class="my-2 ms-4 h-6 flex">
 					<label class="font-bold text-left text-gray-200" for="telefone">Telefone:</label>
 					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="telefone"
-						name="telefone" type="text" pattern="\d{11}" placeholder="11912345678">
+						name="telefone" type="text" pattern="\d{11}" placeholder="11912345678" th:field="*{phoneNumber}">
 				</span>
 
 				<span class="my-2 ms-4 h-6 flex">
 					<label class="font-bold text-left text-gray-200 text-gray-200" for="nascimeto">Nascimento:</label>
 					<input class="p-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="nascimeto"
-						name="nascimento" type="date">
+						name="nascimento" type="date" th:field="*{birthDate}">
 				</span>
 			</fieldset>
 

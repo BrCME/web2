@@ -1,7 +1,6 @@
 package com.web2.safia.configs;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,12 +18,12 @@ import com.web2.safia.models.Employee;
 
 @Configuration
 public class SecurityConfig implements AuditorAware<Employee> {
-	private static final String[] WHITE_LIST = { "/**" };
+	private static final String[] WHITE_LIST = { "/**", "**/**", "/employee**" };
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
-				.authorizeHttpRequests(authorize -> authorize.requestMatchers(WHITE_LIST).permitAll())
+				.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
 				.formLogin(form -> form.loginPage("/login").permitAll())
 				.build();
 	}

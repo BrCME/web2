@@ -1,3 +1,4 @@
+
 -- Commit
 ALTER TABLE commit
 DROP CONSTRAINT commit_creator_fk;

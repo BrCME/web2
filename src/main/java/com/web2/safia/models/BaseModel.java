@@ -20,7 +20,7 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Base implements Serializable {
+public abstract class BaseModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -43,10 +43,11 @@ public abstract class Base implements Serializable {
 	@Column(name = "deleted_at")
 	protected LocalDateTime deletedAt;
 
-	protected Base() {
+	protected BaseModel() {
+		setCreatedAt(LocalDateTime.now());
 	}
 
-	protected Base(
+	protected BaseModel(
 			UUID id,
 			Employee creator,
 			LocalDateTime createdAt,
