@@ -19,7 +19,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class Task extends Base {
+public class Task extends BaseModel {
 	@NotBlank(message = "Nome é obrigatório")
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -29,6 +29,7 @@ public class Task extends Base {
 	private String description;
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "status", nullable = false)
 	private TaskStatus status;
 
 	@NotNull(message = "Projeto é obrigatório")

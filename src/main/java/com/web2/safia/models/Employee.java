@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -19,7 +20,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 @Entity
-public class Employee extends Base {
+public class Employee extends BaseModel {
 	@Column(name = "name", nullable = false)
 	@NotBlank(message = "Nome é obrigatório")
 	private String name;
@@ -44,16 +45,16 @@ public class Employee extends Base {
 	@Past(message = "Data de nascimento deve estar no passado")
 	private LocalDate birthDate;
 
-	@ManyToMany(mappedBy = "employees")
+	@ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER)
 	private Set<Team> teams = new HashSet<>();
 
-	@ManyToMany(mappedBy = "employees")
+	@ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER)
 	private Set<Project> projects = new HashSet<>();
 
-	@OneToMany(mappedBy = "employee")
+	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
 	private Set<Work> works = new HashSet<>();
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "work", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "task_id"))
 	private Set<Task> tasks = new HashSet<>();
 
@@ -61,7 +62,8 @@ public class Employee extends Base {
 		super();
 	}
 
-	public Employee(UUID id,
+	public Employee(
+			UUID id,
 			Employee creator,
 			LocalDateTime createdAt,
 			LocalDateTime updatedAt,
@@ -206,10 +208,19 @@ public class Employee extends Base {
 	@Override
 	public String toString() {
 		return "Employee [name=" + name +
+				", id=" + id +
 				", email=" + email +
+				", creator=" + creator +
 				", password=" + password +
+				", createdAt=" + createdAt +
+				", updatedAt=" + updatedAt +
 				", phoneNumber=" + phoneNumber +
+				", deletedAt=" + deletedAt +
 				", cpf=" + cpf +
-				", birthDate=" + birthDate + "]";
+				", birthDate=" + birthDate +
+				", teams=" + teams +
+				", projects=" + projects +
+				", works=" + works +
+				", tasks=" + tasks + "]";
 	}
 }

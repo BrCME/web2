@@ -3,6 +3,9 @@ package com.web2.safia.models;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,17 +14,26 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-public class Commit extends Base {
+public class Commit extends BaseModel {
     @NotBlank(message = "Descrição não pode ser vazia")
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "type", nullable = false)
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
     @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
     private CommitType type;
 
     public Commit() {
         super();
+    }
+
+    public Commit(
+            @NotBlank(message = "Descrição não pode ser vazia") String description,
+            CommitType type) {
+
+        this.description = description;
+        this.type = type;
     }
 
     public Commit(
