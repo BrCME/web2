@@ -25,12 +25,12 @@
 
 				<span class="my-2 ms-4 h-6 flex">
 					<label class="font-bold text-left text-gray-200" for="email">Email:</label>
-					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="email" name="email" type="email">
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="email" name="email" type="email" th:field="*{email}">
 				</span>
 
 				<span class="my-2 ms-4 h-6 flex">
 					<label class="font-bold text-left text-gray-200" for="senha">Senha:</label>
-					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="senha" name="senha" type="password">
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="senha" name="senha" type="password" th:field="*{password}">
 				</span>
 			</fieldset>
 
@@ -40,7 +40,7 @@
 		</form>
 
 		<p class="text-sm font-normal text-gray-200 text-left place-self-end">Novo por aqui? <a class="underline text-green-600"
-				href="/public/sign-up">criar nova conta</a></p>
+				href="/auth/sign-up">criar nova conta</a></p>
 
 	</div>
 </body>

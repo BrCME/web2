@@ -20,7 +20,7 @@
 			<form th:hx-post="@{/employee/create}" hx-target="#main" hx-swap="outerHTML" th:object="${employee}"
 		-->
 
-		<form action="#" th:action="@{/employee}" th:object="${employee}" method="post" class="flex flex-col">
+		<form action="#" th:action="@{/auth/new-employee}" th:object="${employee}" method="post" class="flex flex-col">
 			<fieldset class="mb-4">
 				<legend class="font-bold text-gray-200 text-left mb-4">Dados de Login</legend>
 
@@ -71,7 +71,7 @@
 		</form>
 
 		<p class="text-sm font-normal text-gray-200 text-left place-self-start">Já tem cadastro? <a
-				class="underline text-green-600" href="/public/sign-in">fazer login</a></p>
+				class="underline text-green-600" href="/auth/sign-in">fazer login</a></p>
 	</div>
 </body>
 

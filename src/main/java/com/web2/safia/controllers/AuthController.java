@@ -25,39 +25,38 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public String login(
-			Employee employee) {
+	public String login(Employee employee) {
 		try {
 			authService.login(employee);
-			return "/login/signup.html";
+			return "/index.html";
 		} catch (DomainException de) {
-			return "/error/404.html";
+			return "error.html";
 		} catch (Exception e) {
-			return "/error/404.html";
+			return "error.html";
 		}
 	}
 
-	@PostMapping("/")
-	public String createAccount() {
-		return "/login/signin.html";
-	}
-
-	@GetMapping("sign-up")
+	@GetMapping("/sign-up")
 	public String signUp(
 			Employee employee,
 			Model model,
 			HttpServletRequest request) {
-		model.addAttribute("employee", employee);
 
+		model.addAttribute("employee", employee);
 		return "/login/signup.html";
 	}
 
-	@GetMapping("sign-in")
-	public String signIn() {
+	@GetMapping("/sign-in")
+	public String signIn(
+			Employee employee,
+			Model model,
+			HttpServletRequest request) {
+
+		model.addAttribute("employee", employee);
 		return "/login/signin.html";
 	}
 
-	@PostMapping("")
+	@PostMapping("/new-employee")
 	public String create(
 			@Valid Employee employee,
 			Model model,

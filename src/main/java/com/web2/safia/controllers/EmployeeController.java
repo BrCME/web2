@@ -39,23 +39,6 @@ public class EmployeeController {
 		return "index.html";
 	}
 
-	@PostMapping("")
-	public String create(
-			@Valid Employee employee,
-			Model model,
-			HttpServletRequest request,
-			BindingResult result,
-			RedirectAttributes redirect) {
-
-		logger.info("Empregado: {}", employee);
-		logger.info("Modelo: {}", model);
-		logger.info("Requisição: {}", request);
-		logger.info("Resultado: {}", result);
-		logger.info("Redireção: {}", redirect);
-
-		employeeService.create(employee);
-
-		return "index.html";
-	}
+	
 
 }
