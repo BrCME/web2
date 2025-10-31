@@ -14,8 +14,6 @@ import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Employee;
 import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
 
-import jakarta.validation.Valid;
-
 @Service
 public class EmployeeService {
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);

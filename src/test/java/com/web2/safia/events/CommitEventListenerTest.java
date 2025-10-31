@@ -19,7 +19,7 @@ import com.web2.safia.models.builders.EmployeeBuilder;
 import com.web2.safia.repositories.adapters.JpaCommitRepository;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class CommitEventListenerTest {
+class CommitEventListenerTest {
 	private CommitEventListener underTest;
 
 	@Mock

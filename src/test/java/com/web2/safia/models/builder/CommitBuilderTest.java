@@ -44,9 +44,9 @@ class CommitBuilderTest {
 
 		assertNotNull(result);
 		assertNotNull(result.getType());
-		assertEquals(result.getType(), CommitType.ATIVACAO);
+		assertEquals(CommitType.ATIVACAO, result.getType());
 		assertNotNull(result.getDescription());
-		assertEquals(result.getDescription(), "Descrição de teste");
+		assertEquals("Descrição de teste", result.getDescription());
 		assertNotNull(result.getCreatedAt());
 	}
 }

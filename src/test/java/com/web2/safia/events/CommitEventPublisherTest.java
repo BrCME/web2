@@ -15,7 +15,7 @@ import com.web2.safia.models.CommitType;
 import com.web2.safia.models.Employee;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class CommitEventPublisherTest {
+class CommitEventPublisherTest {
 	private CommitEventPublisher underTest;
 
 	@Mock
