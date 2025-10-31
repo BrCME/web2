@@ -20,8 +20,8 @@ import jakarta.validation.Valid;
 public class AuthController {
 	private final AuthService authService;
 
-	public AuthController(AuthService AuthService) {
-		this.authService = AuthService;
+	public AuthController(AuthService authService) {
+		this.authService = authService;
 	}
 
 	@PostMapping("/login")

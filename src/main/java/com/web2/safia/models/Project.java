@@ -32,6 +32,10 @@ public class Project extends BaseModel {
 	@JoinColumn(name = "team_id")
 	private Team team;
 
+	@ManyToOne
+	@JoinColumn(name = "manager_id")
+	private Employee manager;
+	
 	@ManyToMany
 	@JoinTable(name = "employee_to_project", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
 	@ElementCollection
@@ -53,12 +57,14 @@ public class Project extends BaseModel {
 			LocalDateTime deletedAt,
 			@Valid @NotBlank(message = "Nome é obrigatório") String name,
 			@Valid @NotBlank(message = "Descrição é obrigatória") String description,
-			@Valid @NotNull(message = "Time é obrigatório") Team team) {
+			@Valid @NotNull(message = "Time é obrigatório") Team team,
+			Employee manager) {
 
 		super(id, creator, createdAt, updatedAt, deletedAt);
 		this.name = name;
 		this.description = description;
 		this.team = team;
+		this.manager = manager;
 	}
 
 	public String getName() {
@@ -83,6 +89,14 @@ public class Project extends BaseModel {
 
 	public void setTeam(Team team) {
 		this.team = team;
+	}
+
+	public Employee getManager() {
+		return manager;
+	}
+
+	public void setManager(Employee manager) {
+		this.manager = manager;
 	}
 
 	@Override
@@ -137,6 +151,7 @@ public class Project extends BaseModel {
 				", description=" + description +
 				", updatedAt=" + updatedAt +
 				", team=" + team +
+				", manager=" + manager +
 				", deletedAt=" + deletedAt +
 				", employees=" + employees + "]";
 	}

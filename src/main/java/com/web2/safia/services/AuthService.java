@@ -60,7 +60,5 @@ public class AuthService {
 		commitEventPublisher.publishCreateCommitEvent(
 				String.format("Criado usuário '%s' novo", employee.getEmail()),
 				employee);
-
-		return;
 	}
 }
