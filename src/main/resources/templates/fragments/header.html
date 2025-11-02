@@ -1,0 +1,16 @@
+<header th:fragment="header" class="w-full h-[5rem] px-8 flex justify-between align-center bg-slate-800">
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+	<img src="" alt="ícone da logo">
+
+	<nav class="flex align-center">
+		<ul class="w-full flex align-center gap-x-8">
+			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-sky-400">Olá, USUARIO (ROLE)</li>
+			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-gray-200"><a th:href="@{/team}">Equipes</a></li>
+			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-gray-200"><a th:href="@{/project}">Projetos</a></li>
+			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-gray-200"><a th:href="@{/work}">Atividades</a></li>
+			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-gray-200"><a th:href="@{/commit}">Eventos</a></li>
+			<li class="place-self-center"><button class="cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-red-400">Sair</button></li>
+		</ul>
+	</nav>
+</header>

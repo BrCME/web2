@@ -28,7 +28,7 @@ public class PublicController {
 	}
 
 	@GetMapping("/cep/{cep}")
-	public String teste2(@PathVariable(name = "cep") String cep) {
+	public String getCep(@PathVariable(name = "cep") String cep) {
 		try {
 			Address endereco = enderecoService.findByCep(cep);
 			logger.info("Endereco encontrado: {}", endereco);
@@ -37,5 +37,10 @@ public class PublicController {
 		}
 
 		return "/login/index.html";
+	}
+
+	@GetMapping("header")
+	public String getHeader() {
+		return "/fragments/header.html";
 	}
 }
