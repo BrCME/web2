@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Employee;
-import com.web2.safia.services.AuthService;
+import com.web2.safia.services.AuthServiceTest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -18,9 +18,9 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
-	private final AuthService authService;
+	private final AuthServiceTest authService;
 
-	public AuthController(AuthService authService) {
+	public AuthController(AuthServiceTest authService) {
 		this.authService = authService;
 	}
 

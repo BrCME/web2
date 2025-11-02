@@ -15,7 +15,7 @@ import jakarta.validation.Valid;
 
 @Service
 public class AuthService {
-	private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthServiceTest.class);
 
 	private final CommitEventPublisher commitEventPublisher;
 	private final PasswordEncoder passwordEncoder;
