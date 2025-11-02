@@ -8,9 +8,63 @@
 	<title>Time Tracker | SAF.IA</title>
 </head>
 
-<body class="bg-center bg-cover bg-no-repeat bg-slate-800 flex flex-col justify-center items-center h-screen">
-	<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 place-self-center">Seja bem-vindo ao SAF.IA Time
-		Tracker</h1>
+<body class="bg-center bg-cover bg-no-repeat bg-slate-800 flex flex-col justify-center items-center min-h-screen">
+	<div class="w-full" th:insert="~{fragments/header :: header}"></div>
+
+	<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 uppercase place-self-center mt-8">
+		Seja bem-vindo ao SAFIA Time Tracker
+	</h1>
+
+	<h2 class="text-xl text-left text-gray-200 uppercase place-self-center mb-8">
+		Aqui, o seu tempo importa!
+	</h2>
+
+	<article class="flex justify-center align-center w-full h-[28rem] px-[4rem]">
+		<span class="flex flex-col justify-center align-center w-5/10 h-full gap-y-8 pe-8 bg-linear-to-l from-slate-950/70 to-slate-950/0">
+			<h2 class="text-2xl font-bold text-sky-400 uppercase text-left">Controle seu tempo</h2>
+			<p class="text-xl text-gray-200 uppercase text-left">
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus minima consequuntur sunt porro
+				veritatis totam ut minus deserunt itaque harum aperiam earum omnis consectetur reiciendis sapiente,
+				soluta aspernatur maiores? Molestias!
+				Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab ad dolor numquam, aspernatur, earum animi
+				impedit qui ipsa vero porro repudiandae corrupti deleniti eaque veniam consectetur est, quam nobis
+				nihil.
+			</p>
+		</span>
+		<img class="w-5/10" th:src="@{/images/clock.jpg}" alt="foto de um relógio preso ao teto">
+	</article>
+
+	<article class="flex justify-center align-center w-full h-[28rem] px-[4rem]">
+		<img class="w-5/10" th:src="@{/images/planning.jpg}" alt="foto de um relógio preso ao teto">
+
+		<span class="flex flex-col justify-center align-center w-5/10 h-full gap-y-8 ps-8 bg-linear-to-r from-slate-950/70 to-slate-950/0">
+			<h2 class="text-2xl font-bold text-sky-400 uppercase text-left">Planejamento facilitado</h2>
+			<p class="text-xl text-gray-200 uppercase text-left">
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus minima consequuntur sunt porro
+				veritatis totam ut minus deserunt itaque harum aperiam earum omnis consectetur reiciendis sapiente,
+				soluta aspernatur maiores? Molestias!
+				Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab ad dolor numquam, aspernatur, earum animi
+				impedit qui ipsa vero porro repudiandae corrupti deleniti eaque veniam consectetur est, quam nobis
+				nihil.
+			</p>
+		</span>
+	</article>
+
+	<article class="flex justify-center align-center w-full h-[28rem] px-[4rem]">
+		<span class="flex flex-col justify-center align-center w-5/10 h-full gap-y-8 pe-8 bg-linear-to-l from-slate-950/70 to-slate-950/0">
+			<h2 class="text-2xl font-bold text-sky-400 uppercase text-left">Alcance seus objetivos</h2>
+			<p class="text-xl text-gray-200 uppercase text-left">
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus minima consequuntur sunt porro
+				veritatis totam ut minus deserunt itaque harum aperiam earum omnis consectetur reiciendis sapiente,
+				soluta aspernatur maiores? Molestias!
+				Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab ad dolor numquam, aspernatur, earum animi
+				impedit qui ipsa vero porro repudiandae corrupti deleniti eaque veniam consectetur est, quam nobis
+				nihil.
+			</p>
+		</span>
+		<img class="w-5/10" th:src="@{/images/goals.jpg}" alt="foto de um relógio preso ao teto">
+	</article>
+
 </body>
 
 </html>
