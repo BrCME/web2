@@ -10,7 +10,7 @@ import com.web2.safia.repositories.adapters.JpaWorkRepository;
 
 @Service
 public class TaskService {
-	private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
+	private static final Logger logger = LoggerFactory.getLogger(TaskServiceTest.class);
 
 	private final JpaEmployeeRepository employeeRepository;
 	private final JpaWorkRepository workRepository;

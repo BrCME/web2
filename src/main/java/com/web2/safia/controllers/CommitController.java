@@ -6,15 +6,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.web2.safia.services.CommitService;
+import com.web2.safia.services.CommitServiceTest;
 
 
 @Controller
 @RequestMapping("/commit")
 public class CommitController {
-	private final CommitService commitService;
+	private final CommitServiceTest commitService;
 
-	public CommitController(CommitService commitService) {
+	public CommitController(CommitServiceTest commitService) {
 		this.commitService = commitService;
 	}
 

@@ -5,14 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.web2.safia.services.EmployeeService;
+import com.web2.safia.services.EmployeeServiceTest;
 
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
-	private final EmployeeService employeeService;
+	private final EmployeeServiceTest employeeService;
 
-	public EmployeeController(EmployeeService employeeService) {
+	public EmployeeController(EmployeeServiceTest employeeService) {
 		this.employeeService = employeeService;
 	}
 
