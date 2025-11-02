@@ -25,7 +25,7 @@ class CepValidatorTest {
 	}
 
 	@Test
-	void givenInvalidCep_whenValidatingString_thenReturnTrue() {
+	void givenInvalidCep_whenValidatingString_thenReturnFalse() {
 		String invalidCep = "123-12345";
 
 		assertFalse(underTest.validate(invalidCep));

@@ -12,7 +12,7 @@ import com.web2.safia.models.Address;
 import com.web2.safia.services.EnderecoService;
 
 @Controller
-@RequestMapping("/public")
+@RequestMapping("/")
 public class PublicController {
 	private static final Logger logger = LoggerFactory.getLogger(PublicController.class);
 
@@ -22,19 +22,9 @@ public class PublicController {
 		this.enderecoService = enderecoService;
 	}
 
-	@GetMapping("/")
+	@GetMapping("")
 	public String getLandingPage() {
 		return "index.html";
-	}
-
-	@GetMapping("sign-up")
-	public String signUp() {
-		return "/login/signup.html";
-	}
-
-	@GetMapping("sign-in")
-	public String signIn() {
-		return "/login/signin.html";
 	}
 
 	@GetMapping("/cep/{cep}")

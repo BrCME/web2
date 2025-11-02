@@ -9,37 +9,38 @@
 	<title>Login | SAF.IA</title>
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-50 bg-[url(/images/splash-screen.jpg)] bg-center bg-cover bg-no-repeat">
+	<div class="w-1/2 h-lvh px-[10%] flex flex-col justify-center align-center place-self-end bg-slate-900/95">
+		<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 place-self-center">Bem-vindo de volta!</h1>
+		<h2 class="text-l font-bold text-center mx-6 text-gray-200 place-self-center">Organize seu tempo com SAF.IA</h2>
 
-	<div class="w-1/2 h-lvh px-[10%] flex flex-col justify-center align-center place-self-end bg-yellow-100">
-		<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-800 place-self-center">Bem-vindo de volta!</h1>
+		<hr class="my-6 text-gray-200">
 
-		<h2 class="text-xl font-bold text-left text-gray-800 place-self-center">Faça o seu login para prosseguir</h2>
+		<!-- 
+		<form action="#" th:action="@{/employee}" th:object="${employee}" method="post" class="flex flex-col">
+		-->
+		<form action="#" th:action="@{/auth/login}" th:object="${employee}" method="post" class="flex flex-col">
+			<fieldset class="mb-4">
+				<legend class="font-bold text-gray-200 text-left mb-4">Faça seu login:</legend>
 
-		<hr class="my-6">
-
-		<form class="flex flex-col" method="post">
-			<fieldset class="my-2">
-				<legend class="text-green-400">Dados de Usuário</legend>
-
-				<span class="my-2 flex">
-					<label class="font-bold text-left text-gray-800" for="email">Email:</label>
-					<input class="bg-gray-50 border-none bg-red-200" id="email" name="email" type="email">
+				<span class="my-2 ms-4 h-6 flex">
+					<label class="font-bold text-left text-gray-200" for="email">Email:</label>
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="email" name="email" type="email" th:field="*{email}">
 				</span>
 
-				<span class="my-2 flex">
-					<label class="font-bold text-left text-gray-800" for="senha">Senha:</label>
-					<input class="bg-gray-50 border-none bg-red-200" id="senha" name="senha" type="password">
+				<span class="my-2 ms-4 h-6 flex">
+					<label class="font-bold text-left text-gray-200" for="senha">Senha:</label>
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="senha" name="senha" type="password" th:field="*{password}">
 				</span>
 			</fieldset>
 
 			<input
-				class="bg-green-400 rounded-lg m-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80"
+				class="bg-green-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80"
 				type="submit" value="Entrar">
 		</form>
 
-		<p class="font-normal text-gray-800 text-left place-self-end">Novo por aqui? <a class="underline text-green-500"
-				href="/public/sign-up">criar nova conta</a></p>
+		<p class="text-sm font-normal text-gray-200 text-left place-self-end">Novo por aqui? <a class="underline text-green-600"
+				href="/auth/sign-up">criar nova conta</a></p>
 
 	</div>
 </body>

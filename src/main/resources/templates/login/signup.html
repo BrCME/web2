@@ -4,69 +4,75 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
 	<title>Login | SAF.IA</title>
 </head>
 
-<body>
-	<h1>Bem-vindo ao SAF.IA!</h1>
-	<h2>Faça o seu cadastro para começar a utiliza o sistema</h2>
+<body class="bg-gray-50 bg-[url(/images/splash-screen.jpg)] bg-center bg-cover bg-no-repeat">
+	<div class="w-1/2 h-lvh px-[10%] flex flex-col justify-center align-center place-self-begin bg-slate-900/95">
+		<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 place-self-center">Bem-vindo ao SAF.IA!</h1>
+		<h2 class="text-l font-bold text-center mx-6 text-gray-200 place-self-center">Faça o seu cadastro para começar a
+			utiliza o sistema e começe a botar sua produtividade em dia!</h2>
 
-	<hr>
+		<hr class="my-6 text-gray-200">
+		<!-- 
+			<form th:hx-post="@{/employee/create}" hx-target="#main" hx-swap="outerHTML" th:object="${employee}"
+		-->
 
-	<form action="" method="post">
-		<fieldset>
-			<legend>Dados de Usuário</legend>
+		<form action="#" th:action="@{/auth/new-employee}" th:object="${employee}" method="post" class="flex flex-col">
+			<fieldset class="mb-4">
+				<legend class="font-bold text-gray-200 text-left mb-4">Dados de Login</legend>
 
-			<label for="nome">Nome:</label>
-			<input id="nome" name="nome" type="text">
+				<span class="my-2 ms-4 h-6 flex">
+					<label class="font-bold text-left text-gray-200" for="email">Email:</label>
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="email"
+						name="email" type="email" th:field="*{email}">
+				</span>
 
-			<br>
+				<span class="my-2 ms-4 h-6 flex">
+					<label class="font-bold text-left text-gray-200" for="senha">Senha:</label>
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="senha"
+						name="senha" type="password" th:field="*{password}">
+				</span>
+			</fieldset>
 
-			<label for="senha">Senha:</label>
-			<input id="senha" name="senha" type="password">
+			<fieldset class="mb-4">
+				<legend class="font-bold text-gray-200 text-left mb-4">Dados Pessoais</legend>
 
-			<br>
+				<span class="my-2 ms-4 h-6 flex">
+					<label class="font-bold text-left text-gray-200" for="nome">Nome:</label>
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="nome"
+						name="nome" type="text" th:field="*{name}">
+				</span>
 
-			<label for="email">Email:</label>
-			<input id="email" name="email" type="email">
+				<span class="my-2 ms-4 h-6 flex">
+					<label class="font-bold text-left text-gray-200" for="cpf">CPF:</label>
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="cpf"
+						name="cpf" type="text" pattern="\d{11}" placeholder="11122233344" th:field="*{cpf}">
+				</span>
 
-			<br>
+				<span class="my-2 ms-4 h-6 flex">
+					<label class="font-bold text-left text-gray-200" for="telefone">Telefone:</label>
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="telefone"
+						name="telefone" type="text" pattern="\d{11}" placeholder="11912345678" th:field="*{phoneNumber}">
+				</span>
 
-			<label for="telefone">Telefone:</label>
-			<input id="telefone" name="telefone" type="text" pattern="\d{11}" placeholder="11912345678">
-		</fieldset>
+				<span class="my-2 ms-4 h-6 flex">
+					<label class="font-bold text-left text-gray-200 text-gray-200" for="nascimeto">Nascimento:</label>
+					<input class="p-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="nascimeto"
+						name="nascimento" type="date" th:field="*{birthDate}">
+				</span>
+			</fieldset>
 
-		<fieldset>
-			<legend>Dados da Fazenda</legend>
+			<input
+				class="bg-green-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80"
+				type="submit" value="Finalizar cadastro">
+		</form>
 
-			<label for="nome-fazenda">Nome da Fazenda:</label>
-			<input id="nome-fazenda" name="nome-fazenda" type="text">
-
-			<br>
-
-			<label for="nome-fazenda">Nome da Fazenda:</label>
-			<input id="nome-fazenda" name="nome-fazenda" type="text">
-
-			<br>
-		</fieldset>
-
-
-		<fieldset>
-			<legend>Dados do Cultivo</legend>
-
-			<label for="cultivo">O que você está cultivando?</label>
-			<select name="cultivo" id="cultivo">
-				<option value="teste">Teste</option>
-			</select>
-
-			<label for="planejamento">O que você planeja cultivar?</label>
-			<select name="planejamento" id="planejamento">
-				<option value="teste">Teste</option>
-			</select>
-		</fieldset>
-
-		<input type="submit" value="Finalizar o cadastro">
-	</form>
+		<p class="text-sm font-normal text-gray-200 text-left place-self-start">Já tem cadastro? <a
+				class="underline text-green-600" href="/auth/sign-in">fazer login</a></p>
+	</div>
 </body>
 
 </html>
