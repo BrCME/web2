@@ -11,14 +11,11 @@
 
 <body class="bg-gray-50 bg-[url(/images/splash-screen.jpg)] bg-center bg-cover bg-no-repeat">
 	<div class="w-1/2 h-lvh px-[10%] flex flex-col justify-center align-center place-self-begin bg-slate-900/95">
-		<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 place-self-center">Bem-vindo ao SAF.IA!</h1>
+		<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 place-self-center">Bem-vindo ao SAFIA!</h1>
 		<h2 class="text-l font-bold text-center mx-6 text-gray-200 place-self-center">Faça o seu cadastro para começar a
 			utiliza o sistema e começe a botar sua produtividade em dia!</h2>
 
 		<hr class="my-6 text-gray-200">
-		<!-- 
-			<form th:hx-post="@{/employee/create}" hx-target="#main" hx-swap="outerHTML" th:object="${employee}"
-		-->
 
 		<form action="#" th:action="@{/auth/new-employee}" th:object="${employee}" method="post" class="flex flex-col">
 			<fieldset class="mb-4">
