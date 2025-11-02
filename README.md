@@ -4,25 +4,24 @@ Trabalho Final da disciplina de Programação Web II.
 
 ## Descrição
 
-O SAF.IA é um software de agronegócio voltado ao público rural de média e pequena escala, para auxiliar com verificação das condições de solo, verificação do clima local, recomendação de plantação, além de um mercado interno para conectar o campo aos produtos que o agricultor precisa.
+Com o **Sistema SAFIA** (Sistema de Apoio e Facilitação de Integração de Atividades), a comunicação entre os membros da equipe se torna centralizada, o gesto consegue acompanhar em tempo real o andamento das atividades e os riscos de atraso são reduzidos, promovento maior eficiência no desenvolvimento do projeto.
 
 ## Requisitos
 
 - [ ] CRUD para Usuário
-- [ ] CRUD para Agricultor
-- [ ] CRUD para Produto
-- [ ] CRUD para Empresa
+- [ ] CRUD para Time
+- [ ] CRUD para Tarefa
+- [ ] CRUD para Projeto
+- [ ] CRUD para Trabalho
 - [ ] Painel Administrativo
 - [ ] Autenticação e Autorização
-- [ ] Coleta de dados de Clima via API
-- [ ] Armazenamento de dados de Clima
 - [ ] Logging
 - [ ] Telemetria
 - [ ] Docker
-- [ ] Testes Unitários
+- [x] Testes Unitários
 - [x] Cache
 - [x] Migrations
-- [ ] MPA (Multi-Page Application)
+- [x] MPA (Multi-Page Application)
 - [ ] Geração de Relatórios
 
 ## Recursos Disponíveis
@@ -30,19 +29,18 @@ O SAF.IA é um software de agronegócio voltado ao público rural de média e pe
 Este projeto disponibiliza fluxos de trabalho condicionados ao usuário logado:
 
 - Usuario Administrador:
-	- Pode ativar/desativar um (ou mais) agricultor
-	- Pode ativar/desativar um (ou mais) vendedor
-	- Pode gerar relatórios de dados por agricultor
-	- Pode gerar relatórios de dados por vendedor
-- Usuário Agricultor:
-	- Pode cadastrar uma (ou mais) propriedade rural em sua posse
-	- Pode alterar os dados de uma propriedade em sua posse
-	- Pode ativar/desativar uma (ou mais) propriedade rural em sua posse
-	- Pode consultar as informações de clima e tempo de uma propriedade em sua posse
-- Usuário Vendedor:
-	- Pode cadastrar um produto comercializável em sua posse
-	- Pode alterar os dados de um produto comercializável em sua posse
-	- Pode ativar/desativar um (ou mais) produto comercializável em sua posse
+	- Pode ativar/desativar um (ou mais) usuario
+	- Pode ativar/desativar um (ou mais) time
+	- Pode gerar relatórios de dados por usuario
+	- Pode gerar relatórios de dados por time
+- Usuário Empregado:
+	- Pode cadastrar um (ou mais) time em sua posse
+	- Pode alterar os dados de um time em sua posse
+	- Pode ativar/desativar um (ou mais) projeto em sua posse
+	- Pode alterar os dados de um projeto em sua posse
+- Usuário Analista:
+	- Pode gerar relatórios de dados por usuario
+	- Pode gerar relatórios de dados por time
 
 ## Instalação
 
