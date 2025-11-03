@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Address;
-import com.web2.safia.services.EnderecoServiceTest;
+import com.web2.safia.services.EnderecoService;
 
 @Controller
 @RequestMapping("/")
 public class PublicController {
 	private static final Logger logger = LoggerFactory.getLogger(PublicController.class);
 
-	private final EnderecoServiceTest enderecoService;
+	private final EnderecoService enderecoService;
 
-	public PublicController(EnderecoServiceTest enderecoService) {
+	public PublicController(EnderecoService enderecoService) {
 		this.enderecoService = enderecoService;
 	}
 

@@ -5,14 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.web2.safia.services.TeamServiceTest;
+import com.web2.safia.services.TeamService;
 
 @Controller
 @RequestMapping("/team")
 public class TeamController {
-	private final TeamServiceTest teamService;
+	private final TeamService teamService;
 
-	public TeamController(TeamServiceTest teamService) {
+	public TeamController(TeamService teamService) {
 		this.teamService = teamService;
 	}
 

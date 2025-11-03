@@ -15,7 +15,7 @@ import com.web2.safia.repositories.adapters.ViaCepEnderecoRepository;
 
 @Service
 public class EnderecoService {
-	private static final Logger logger = LoggerFactory.getLogger(EnderecoServiceTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(EnderecoService.class);
 
 	private final ConsumerEnderecoRepository apiEnderecoRepository;
 	private final JpaEnderecoRepository jpaEnderecoRepository;
