@@ -26,7 +26,4 @@ public class EmployeeController {
 
 		return "index.html";
 	}
-
-	
-
 }

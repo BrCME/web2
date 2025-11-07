@@ -58,6 +58,10 @@ public class Employee extends BaseModel {
 	@JoinTable(name = "work", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "task_id"))
 	private Set<Task> tasks = new HashSet<>();
 
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+
 	public Employee() {
 		super();
 	}
@@ -168,6 +172,18 @@ public class Employee extends BaseModel {
 		projects.remove(project);
 	}
 
+	public Set<Role> getAllRoles() {
+		return Set.copyOf(roles);
+	}
+
+	public void addRole(Role role) {
+		roles.add(role);
+	}
+
+	public void removeRole(Role role) {
+		roles.remove(role);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -221,6 +237,7 @@ public class Employee extends BaseModel {
 				", teams=" + teams +
 				", projects=" + projects +
 				", works=" + works +
-				", tasks=" + tasks + "]";
+				", tasks=" + tasks +
+				", roles=" + roles + "]";
 	}
 }

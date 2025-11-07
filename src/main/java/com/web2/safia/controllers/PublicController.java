@@ -12,7 +12,7 @@ import com.web2.safia.models.Address;
 import com.web2.safia.services.EnderecoServiceTest;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("")
 public class PublicController {
 	private static final Logger logger = LoggerFactory.getLogger(PublicController.class);
 
@@ -22,7 +22,7 @@ public class PublicController {
 		this.enderecoService = enderecoService;
 	}
 
-	@GetMapping("")
+	@GetMapping("/")
 	public String getLandingPage() {
 		return "index.html";
 	}
@@ -37,10 +37,5 @@ public class PublicController {
 		}
 
 		return "/login/index.html";
-	}
-
-	@GetMapping("header")
-	public String getHeader() {
-		return "/fragments/header.html";
 	}
 }

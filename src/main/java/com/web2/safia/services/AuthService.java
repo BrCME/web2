@@ -2,53 +2,47 @@ package com.web2.safia.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.web2.safia.events.CommitEventPublisher;
-import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Employee;
 import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
-import com.web2.safia.repositories.adapters.JpaRoleRepository;
 
 import jakarta.validation.Valid;
 
 @Service
-public class AuthService {
-	private static final Logger logger = LoggerFactory.getLogger(AuthServiceTest.class);
+public class AuthService implements UserDetailsService {
+	private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
 	private final CommitEventPublisher commitEventPublisher;
 	private final PasswordEncoder passwordEncoder;
 	private final JpaEmployeeRepository employeeRepository;
-	private final JpaRoleRepository roleRepository;
 
 	public AuthService(
 			CommitEventPublisher commitEventPublisher,
 			PasswordEncoder passwordEncoder,
-			JpaEmployeeRepository employeeRepository,
-			JpaRoleRepository roleRepository) {
+			JpaEmployeeRepository employeeRepository) {
 
 		this.commitEventPublisher = commitEventPublisher;
 		this.passwordEncoder = passwordEncoder;
 		this.employeeRepository = employeeRepository;
-		this.roleRepository = roleRepository;
 	}
 
-	public Employee login(Employee employee) throws DomainException {
-		var user = employeeRepository.findByEmail(employee.getEmail());
-
-		if (!user.isPresent()) {
-			logger.error("Usuário do email '{}' não encontrado", employee.getEmail());
-			throw new DomainException("Usuário inválido");
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		var employee = employeeRepository.findByEmail(username);
+		
+		if (!employee.isPresent()) {
+			logger.error("Empregado com email '{}' não encontrado", username);
+			throw new UsernameNotFoundException(String.format("Empregado com email '%s' não encontrado", username));
 		}
 
-		if (!passwordEncoder.matches(employee.getPassword(), user.get().getPassword())) {
-			logger.error("Senha de '{}' inválida", employee.getEmail());
-			throw new DomainException("Usuário inválido");
-		}
-
-		logger.info("Login de '{}' efetuado!", employee.getEmail());
-		return user.get();
+		return new User(employee.get().getName(), employee.get().getPassword(), employee.get().getAllRoles());
 	}
 
 	public void create(@Valid Employee employee) {
