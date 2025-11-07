@@ -11,7 +11,7 @@ import com.web2.safia.repositories.adapters.JpaCommitRepository;
 
 @Service
 public class CommitService {
-	private static final Logger logger = LoggerFactory.getLogger(CommitService.class);
+	private static final Logger logger = LoggerFactory.getLogger(CommitServiceTest.class);
 
 	private final JpaCommitRepository commitRepository;
 

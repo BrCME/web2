@@ -16,7 +16,7 @@ import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
 
 @Service
 public class EmployeeService {
-	private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeServiceTest.class);
 
 	private final JpaEmployeeRepository employeeRepository;
 	
