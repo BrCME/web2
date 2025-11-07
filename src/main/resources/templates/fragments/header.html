@@ -1,6 +1,6 @@
 <header th:fragment="header"
 	class="place-self-start w-full h-[5rem] px-8 flex justify-between align-center bg-slate-950">
-	<img src="" alt="ícone da logo">
+	<img th:src="@{/images/safia-logo.jpg}" alt="ícone da logo" class="rounded-xl p-2">
 
 	<nav class="flex align-center">
 		<ul class="w-full flex align-center gap-x-8">
@@ -27,13 +27,6 @@
 			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-gray-200"
 				sec:authorize="isAuthenticated()"><a th:href="@{/commit}">Eventos</a>
 			</li>
-			<!-- <li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-red-400"
-			sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Sair</a>
-		</li> -->
-			<!-- <a th:hx-post="@{/logout}" hx-target="#main" hx-swap="outerHTML" hx-push-url="true" class="ml-5 rounded-lg border-2 border-gray-600 bg-gray-600 px-8 py-2 text-white shadow-md hover:bg-white hover:text-gray-600">Logout</a> -->
-			<!-- <li class="place-self-center" sec:authorize="isAuthenticated()"><button
-			class="cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-red-400">Sair</button>
-		</li> -->
 			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-gray-200"
 				sec:authorize="isAuthenticated()">
 				<form th:action="@{/auth/sign-out}" method="post" class="inline">

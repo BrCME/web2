@@ -11,7 +11,7 @@ import com.web2.safia.repositories.adapters.JpaTeamRepository;
 
 @Service
 public class TeamService {
-	private static final Logger logger = LoggerFactory.getLogger(TeamServiceTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(TeamService.class);
 
 	private final JpaTeamRepository teamRepository;
 

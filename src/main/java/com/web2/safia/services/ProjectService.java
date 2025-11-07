@@ -15,7 +15,7 @@ import com.web2.safia.repositories.adapters.JpaProjectRepository;
 
 @Service
 public class ProjectService {
-	private static final Logger logger = LoggerFactory.getLogger(ProjectServiceTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
 
 	private final JpaProjectRepository projectRepository;
 	

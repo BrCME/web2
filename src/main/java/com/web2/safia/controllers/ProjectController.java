@@ -4,15 +4,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.web2.safia.services.ProjectServiceTest;
+import com.web2.safia.services.ProjectService;
+
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequestMapping("/project")
 public class ProjectController {
-	private final ProjectServiceTest projectService;
+	private final ProjectService projectService;
 
-	public ProjectController(ProjectServiceTest projectService) {
+	public ProjectController(ProjectService projectService) {
 		this.projectService = projectService;
 	}
 

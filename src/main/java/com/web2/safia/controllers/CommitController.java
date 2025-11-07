@@ -4,17 +4,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.web2.safia.services.CommitService;
+
 import org.springframework.web.bind.annotation.GetMapping;
-
-import com.web2.safia.services.CommitServiceTest;
-
 
 @Controller
 @RequestMapping("/commit")
 public class CommitController {
-	private final CommitServiceTest commitService;
+	private final CommitService commitService;
 
-	public CommitController(CommitServiceTest commitService) {
+	public CommitController(CommitService commitService) {
 		this.commitService = commitService;
 	}
 

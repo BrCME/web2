@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.web2.safia.models.Employee;
-import com.web2.safia.services.AuthServiceTest;
+import com.web2.safia.services.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -17,16 +17,22 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
-	private final AuthServiceTest authService;
+	private final AuthService authService;
 
 	public AuthController(
-		AuthService authService) {
+			AuthService authService) {
 
 		this.authService = authService;
 	}
 
 	@GetMapping("/sign-up")
-	public String signUp() {
+	public String signUp(
+			Employee employee,
+			Model model,
+			HttpServletRequest request) {
+
+		model.addAttribute("employee", employee);
+
 		return "/login/signup.html";
 	}
 

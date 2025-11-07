@@ -22,12 +22,6 @@
 
 		<hr class="my-6 text-gray-200">
 
-		<!-- 
-		<form action="#" th:action="@{/employee}" th:object="${employee}" method="post" class="flex flex-col" th:hx-post="@{/auth/login}">
-        <form th:hx-post="@{/login}" hx-target="#main" hx-swap="outerHTML">
-		
-			action="#" th:action="@{/auth/login}" th:object="${employee}" method="post" hx-swap="outerHTML" th:hx-post="@{/auth/login}"
-		-->
 		<form th:action="@{/auth/sign-in}" method="post" class="flex flex-col">
 			<fieldset class="mb-4">
 				<legend class="font-bold text-gray-200 text-left mb-4">Faça seu login:</legend>
@@ -36,14 +30,12 @@
 					<label class="font-bold text-left text-gray-200" for="username">Email:</label>
 					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="username"
 						name="username" type="text" autofocus>
-					<!-- <input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="email" name="email" type="email" th:field="*{email}" autofocus> -->
 				</span>
 
 				<span class="my-2 ms-4 h-6 flex">
 					<label class="font-bold text-left text-gray-200" for="password">Senha:</label>
 					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="password"
 						name="password" type="password">
-					<!-- <input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="senha" name="senha" type="password" th:field="*{password}"> -->
 				</span>
 			</fieldset>
 
