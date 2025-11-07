@@ -6,10 +6,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-	<title>Login | SAF.IA</title>
+	<title>Login | SAFIA</title>
 </head>
 
 <body class="bg-gray-50 bg-[url(/images/splash-screen.jpg)] bg-center bg-cover bg-no-repeat">
+	<!-- CSRF -->
+	<!-- <div th:fragment="csrf">
+		<input type="hidden" th:if="${_csrf != null}" name="csrf-token" th:value="${_csrf.token}" />
+		<input type="hidden" th:if="${_csrf != null}" name="csrf-header" th:value="${_csrf.headerName}" />
+	</div> -->
+
 	<div class="w-1/2 h-lvh px-[10%] flex flex-col justify-center align-center place-self-end bg-slate-900/95">
 		<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 place-self-center">Bem-vindo de volta!</h1>
 		<h2 class="text-l font-bold text-center mx-6 text-gray-200 place-self-center">Organize seu tempo com SAF.IA</h2>
@@ -17,20 +23,27 @@
 		<hr class="my-6 text-gray-200">
 
 		<!-- 
-		<form action="#" th:action="@{/employee}" th:object="${employee}" method="post" class="flex flex-col">
+		<form action="#" th:action="@{/employee}" th:object="${employee}" method="post" class="flex flex-col" th:hx-post="@{/auth/login}">
+        <form th:hx-post="@{/login}" hx-target="#main" hx-swap="outerHTML">
+		
+			action="#" th:action="@{/auth/login}" th:object="${employee}" method="post" hx-swap="outerHTML" th:hx-post="@{/auth/login}"
 		-->
-		<form action="#" th:action="@{/auth/login}" th:object="${employee}" method="post" class="flex flex-col">
+		<form th:action="@{/auth/sign-in}" method="post" class="flex flex-col">
 			<fieldset class="mb-4">
 				<legend class="font-bold text-gray-200 text-left mb-4">Faça seu login:</legend>
 
 				<span class="my-2 ms-4 h-6 flex">
-					<label class="font-bold text-left text-gray-200" for="email">Email:</label>
-					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="email" name="email" type="email" th:field="*{email}">
+					<label class="font-bold text-left text-gray-200" for="username">Email:</label>
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="username"
+						name="username" type="text" autofocus>
+					<!-- <input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="email" name="email" type="email" th:field="*{email}" autofocus> -->
 				</span>
 
 				<span class="my-2 ms-4 h-6 flex">
-					<label class="font-bold text-left text-gray-200" for="senha">Senha:</label>
-					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="senha" name="senha" type="password" th:field="*{password}">
+					<label class="font-bold text-left text-gray-200" for="password">Senha:</label>
+					<input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="password"
+						name="password" type="password">
+					<!-- <input class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-200 size-full" id="senha" name="senha" type="password" th:field="*{password}"> -->
 				</span>
 			</fieldset>
 
@@ -39,8 +52,10 @@
 				type="submit" value="Entrar">
 		</form>
 
-		<p class="text-sm font-normal text-gray-200 text-left place-self-end">Novo por aqui? <a class="underline text-green-600"
-				href="/auth/sign-up">criar nova conta</a></p>
+		<div th:if="${param.error}" class="uppercase text-sm text-red-400">Email e/ou senha inválidos</div>
+
+		<p class="text-sm font-normal text-gray-200 text-left place-self-end">Novo por aqui? <a
+				class="underline text-green-600" href="/auth/sign-up">criar nova conta</a></p>
 
 	</div>
 </body>

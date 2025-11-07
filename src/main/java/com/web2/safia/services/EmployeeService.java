@@ -42,6 +42,7 @@ public class EmployeeService {
 		Optional<Employee> employee = employeeRepository.findByEmail(email);
 
 		if (!employee.isPresent()) {
+			logger.error("Usuário com email '{}' não existe", email);
 			throw new DomainException("Usuário não existe");
 		}
 

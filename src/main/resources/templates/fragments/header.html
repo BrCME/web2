@@ -11,7 +11,9 @@
 			<!-- Privado - logado -->
 			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-sky-400"
 				sec:authorize="isAuthenticated()">
-				Olá, USUARIO (ROLE)
+				<span>Olá, </span>
+				<span sec:authentication="principal.username">Username</span>
+				<span sec:authentication="principal.authorities">(Roles)</span>
 			</li>
 			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-gray-200"
 				sec:authorize="isAuthenticated()"><a th:href="@{/team}">Equipes</a>
@@ -25,8 +27,19 @@
 			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-gray-200"
 				sec:authorize="isAuthenticated()"><a th:href="@{/commit}">Eventos</a>
 			</li>
-			<li class="place-self-center" sec:authorize="isAuthenticated()"><button
-					class="cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-red-400">Sair</button>
+			<!-- <li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-red-400"
+			sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Sair</a>
+		</li> -->
+			<!-- <a th:hx-post="@{/logout}" hx-target="#main" hx-swap="outerHTML" hx-push-url="true" class="ml-5 rounded-lg border-2 border-gray-600 bg-gray-600 px-8 py-2 text-white shadow-md hover:bg-white hover:text-gray-600">Logout</a> -->
+			<!-- <li class="place-self-center" sec:authorize="isAuthenticated()"><button
+			class="cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-red-400">Sair</button>
+		</li> -->
+			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-gray-200"
+				sec:authorize="isAuthenticated()">
+				<form th:action="@{/auth/sign-out}" method="post" class="inline">
+					<input class="cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-red-400"
+						type="submit" value="Sair">
+				</form>
 			</li>
 		</ul>
 	</nav>
