@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.web2.safia.events.CommitEventPublisher;
 import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
+import com.web2.safia.repositories.adapters.JpaRoleRepository;
 
 public class AuthServiceTest {
 	private AuthService underTest;
@@ -21,10 +22,13 @@ public class AuthServiceTest {
 	@Mock
 	private JpaEmployeeRepository employeeRepository;
 
+	@Mock
+	private JpaRoleRepository roleRepository;
+
 	@BeforeAll
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		underTest = new AuthService(commitEventPublisher, passwordEncoder, employeeRepository);
+		underTest = new AuthService(commitEventPublisher, passwordEncoder, employeeRepository, roleRepository);
 	}
 
 	@Test

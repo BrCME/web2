@@ -77,7 +77,12 @@ public class Employee extends BaseModel {
 			@Size(max = 20, min = 8, message = "Senha deve conter entre 8 a 20 letras") String password,
 			@Size(max = 11, min = 11, message = "Tamanho de telefone precisa ser 11") String phoneNumber,
 			@Size(max = 11, min = 11, message = "Tamanho de CPF precisa ser 11") String cpf,
-			@Past(message = "Data de nascimento deve estar no passado") LocalDate birthDate) {
+			@Past(message = "Data de nascimento deve estar no passado") LocalDate birthDate,
+			Set<Team> teams,
+			Set<Project> projects,
+			Set<Work> works,
+			Set<Task> tasks,
+			Set<Role> roles) {
 
 		super(id, creator, createdAt, updatedAt, deletedAt);
 		this.name = name;
@@ -86,6 +91,11 @@ public class Employee extends BaseModel {
 		this.phoneNumber = phoneNumber;
 		this.cpf = cpf;
 		this.birthDate = birthDate;
+		this.teams = new HashSet<>(teams);
+		this.projects = new HashSet<>(projects);
+		this.works = new HashSet<>(works);
+		this.tasks = new HashSet<>(tasks);
+		this.roles = new HashSet<>(roles);
 	}
 
 	public String getName() {
