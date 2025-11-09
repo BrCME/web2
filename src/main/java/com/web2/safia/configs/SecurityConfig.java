@@ -21,13 +21,15 @@ import com.web2.safia.models.Employee;
 public class SecurityConfig implements AuditorAware<Employee> {
 	private static final String[] WHITE_LIST = { "/index.html", "/", "/logout", "/login", "/auth/sign-in",
 			"/auth/sign-up", "/auth/new-employee" };
+	private static final String[] CONTENT_LIST = { "/images/**", "/svgs/**", "/scripts/**" };
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 				.authorizeHttpRequests(customizer -> customizer
 						.requestMatchers(WHITE_LIST).permitAll()
-						.anyRequest().permitAll())
+						.requestMatchers(CONTENT_LIST).permitAll()
+						.anyRequest().authenticated())
 				.formLogin(form -> form
 						.loginPage("/auth/sign-in").permitAll()
 						.defaultSuccessUrl("/").permitAll())

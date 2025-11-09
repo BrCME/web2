@@ -1,6 +1,8 @@
 <header th:fragment="header"
 	class="place-self-start w-full h-[5rem] px-8 flex justify-between align-center bg-slate-950">
-	<img th:src="@{/images/safia-logo.jpg}" alt="ícone da logo" class="rounded-xl p-2">
+	<a th:href="@{/}" class="h-full px-4 bg-cover hover:opacity-80">
+		<img th:src="@{/images/safia-logo.jpg}" alt="ícone da logo" class="w-full h-full rounded-xl p-2">
+	</a>
 
 	<nav class="flex align-center">
 		<ul class="w-full flex align-center gap-x-8">
@@ -11,9 +13,11 @@
 			<!-- Privado - logado -->
 			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-sky-400"
 				sec:authorize="isAuthenticated()">
-				<span>Olá, </span>
-				<span sec:authentication="principal.username">Username</span>
-				<span sec:authentication="principal.authorities">(Roles)</span>
+				<a th:href="@{/employee/me}">
+					<span>Olá, </span>
+					<span sec:authentication="principal.name">Username</span>
+					<!-- <span sec:authentication="principal.authorities">(Roles)</span> -->
+				</a>
 			</li>
 			<li class="place-self-center cursor-pointer hover:opacity-80 uppercase text-xl font-bold text-gray-200"
 				sec:authorize="isAuthenticated()"><a th:href="@{/team}">Equipes</a>
