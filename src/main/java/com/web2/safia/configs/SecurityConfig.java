@@ -19,9 +19,11 @@ import com.web2.safia.models.Employee;
 
 @Configuration
 public class SecurityConfig implements AuditorAware<Employee> {
-	private static final String[] WHITE_LIST = { "/index.html", "/", "/logout", "/login", "/auth/sign-in",
-			"/auth/sign-up", "/auth/new-employee" };
+	private static final String[] WHITE_LIST = { "/", "/auth/sign-in", "/auth/sign-up", "/auth/sign-out",
+			"/auth/new-employee" };
 	private static final String[] CONTENT_LIST = { "/images/**", "/svgs/**", "/scripts/**" };
+	private static final String[] ADMIN_LIST = { "/teams/all", "/employee/all", "/commit/all", "/project/all",
+			"/work/all", "/task/all" };
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,6 +31,7 @@ public class SecurityConfig implements AuditorAware<Employee> {
 				.authorizeHttpRequests(customizer -> customizer
 						.requestMatchers(WHITE_LIST).permitAll()
 						.requestMatchers(CONTENT_LIST).permitAll()
+						.requestMatchers(ADMIN_LIST).hasRole("ROLE_ADMIN")
 						.anyRequest().authenticated())
 				.formLogin(form -> form
 						.loginPage("/auth/sign-in").permitAll()
