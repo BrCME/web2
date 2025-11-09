@@ -49,7 +49,7 @@ public class AuthService implements UserDetailsService {
 			throw new UsernameNotFoundException(String.format("Empregado com email '%s' não encontrado", username));
 		}
 
-		return new User(employee.get().getName(), employee.get().getPassword(), employee.get().getAllRoles());
+		return employee.get();
 	}
 
 	public void create(@Valid Employee employee) {

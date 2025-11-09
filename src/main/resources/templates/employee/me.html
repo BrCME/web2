@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<link rel="shortcut icon" th:href="@{/images/favico.ico}" type="image/x-icon">
+	<title>Time Tracker | SAFIA</title>
+</head>
+
+<body class="bg-center bg-cover bg-no-repeat bg-slate-800 flex flex-col justify-center items-center min-h-screen">
+	<div class="w-full" th:insert="~{fragments/header :: header}"></div>
+
+	<form class="flex flex-col w-6/10 place-self-center my-4">
+		<fieldset class="mb-4" disabled>
+			<legend class="font-bold text-gray-200 text-left mb-4">Dados de Sistema</legend>
+
+			<span class="my-2 h-6 flex">
+				<h3 class="font-bold text-left text-gray-200" for="email">Id:</h3>
+				<div sec:authentication="principal.id"
+					class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+			</span>
+
+			<span class="my-2 h-6 flex">
+				<h3 class="font-bold text-left text-gray-200" for="email">Email:</h3>
+				<div sec:authentication="principal.email"
+					class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+			</span>
+
+			<span class="my-2 h-6 flex">
+				<h3 class="font-bold text-left text-gray-200" for="senha">Senha:</h3>
+				<div class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full">************</div>
+			</span>
+		</fieldset>
+
+		<fieldset class="mb-4" disabled>
+			<legend class="font-bold text-gray-200 text-left mb-4">Dados Pessoais</legend>
+
+			<span class="my-2 h-6 flex">
+				<h3 class="font-bold text-left text-gray-200" for="nome">Nome:</h3>
+				<div sec:authentication="principal.name"
+					class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+			</span>
+
+			<span class="my-2 h-6 flex">
+				<h3 class="font-bold text-left text-gray-200" for="cpf">CPF:</h3>
+				<div sec:authentication="principal.cpf"
+					class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+			</span>
+
+			<span class="my-2 h-6 flex">
+				<h3 class="font-bold text-left text-gray-200" for="telefone">Telefone:</h3>
+				<div sec:authentication="principal.phoneNumber"
+					class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+			</span>
+
+			<span class="my-2 h-6 flex">
+				<h3 class="font-bold text-left text-gray-200 text-gray-200" for="nascimeto">Nascimento:</h3>
+				<div sec:authentication="principal.birthDate"
+					class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+			</span>
+		</fieldset>
+	</form>
+
+	<!-- <button
+		class="bg-green-600 rounded-lg my-4 py-2 px-8 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
+		Editar Perfil
+	</button> -->
+
+	<article th:object="${roles}"
+		class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
+		<h3 class="uppercase text-xl font-bold text-sky-400">
+			Meus cargos:
+		</h3>
+		<span class="w-full h-full flex justify-center items-center gap-x-8">
+			<span th:each="role : ${roles}"
+				class="flex justify-center items-center min-w-[8rem] h-[4rem] border-2 border-sky-400 rounded-xl p-2 bg-slate-900 cursor-pointer hover:opacity-80">
+				<h4 th:text="${role}" class="font-bold text-gray-200"></h4>
+			</span>
+		</span>
+	</article>
+
+	<article th:object="${teams}"
+		class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
+		<h3 class="uppercase text-xl font-bold text-green-400">
+			Meus Times:
+		</h3>
+		<span class="w-full h-full flex justify-center items-center gap-x-8">
+			<span th:each="team : ${teams}"
+				class="flex justify-center items-center my-4 px-8 border-2 border-green-400 rounded-[50%] p-2 bg-slate-700 cursor-pointer hover:opacity-80">
+				<h4 th:text="${team}" class="font-bold text-gray-200"></h4>
+			</span>
+		</span>
+	</article>
+
+	<article th:object="${projects}"
+		class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
+		<h3 class="uppercase text-xl font-bold text-orange-400">
+			Meus Projetos:
+		</h3>
+		<span class="w-full h-full flex justify-center items-center gap-x-8">
+			<span th:each="project : ${projects}"
+				class="flex justify-center items-center w-[8rem] h-[8rem] border-2 border-orange-400 rounded-[50%] p-2 bg-slate-700 cursor-pointer hover:opacity-80">
+				<h4 th:text="${project}" class="font-bold text-gray-200"></h4>
+			</span>
+		</span>
+	</article>
+
+	<article th:object="${tasks}"
+		class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
+		<h3 class="uppercase text-xl font-bold text-fuchsia-400">
+			Minhas Tarefas:
+		</h3>
+		<span class="w-full h-full flex justify-center items-center gap-x-8">
+			<span th:each="task : ${tasks}"
+				class="flex justify-center items-center w-[8rem] h-[8rem] border-2 border-fuchsia-400 rounded-[50%] p-2 bg-slate-700 cursor-pointer hover:opacity-80">
+				<h4 th:text="${task}" class="font-bold text-gray-200"></h4>
+			</span>
+		</span>
+	</article>
+
+	<article th:object="${works}"
+		class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
+		<h3 class="uppercase text-xl font-bold text-rose-400">
+			Meus Trabalhos:
+		</h3>
+		<span class="w-full h-full flex justify-center items-center gap-x-8">
+			<span th:each="work : ${works}"
+				class="flex justify-center items-center w-[8rem] h-[8rem] border-2 border-rose-400 rounded-[50%] p-2 bg-slate-700 cursor-pointer hover:opacity-80">
+				<h4 th:text="${work}" class="font-bold text-gray-200"></h4>
+			</span>
+		</span>
+	</article>
+</body>
+
+</html>

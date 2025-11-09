@@ -2,9 +2,14 @@ package com.web2.safia.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +25,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 @Entity
-public class Employee extends BaseModel {
+public class Employee extends BaseModel implements UserDetails, CredentialsContainer {
 	@Column(name = "name", nullable = false)
 	@NotBlank(message = "Nome é obrigatório")
 	private String name;
@@ -182,6 +187,30 @@ public class Employee extends BaseModel {
 		projects.remove(project);
 	}
 
+	public Set<Work> getAllWorks() {
+		return Set.copyOf(works);
+	}
+
+	public void addWork(Work work) {
+		works.add(work);
+	}
+
+	public void removeWork(Work work) {
+		works.remove(work);
+	}
+
+	public Set<Task> getAllTasks() {
+		return Set.copyOf(tasks);
+	}
+
+	public void addTask(Task task) {
+		tasks.add(task);
+	}
+
+	public void removeTask(Task task) {
+		tasks.remove(task);
+	}
+
 	public Set<Role> getAllRoles() {
 		return Set.copyOf(roles);
 	}
@@ -249,5 +278,20 @@ public class Employee extends BaseModel {
 				", works=" + works +
 				", tasks=" + tasks +
 				", roles=" + roles + "]";
+	}
+
+	@Override
+	public void eraseCredentials() {
+		password = null;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
 	}
 }
