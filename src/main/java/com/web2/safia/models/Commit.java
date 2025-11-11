@@ -22,7 +22,7 @@ public class Commit extends BaseModel {
     @JdbcType(value = PostgreSQLEnumJdbcType.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private CommitType type;
+    private Type type;
 
     public Commit() {
         super();
@@ -30,7 +30,7 @@ public class Commit extends BaseModel {
 
     public Commit(
             @NotBlank(message = "Descrição não pode ser vazia") String description,
-            CommitType type) {
+            Type type) {
 
         this.description = description;
         this.type = type;
@@ -43,11 +43,15 @@ public class Commit extends BaseModel {
             LocalDateTime updatedAt,
             LocalDateTime deletedAt,
             @Valid @NotBlank(message = "Descrição não pode ser vazia") String description,
-            CommitType type) {
+            Type type) {
 
         super(id, creator, createdAt, updatedAt, deletedAt);
         this.description = description;
         this.type = type;
+    }
+
+    public static enum Type {
+        ATUALIZACAO, DESATIVACAO, ATIVACAO, REMOCAO, CRIACAO;
     }
 
     public String getDescription() {
@@ -60,11 +64,11 @@ public class Commit extends BaseModel {
         this.description = description;
     }
 
-    public CommitType getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(CommitType type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

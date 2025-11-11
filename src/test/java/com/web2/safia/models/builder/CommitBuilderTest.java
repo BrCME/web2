@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.web2.safia.models.CommitType;
+import com.web2.safia.models.Commit;
 import com.web2.safia.models.builders.CommitBuilder;
 
 class CommitBuilderTest {
@@ -38,13 +38,13 @@ class CommitBuilderTest {
 	void givenValidArguments_whenBuilding_thenReturnValidCommit() {
 		var result = underTest
 				.builder()
-				.withType(CommitType.ATIVACAO)
+				.withType(Commit.Type.ATIVACAO)
 				.withDescription("Descrição de teste")
 				.build();
 
 		assertNotNull(result);
 		assertNotNull(result.getType());
-		assertEquals(CommitType.ATIVACAO, result.getType());
+		assertEquals(Commit.Type.ATIVACAO, result.getType());
 		assertNotNull(result.getDescription());
 		assertEquals("Descrição de teste", result.getDescription());
 		assertNotNull(result.getCreatedAt());

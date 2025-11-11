@@ -31,7 +31,7 @@ public class SecurityConfig implements AuditorAware<Employee> {
 				.authorizeHttpRequests(customizer -> customizer
 						.requestMatchers(WHITE_LIST).permitAll()
 						.requestMatchers(CONTENT_LIST).permitAll()
-						.requestMatchers(ADMIN_LIST).hasRole("ROLE_ADMIN")
+						.requestMatchers(ADMIN_LIST).hasRole("ADMIN")
 						.anyRequest().authenticated())
 				.formLogin(form -> form
 						.loginPage("/auth/sign-in").permitAll()
@@ -39,9 +39,9 @@ public class SecurityConfig implements AuditorAware<Employee> {
 				.logout(logout -> logout
 						.logoutUrl("/auth/sign-out").permitAll()
 						.invalidateHttpSession(true)
-						.logoutSuccessUrl("/")
 						.clearAuthentication(true)
-						.deleteCookies("JSESSIONID").permitAll())
+						.deleteCookies("JSESSIONID")
+						.logoutSuccessUrl("/").permitAll())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 				.build();
 	}

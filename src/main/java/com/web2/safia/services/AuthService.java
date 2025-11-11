@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.web2.safia.events.CommitEventPublisher;
 import com.web2.safia.models.Employee;
-import com.web2.safia.models.RoleType;
+import com.web2.safia.models.Role;
 import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
 import com.web2.safia.repositories.adapters.JpaRoleRepository;
 
@@ -55,7 +55,7 @@ public class AuthService implements UserDetailsService {
 		var encodedPassword = passwordEncoder.encode(employee.getPassword());
 		employee.setPassword(encodedPassword);
 
-		var roles = roleRepository.findAllByType(Set.of(RoleType.EMPLOYEE.name(), RoleType.NEWCOMER.name()));
+		var roles = roleRepository.findAllByType(Set.of(Role.Type.EMPLOYEE.name(), Role.Type.NEWCOMER.name()));
 
 		roles.stream().forEach(role -> employee.addRole(role));
 

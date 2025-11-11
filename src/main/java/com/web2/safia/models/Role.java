@@ -25,14 +25,18 @@ public class Role implements GrantedAuthority {
 	@JdbcType(value = PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
-	private RoleType type;
+	private Type type;
 
 	public Role() {
 	}
 
-	public Role(UUID id, RoleType type) {
+	public Role(UUID id, Type type) {
 		this.id = id;
 		this.type = type;
+	}
+
+	public static enum Type {
+		ADMIN, OWNER, MANAGER, EMPLOYEE, NEWCOMER;
 	}
 
 	public UUID getId() {
@@ -43,11 +47,11 @@ public class Role implements GrantedAuthority {
 		this.id = id;
 	}
 
-	public RoleType getType() {
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(RoleType type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 

@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.web2.safia.models.Commit;
-import com.web2.safia.models.CommitType;
 import com.web2.safia.models.builders.EmployeeBuilder;
 import com.web2.safia.repositories.adapters.JpaCommitRepository;
 
@@ -34,7 +33,7 @@ class CommitEventListenerTest {
 	@Test
 	void givenInvalidCommitEvent_whenOnCommitEvent_thenThrowsException() {
 		assertThrows(IllegalArgumentException.class,
-				() -> underTest.onCommitEvent(new CommitEvent(this, "Commit inválido", CommitType.ATIVACAO, null)));
+				() -> underTest.onCommitEvent(new CommitEvent(this, "Commit inválido", Commit.Type.ATIVACAO, null)));
 	}
 
 	@Test
@@ -46,9 +45,9 @@ class CommitEventListenerTest {
 				.withId(UUID.randomUUID())
 				.build();
 
-		var validCommitEvent = new CommitEvent(this, "Criado usuário 'user@mail.com' novo", CommitType.CRIACAO,
+		var validCommitEvent = new CommitEvent(this, "Criado usuário 'user@mail.com' novo", Commit.Type.CRIACAO,
 				creator);
-		var validCommitModel = new Commit("Criado usuário 'user@mail.com' novo", CommitType.CRIACAO);
+		var validCommitModel = new Commit("Criado usuário 'user@mail.com' novo", Commit.Type.CRIACAO);
 
 		when(commitRepository.save(validCommitModel)).thenReturn(validCommitModel);
 
