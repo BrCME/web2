@@ -37,7 +37,7 @@ spring:
       maximum-pool-size: 20
 
   jpa:
-    show-sql: false
+    show-sql: true
     generate-ddl: false
     open-in-view: false
     properties:
@@ -48,6 +48,7 @@ spring:
       hibernate:
         format-sql: true
         ddl-auto: none
+        generate_statistics: true
 
   lifecycle:
     timeout-per-shutdown-phase: "30s"
