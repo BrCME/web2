@@ -6,9 +6,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.web2.safia.events.CommitEventPublisher;
+import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
 import com.web2.safia.repositories.adapters.JpaTeamRepository;
 
-public class TeamServiceTest {
+
+class TeamServiceTest {
 	private TeamService underTest;
 
 	@Mock
@@ -17,13 +19,40 @@ public class TeamServiceTest {
 	@Mock
 	private JpaTeamRepository teamRepository;
 
+	@Mock
+	private JpaEmployeeRepository employeeRepository;
+
 	@BeforeAll
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		underTest = new TeamService(commitEventPublisher, teamRepository);
+		underTest = new TeamService(commitEventPublisher, teamRepository, employeeRepository);
 	}
 
 	@Test
 	void givenValidPageable_whenGetAll_thenReturnTeamPage() {
+	}
+
+	@Test
+	void givenValidPageable_whenGetAllByCreator_thenReturnTeamPage() {
+	}
+
+	@Test
+	void create() {
+	}
+
+	@Test
+	void deleteById() {
+	}
+
+	@Test
+	void updateById() {
+	}
+
+	@Test
+	void addEmployee() {
+	}
+
+	@Test
+	void removeEmployee() {
 	}
 }

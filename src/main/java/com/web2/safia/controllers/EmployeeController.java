@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.web2.safia.exceptions.DomainException;
+import com.web2.safia.models.Employee;
 import com.web2.safia.services.EmployeeService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,12 +26,13 @@ public class EmployeeController {
 			Model model,
 			HttpServletRequest request) throws DomainException {
 
-		var employee = employeeService.getByEmail(request.getUserPrincipal().getName());
+		var employee = getCreator(request.getUserPrincipal().getName());
+
 		model.addAttribute("roles", employee.getAllRoles());
-		model.addAttribute("projects", employee.getAllProjects());
-		model.addAttribute("teams", employee.getAllTeams());
-		model.addAttribute("works", employee.getAllWorks());
-		model.addAttribute("tasks", employee.getAllTasks());
+		model.addAttribute("projects", employeeService.getAllProjects(employee));
+		model.addAttribute("teams", employeeService.getAllTeams(employee));
+		model.addAttribute("works", employeeService.getAllWorks(employee));
+		model.addAttribute("tasks", employeeService.getAllTasks(employee));
 
 		return "/employee/me.html";
 	}
@@ -44,5 +46,9 @@ public class EmployeeController {
 		}
 
 		return "index.html";
+	}
+
+	private Employee getCreator(String email) throws DomainException {
+		return employeeService.getByEmail(email);
 	}
 }

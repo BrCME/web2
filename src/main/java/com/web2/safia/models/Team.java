@@ -8,9 +8,11 @@ import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
@@ -24,16 +26,13 @@ public class Team extends BaseModel {
 	@Column(name = "description", nullable = false)
 	private String description;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "employee_to_team", joinColumns = @JoinColumn(name = "team_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
 	@ElementCollection
 	private Set<Employee> employees = new HashSet<>();
 
-	// @ManyToMany
-	// @JoinTable(name = "team_project", joinColumns = @JoinColumn(name =
-	// "team_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
-	// @ElementCollection
-	// private Set<Project> projects = new HashSet<>();
+	@OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
+	private Set<Project> projects = new HashSet<>();
 
 	public Team() {
 	}
@@ -72,12 +71,12 @@ public class Team extends BaseModel {
 		return Set.copyOf(employees);
 	}
 	
-	public void addEmployee(Employee employee) {
-		employees.add(employee);
+	public boolean addEmployee(Employee employee) {
+		return employees.add(employee);
 	}
 
-	public void removeEmployee(Employee employee) {
-		employees.remove(employee);
+	public boolean removeEmployee(Employee employee) {
+		return employees.remove(employee);
 	}
 
 	@Override

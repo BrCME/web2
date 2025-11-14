@@ -41,10 +41,12 @@ public class Task extends BaseModel {
 	@Column(name = "dead_line", nullable = false)
 	private LocalDateTime deadLine;
 
-	@OneToMany(mappedBy = "task")
+	@OneToMany
+	@JoinColumn()
 	private Set<Work> works = new HashSet<>();
 
-	@ManyToMany(mappedBy = "tasks")
+	@ManyToMany
+	
 	private Set<Employee> employees = new HashSet<>();
 
 	public Task() {

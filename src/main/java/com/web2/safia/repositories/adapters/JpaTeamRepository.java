@@ -6,12 +6,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
+import org.springframework.data.repository.query.Param;
 
+import com.web2.safia.models.Employee;
 import com.web2.safia.models.Team;
 
-import io.lettuce.core.dynamic.annotation.Param;
+import java.util.Set;
 
 public interface JpaTeamRepository extends JpaRepository<Team, UUID> {
-	@NativeQuery("SELECT t.id, t.name, t.description, t.created_by, t.created_at, t.updated_at, t.deleted_at FROM team t WHERE t.created_by = :creatorId AND t.deleted_at IS NULL")
-	Page<Team> findAllByCreator(Pageable pageable, @Param("creatorId") UUID creatorId);
+	Page<Team> findAllByCreator(Pageable pageable, Employee creator);
+
+	@NativeQuery(
+		"SELECT t.* FROM team t " +
+		"INNER JOIN employee_to_team ett ON t.id = ett.team_id " +
+		"INNER JOIN employee e ON e.id = ett.employee_id " +
+		"WHERE t.deleted_at IS NULL AND e.id = :employeeId;")
+	Set<Team> findByUserId(@Param("employeeId") UUID employeeId);
 }

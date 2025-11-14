@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web2.safia.events.CommitEventPublisher;
 import com.web2.safia.models.Employee;
@@ -40,6 +42,7 @@ public class AuthService implements UserDetailsService {
 	}
 
 	@Override
+	// @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		var employee = employeeRepository.findByEmail(username);
 
@@ -47,6 +50,8 @@ public class AuthService implements UserDetailsService {
 			logger.error("Empregado com email '{}' não encontrado", username);
 			throw new UsernameNotFoundException(String.format("Empregado com email '%s' não encontrado", username));
 		}
+
+		employee.get().getAllRoles();
 
 		return employee.get();
 	}

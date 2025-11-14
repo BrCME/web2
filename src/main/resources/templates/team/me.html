@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<link rel="shortcut icon" th:href="@{/images/favico.ico}" type="image/x-icon">
+	<title>Equipes | SAFIA</title>
+</head>
+
+<body class="bg-center bg-cover bg-no-repeat bg-slate-800 flex flex-col justify-start items-center min-h-screen">
+	<div class="w-full" th:insert="~{fragments/header :: header}"></div>
+
+	<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 uppercase place-self-center mt-8">
+		Minhas Equipes
+	</h1>
+
+	<!-- 	
+	<article th:object="${teams}" class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
+		<span class="w-full h-full flex justify-center items-center gap-x-8">
+			<span th:each="team : ${teams}"
+				class="flex justify-center items-center my-4 px-8 border-2 border-green-400 rounded-[50%] p-2 bg-slate-700 cursor-pointer hover:opacity-80">
+				<h4 th:text="${team}" class="font-bold text-gray-200"></h4>
+			</span>
+		</span>
+	</article>
+	-->
+
+	<article>
+		<h2>Informações</h2>
+
+		<span th:text="'Total de Equipe(s): ' + ${total}">
+		</span>
+	</article>
+
+
+	<a th:href="@{/team/create}"
+		class="place-self-end bg-green-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
+		Nova Equipe
+	</a>
+
+	<table class="w-6/10" th:object="${teams}">
+		<thead>
+			<tr class="w-full h-12 text-gray-200 font-bold uppercase bg-slate-950">
+				<th>Nome</th>
+				<th>Descrição</th>
+				<th>Criador</th>
+				<th>Criado em</th>
+				<th>Ações</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="team : ${teams}"
+				class="w-full h-12 text-slate-950 font-bold uppercase bg-gray-200 text-center cursor-pointer hover:opacity-80">
+				<td>
+					<a th:href="@{/team/detail/${team.id}}">
+						<p class="inline" th:text="${team.name}">Team O</p>
+						<p class="inline" th:text="${team.description}">A melhor equipe do bairro!</p>
+						<p class="inline" th:text="${team.creator.name}">Jack Stalber</p>
+						<p class="inline" th:text="${team.createdAt}">20/01/2020</p>
+					</a>
+				</td>
+			</tr>
+
+			<!-- <tr
+				class="w-full h-12 text-gray-200 font-bold uppercase bg-gray-600 text-center cursor-pointer hover:opacity-80">
+				<td>Team O</td>
+				<td>A melhor equipe do bairro!</td>
+				<td>Jack Stalber</td>
+				<td>12/11/2025</td>
+				<td></td>
+			</tr>
+
+			<tr
+				class="w-full h-12 text-slate-950 font-bold uppercase bg-gray-200 text-center cursor-pointer hover:opacity-80">
+				<td>Team O</td>
+				<td>A melhor equipe do bairro!</td>
+				<td>Jack Stalber</td>
+				<td>21/15/2000</td>
+				<td></td>
+			</tr> -->
+		</tbody>
+	</table>
+
+	<div>
+		<button>Primeiro</button>
+		<button>1</button>
+		<button>2</button>
+		<button>3</button>
+		<button>Último</button>
+	</div>
+
+</body>
+
+</html>
