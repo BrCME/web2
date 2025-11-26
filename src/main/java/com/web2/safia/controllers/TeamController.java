@@ -20,8 +20,6 @@ import com.web2.safia.services.TeamService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
 @RequestMapping("/team")
@@ -63,10 +61,16 @@ public class TeamController {
 	}
 
 	@GetMapping("/detail/{id}")
-	public String getMethodName(@PathVariable("id") String id) {
-		return "/index.html";
+	public String getDetail(
+			@PathVariable("id") UUID id,
+			Model model,
+			HttpServletRequest request) throws DomainException {
+
+		var team = teamService.getById(id);
+		model.addAttribute("team", team);
+
+		return "/team/detail.html";
 	}
-	
 
 	@GetMapping("/create")
 	public String getCreatePage(

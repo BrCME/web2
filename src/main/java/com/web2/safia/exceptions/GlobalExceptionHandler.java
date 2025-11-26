@@ -2,12 +2,13 @@ package com.web2.safia.exceptions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.thymeleaf.exceptions.TemplateEngineException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -17,9 +18,9 @@ public class GlobalExceptionHandler {
 			DomainException.class,
 			IllegalArgumentException.class })
 	public String handleExceptions(Exception ex, Model model) {
-		logger.error("Exceção de Domínio: {}", ex);
+		logger.error("Exceção de Domínio: ", ex);
 
-		model.addAttribute("message", ex.getMessage());
+		model.addAttribute("message", ex.getLocalizedMessage());
 		model.addAttribute("code", HttpStatus.BAD_REQUEST.value());
 
 		return "error.html";
@@ -28,7 +29,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler({
 		MethodArgumentNotValidException.class})
 	public String handleInvalidArgumentExceptions(MethodArgumentNotValidException  ex, Model model) {
-		logger.error("Exceção de Validação: {}", ex);
+		logger.error("Exceção de Validação: ", ex);
 		
 		model.addAttribute("message", ex.getAllErrors().stream().map(error -> error.getDefaultMessage()).toList());
 		model.addAttribute("code", HttpStatus.BAD_REQUEST.value());
@@ -37,22 +38,34 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler({
-			JpaSystemException.class
+			DataAccessException.class
 	})
-	public String handleJpaExceptions(JpaSystemException ex, Model model) {
-		logger.error("Exceção de JPA: {}", ex);
+	public String handleJpaExceptions(Exception ex, Model model) {
+		logger.error("Exceção de JPA: ", ex);
 
-		model.addAttribute("message", ex.getMessage());
+		model.addAttribute("message", ex.getLocalizedMessage());
 		model.addAttribute("code", HttpStatus.SERVICE_UNAVAILABLE.value());
 
 		return "error.html";
 	}
 
+	@ExceptionHandler({
+		TemplateEngineException.class
+	})
+	public String handleTemplateExceptions(Exception ex, Model model) {
+		logger.error("Exceção de Thymeleaf: ", ex);
+
+		model.addAttribute("message", ex.getLocalizedMessage());
+		model.addAttribute("code", HttpStatus.UNPROCESSABLE_ENTITY.value());
+		
+		return "error.html";
+	}
+
 	@ExceptionHandler({ Exception.class })
 	public String handleGenericExceptions(Exception ex, Model model) {
-		logger.error("Exceção extra: {}", ex);
+		logger.error("Exceção extra: ", ex);
 
-		model.addAttribute("message", ex.getMessage());
+		model.addAttribute("message", ex.getLocalizedMessage());
 		model.addAttribute("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
 
 		return "error.html";

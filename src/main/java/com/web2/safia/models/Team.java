@@ -1,6 +1,7 @@
 package com.web2.safia.models;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -77,6 +78,18 @@ public class Team extends BaseModel {
 
 	public boolean removeEmployee(Employee employee) {
 		return employees.remove(employee);
+	}
+
+	public Set<Project> getAllProjects() {
+		return Set.copyOf(projects);
+	}
+
+	public boolean addProject(Project project) {
+		return projects.add(project);
+	}
+
+	public boolean removeProject(Project project) {
+		return projects.remove(project);
 	}
 
 	@Override

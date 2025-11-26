@@ -68,9 +68,8 @@
 		Editar Perfil
 	</button> -->
 
-	<article th:object="${roles}"
-		class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
-		<h3 class="uppercase text-xl font-bold text-sky-400">
+	<article th:object="${roles}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
+		<h3 class="uppercase text-xl font-bold text-sky-400 mb-4">
 			Meus cargos:
 		</h3>
 		<span class="w-full h-full flex justify-center items-center gap-x-8">
@@ -81,21 +80,49 @@
 		</span>
 	</article>
 
-	<article th:object="${teams}"
-		class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
-		<h3 class="uppercase text-xl font-bold text-green-400">
+	<article th:object="${teams}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
+		<h3 class="uppercase text-xl font-bold text-green-400 mb-4">
 			Minhas Equipes:
 		</h3>
-		<span class="w-full h-full flex justify-center items-center gap-x-8">
-			<span th:each="team : ${teams}"
+		<span class="w-full h-full flex justify-center items-center gap-x-8 border-2">
+			<table class="w-full " th:object="${teams}">
+				<thead class="text-gray-400 font-bold uppercase bg-slate-950">
+					<tr class="w-full h-12">
+						<th class="px-4" scope="col">Nome</th>
+						<th class="px-4" scope="col">Descrição</th>
+						<th class="px-4" scope="col">Pessoa(s)</th>
+						<th class="px-4" scope="col">Criador</th>
+						<th class="px-4" scope="col">Criado em</th>
+						<th class="px-4" scope="col">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="team : ${teams}"
+						class="w-full h-12 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
+						<th scope="row" class="px-4 text-left cursor-pointer underline"><a
+								th:href="@{/team/detail/} + ${team.id}" th:text="${team.name}">Team O</a></th>
+						<td class="px-4 text-left" th:text="${team.description}">A melhor equipe do bairro!</td>
+						<td class="px-4 text-center" th:text="${team.getAllEmployees().size()}">5 pessoa(s)</td>
+						<td class="px-4 text-center" th:text="${team.creator.name}">Jack Stalber</td>
+						<td class="px-4 text-center" th:text="${team.createdAt.toLocalDate()}">20/01/2020</td>
+						<td>
+							<span>
+								<img src="" alt="ícone de lixeira pequena">
+								<img src="" alt="ícone de lápis pequeno">
+							</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<!-- <span th:each="team : ${teams}"
 				class="flex justify-center items-center my-4 px-8 border-2 border-green-400 rounded-[50%] p-2 bg-slate-700 cursor-pointer hover:opacity-80">
 				<h4 th:text="${team}" class="font-bold text-gray-200"></h4>
-			</span>
+			</span> -->
 		</span>
 	</article>
 
-	<article th:object="${projects}"
-		class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
+	<article th:object="${projects}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
 		<h3 class="uppercase text-xl font-bold text-orange-400">
 			Meus Projetos:
 		</h3>
@@ -107,8 +134,7 @@
 		</span>
 	</article>
 
-	<article th:object="${tasks}"
-		class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
+	<article th:object="${tasks}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
 		<h3 class="uppercase text-xl font-bold text-fuchsia-400">
 			Minhas Tarefas:
 		</h3>
@@ -120,8 +146,7 @@
 		</span>
 	</article>
 
-	<article th:object="${works}"
-		class="flex flex-col justify-center items-center w-6/10 h-[12rem]">
+	<article th:object="${works}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
 		<h3 class="uppercase text-xl font-bold text-rose-400">
 			Meus Trabalhos:
 		</h3>

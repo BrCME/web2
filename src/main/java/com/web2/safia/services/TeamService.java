@@ -44,14 +44,25 @@ public class TeamService {
 		return teamRepository.findAllByCreator(pageable, creator);
 	}
 
+	public Team getById(UUID id) throws DomainException {
+		var team = teamRepository.findById(id);
+
+		if (!team.isPresent()) {
+			logger.error("Equipe com id '{}' não encontrada", id);
+			throw new DomainException(String.format("Equipe com id '%s' não encontrada", id));
+		}
+
+		return team.get();
+	}
+
 	public void create(@Valid Team team, Employee creator) {
 		team.setCreator(creator);
 		team.addEmployee(creator);
 		teamRepository.save(team);
-		logger.info("Criado time '{}' novo por '{}", team.getName(), creator.getEmail());
+		logger.info("Criada equipe '{}' novo por '{}", team.getName(), creator.getEmail());
 
 		commitEventPublisher.publishCreateCommitEvent(
-				String.format("Criado time '%s' novo", team.getName()),
+				String.format("Criada equipe '%s' novo", team.getName()),
 				creator);
 	}
 
@@ -59,7 +70,7 @@ public class TeamService {
 		var team = teamRepository.findById(id);
 
 		if (!team.isPresent()) {
-			logger.error("Time '{}' não encontrado para deletar", id);
+			logger.error("Equipe '{}' não encontrada para deletar", id);
 			throw new DomainException();
 		}
 
@@ -67,7 +78,7 @@ public class TeamService {
 		teamRepository.save(team.get());
 
 		commitEventPublisher.publishDeactivateCommitEvent(
-				String.format("Deletado time '%s'", team.get().getName()),
+				String.format("Deletada equipe '%s'", team.get().getName()),
 				creator);
 	}
 
@@ -75,8 +86,8 @@ public class TeamService {
 		var actualTeam = teamRepository.findById(team.getId());
 
 		if (!actualTeam.isPresent()) {
-			logger.error("Time '{}' não encontrado para atualizar", team.getId());
-			throw new DomainException("Time não encontrado");
+			logger.error("Equipe '{}' não encontrado para atualizar", team.getId());
+			throw new DomainException("Equipe não encontrada");
 		}
 
 		actualTeam.get().setName(team.getName());
@@ -84,7 +95,7 @@ public class TeamService {
 
 		teamRepository.save(actualTeam.get());
 		commitEventPublisher.publishUpdateCommitEvent(
-				String.format("Atualizado time '%s'", actualTeam.get().getName()),
+				String.format("Atualizada equipe '%s'", actualTeam.get().getName()),
 				creator);
 	}
 
@@ -93,25 +104,25 @@ public class TeamService {
 		var employee = employeeRepository.findById(employeeId);
 
 		if (!employee.isPresent()) {
-			logger.error("Empregado '{}' não encontrado para adicionar ao time '{}'", employeeId, team.getName());
-			throw new DomainException("Empregado não encontrado para adicionar ao Time");
+			logger.error("Empregado '{}' não encontrado para adicionar à equipe '{}'", employeeId, team.getName());
+			throw new DomainException("Empregado não encontrado para adicionar à equipe");
 		}
 
 		if (!actualTeam.isPresent()) {
-			logger.error("Time '{}' não encontrado para adicionar empregado '{}'", team.getId(),
+			logger.error("Equipe '{}' não encontrada para adicionar empregado '{}'", team.getId(),
 					employee.get().getEmail());
-			throw new DomainException("Time não encontrado para adicionar empregado");
+			throw new DomainException("Equipe não encontrada para adicionar empregado");
 		}
 
 		if (!actualTeam.get().addEmployee(creator)) {
-			logger.error("Não foi possível adicionar o empregado '{}' ao time '{}'", employee.get().getEmail(),
+			logger.error("Não foi possível adicionar o empregado '{}' à equipe '{}'", employee.get().getEmail(),
 					actualTeam.get().getName());
-			throw new DomainException("Não foi possível adicionar empregado ao time");
+			throw new DomainException("Não foi possível adicionar empregado à equipe");
 		}
 
 		teamRepository.save(actualTeam.get());
 		commitEventPublisher.publishUpdateCommitEvent(
-				String.format("Atualizado time '%s' com novo empregado '%s'", actualTeam.get().getName(),
+				String.format("Atualizada equipe '%s' com novo empregado '%s'", actualTeam.get().getName(),
 						employee.get().getEmail()),
 				creator);
 	}
@@ -121,25 +132,25 @@ public class TeamService {
 		var employee = employeeRepository.findById(employeeId);
 
 		if (!employee.isPresent()) {
-			logger.error("Empregado '{}' não encontrado para remover do time '{}'", employeeId, team.getName());
-			throw new DomainException("Empregado não encontrado para remover do Time");
+			logger.error("Empregado '{}' não encontrado para remover da equipe '{}'", employeeId, team.getName());
+			throw new DomainException("Empregado não encontrado para remover da equipe");
 		}
 
 		if (!actualTeam.isPresent()) {
-			logger.error("Time '{}' não encontrado para remover empregado '{}'", team.getId(),
+			logger.error("Equipe '{}' não encontrado para remover empregado '{}'", team.getId(),
 					employee.get().getEmail());
-			throw new DomainException("Time não encontrado para remover empregado");
+			throw new DomainException("Equipe não encontrado para remover empregado");
 		}
 
 		if (!actualTeam.get().removeEmployee(employee.get())) {
-			logger.error("Não foi possivel remover o empregado '{}' do time '{}'", employee.get().getEmail(),
+			logger.error("Não foi possivel remover o empregado '{}' da equipe '{}'", employee.get().getEmail(),
 					actualTeam.get().getName());
-			throw new DomainException("Não foi possível remover empregado do time");
+			throw new DomainException("Não foi possível remover empregado da equipe");
 		}
 
 		teamRepository.save(actualTeam.get());
 		commitEventPublisher.publishUpdateCommitEvent(
-				String.format("Atualizado time '%s'", actualTeam.get().getName()),
+				String.format("Atualizada equipe '%s'", actualTeam.get().getName()),
 				creator);
 	}
 }
