@@ -5,18 +5,26 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.web2.safia.events.CommitEventPublisher;
+import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
 import com.web2.safia.repositories.adapters.JpaProjectRepository;
 
 public class ProjectServiceTest {
 	private ProjectService underTest;
 
 	@Mock
+	private CommitEventPublisher commitEventPublisher;
+	
+	@Mock
+	private JpaEmployeeRepository employeeRepository;
+	
+	@Mock
 	private JpaProjectRepository projectRepository;
 	
 	@BeforeAll
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		underTest = new ProjectService(projectRepository);
+		underTest = new ProjectService(commitEventPublisher, employeeRepository, projectRepository);
 	}
 
 	@Test

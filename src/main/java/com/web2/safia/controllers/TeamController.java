@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.web2.safia.exceptions.DomainException;
-import com.web2.safia.models.Employee;
 import com.web2.safia.models.Team;
 import com.web2.safia.services.EmployeeService;
 import com.web2.safia.services.TeamService;
@@ -23,16 +22,15 @@ import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/team")
-public class TeamController {
-	private final EmployeeService employeeService;
+public class TeamController extends BaseController {
 	private final TeamService teamService;
 
 	public TeamController(
 			TeamService teamService,
 			EmployeeService employeeService) {
 
+		super(employeeService);
 		this.teamService = teamService;
-		this.employeeService = employeeService;
 	}
 
 	@GetMapping("/all")
@@ -97,14 +95,14 @@ public class TeamController {
 		return getAllByCreator(Pageable.ofSize(20), model, request);
 	}
 
-	@PostMapping("/delete-team/{teamId}")
+	@PostMapping("/delete/{id}")
 	public String deleteById(
-			@PathVariable("teamId") UUID teamId,
+			@PathVariable("id") UUID id,
 			Model model,
 			HttpServletRequest request) throws DomainException {
 
 		var creator = getCreator(request.getUserPrincipal().getName());
-		teamService.deleteById(teamId, creator);
+		teamService.deleteById(id, creator);
 
 		return getAllByCreator(Pageable.ofSize(20), model, request);
 	}
@@ -145,9 +143,5 @@ public class TeamController {
 		teamService.removeEmployee(team, employeeId, creator);
 
 		return getAllByCreator(Pageable.ofSize(20), model, request);
-	}
-
-	private Employee getCreator(String email) throws DomainException {
-		return employeeService.getByEmail(email);
 	}
 }

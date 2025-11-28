@@ -18,16 +18,14 @@ public class CommitController {
 		this.commitService = commitService;
 	}
 
-	@GetMapping("/")
-	public String getAll(Pageable pageable, Model model) {
+	@GetMapping
+	public String getAll(
+			Pageable pageable,
+			Model model) {
+
 		var commits = commitService.getAll(pageable);
-
-		if (commits.isEmpty()) {
-			return "error.html";
-		}
-
 		model.addAttribute("commits", commits);
 
-		return "index.html";
+		return "/commit/index.html";
 	}
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.web2.safia.events.CommitEventPublisher;
 import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
 import com.web2.safia.repositories.adapters.JpaTaskRepository;
 import com.web2.safia.repositories.adapters.JpaWorkRepository;
@@ -11,6 +12,9 @@ import com.web2.safia.repositories.adapters.JpaWorkRepository;
 public class TaskServiceTest {
 	private TaskService underTest;
 
+	@Mock
+	private CommitEventPublisher commitEventPublisher;
+	
 	@Mock
 	private JpaEmployeeRepository employeeRepository;
 	
@@ -23,7 +27,7 @@ public class TaskServiceTest {
 	@BeforeAll
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		underTest = new TaskService(employeeRepository, workRepository, taskRepository);
+		underTest = new TaskService(commitEventPublisher, employeeRepository, workRepository, taskRepository);
 	}
 	
 }

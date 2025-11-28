@@ -19,10 +19,9 @@ import com.web2.safia.repositories.adapters.JpaTeamRepository;
 import jakarta.validation.Valid;
 
 @Service
-public class TeamService {
+public class TeamService extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(TeamService.class);
 
-	private final CommitEventPublisher commitEventPublisher;
 	private final JpaTeamRepository teamRepository;
 	private final JpaEmployeeRepository employeeRepository;
 
@@ -31,7 +30,7 @@ public class TeamService {
 			JpaTeamRepository teamRepository,
 			JpaEmployeeRepository employeeRepository) {
 
-		this.commitEventPublisher = commitEventPublisher;
+		super(commitEventPublisher);
 		this.teamRepository = teamRepository;
 		this.employeeRepository = employeeRepository;
 	}

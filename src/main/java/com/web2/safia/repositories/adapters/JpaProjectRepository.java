@@ -3,13 +3,18 @@ package com.web2.safia.repositories.adapters;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.repository.query.Param;
 
+import com.web2.safia.models.Employee;
 import com.web2.safia.models.Project;
 
 public interface JpaProjectRepository extends JpaRepository<Project, UUID> {
+	Page<Project> findAllByCreator(Pageable pageable, Employee creator);
+
 	@NativeQuery(
 		"SELECT p.* FROM project p " +
 		"INNER JOIN employee_to_project etp ON p.id = etp.project_id " +

@@ -112,12 +112,12 @@ public class Project extends BaseModel {
 		return Set.copyOf(employees);
 	}
 
-	public void addEmployee(Employee employee) {
-		employees.add(employee);
+	public boolean addEmployee(Employee employee) {
+		return employees.add(employee);
 	}
 
-	public void removeEmployee(Employee employee) {
-		employees.remove(employee);
+	public boolean removeEmployee(Employee employee) {
+		return employees.remove(employee);
 	}
 
 	@Override

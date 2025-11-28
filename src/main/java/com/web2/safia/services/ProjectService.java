@@ -1,5 +1,6 @@
 package com.web2.safia.services;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -8,35 +9,148 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.web2.safia.events.CommitEventPublisher;
 import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Employee;
 import com.web2.safia.models.Project;
+import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
 import com.web2.safia.repositories.adapters.JpaProjectRepository;
 
+import jakarta.validation.Valid;
+
 @Service
-public class ProjectService {
+public class ProjectService extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
 
+	private final JpaEmployeeRepository employeeRepository;
 	private final JpaProjectRepository projectRepository;
-	
 
-	public ProjectService(JpaProjectRepository projectRepository) {
+	public ProjectService(
+			CommitEventPublisher commitEventPublisher,
+			JpaEmployeeRepository employeeRepository,
+			JpaProjectRepository projectRepository) {
+
+		super(commitEventPublisher);
+		this.employeeRepository = employeeRepository;
 		this.projectRepository = projectRepository;
 	}
 
 	public Page<Project> getAll(Pageable pageable) {
 		return projectRepository.findAll(pageable);
 	}
-	
-	public void addEmployee(UUID projectId, Employee employee) throws DomainException {
-		var project = projectRepository.findById(projectId);
+
+	public Page<Project> getAllByCreator(Pageable pageable, Employee creator) {
+		return projectRepository.findAllByCreator(pageable, creator);
+	}
+
+	public Project getById(UUID id) throws DomainException {
+		var project = projectRepository.findById(id);
 
 		if (!project.isPresent()) {
-			logger.error("Projeto com id {} não existe", projectId);
-			throw new DomainException("Projeto não existe");
+			logger.error("Projeto com id '{}' não encontrado", id);
+			throw new DomainException(String.format("Projeto com id '%s' não encontrado", id));
 		}
 
-		project.get().addEmployee(employee);
+		return project.get();
+	}
+
+	public void create(@Valid Project project, Employee creator) {
+		project.setCreator(creator);
+		project.addEmployee(creator);
+		projectRepository.save(project);
+		logger.info("Criado projeto '{}' novo por '{}", project.getName(), creator.getEmail());
+
+		commitEventPublisher.publishCreateCommitEvent(
+				String.format("Criado projeto '%s' novo", project.getName()),
+				creator);
+	}
+
+	public void deleteById(UUID id, Employee creator) throws DomainException {
+		var project = projectRepository.findById(id);
+
+		if (!project.isPresent()) {
+			logger.error("Projeto '{}' não encontrado para deletar", id);
+			throw new DomainException();
+		}
+
+		project.get().setDeletedAt(LocalDateTime.now());
 		projectRepository.save(project.get());
+
+		commitEventPublisher.publishDeactivateCommitEvent(
+				String.format("Deletado projeto '%s'", project.get().getName()),
+				creator);
+	}
+
+	public void updateById(@Valid Project project, Employee creator) throws DomainException {
+		var actualProject = projectRepository.findById(project.getId());
+
+		if (!actualProject.isPresent()) {
+			logger.error("Projeto '{}' não encontrado para atualizar", project.getId());
+			throw new DomainException("Projeto não encontrado");
+		}
+
+		actualProject.get().setName(project.getName());
+		actualProject.get().setDescription(project.getDescription());
+		actualProject.get().setManager(project.getManager());
+
+		projectRepository.save(actualProject.get());
+		commitEventPublisher.publishUpdateCommitEvent(
+				String.format("Atualizado projeto '%s'", actualProject.get().getName()),
+				creator);
+	}
+
+	public void addEmployee(@Valid Project project, UUID employeeId, Employee creator) throws DomainException {
+		var actualProject = projectRepository.findById(project.getId());
+		var employee = employeeRepository.findById(employeeId);
+
+		if (!employee.isPresent()) {
+			logger.error("Empregado '{}' não encontrado para adicionar ao projeto '{}'", employeeId, project.getName());
+			throw new DomainException("Empregado não encontrado para adicionar ao projeto");
+		}
+
+		if (!actualProject.isPresent()) {
+			logger.error("Projeto '{}' não encontrado para adicionar empregado '{}'", project.getId(),
+					employee.get().getEmail());
+			throw new DomainException("Projeto não encontrado para adicionar empregado");
+		}
+
+		if (!actualProject.get().addEmployee(creator)) {
+			logger.error("Não foi possível adicionar o empregado '{}' ao projeto '{}'", employee.get().getEmail(),
+					actualProject.get().getName());
+			throw new DomainException("Não foi possível adicionar empregado ao projeto");
+		}
+
+		projectRepository.save(actualProject.get());
+		commitEventPublisher.publishUpdateCommitEvent(
+				String.format("Atualizado projeto '%s' com novo empregado '%s'", actualProject.get().getName(),
+						employee.get().getEmail()),
+				creator);
+	}
+
+	public void removeEmployee(@Valid Project project, UUID employeeId, Employee creator) throws DomainException {
+		var actualProject = projectRepository.findById(project.getId());
+		var employee = employeeRepository.findById(employeeId);
+
+		if (!employee.isPresent()) {
+			logger.error("Empregado '{}' não encontrado para remover do projeto '{}'", employeeId, project.getName());
+			throw new DomainException("Empregado não encontrado para remover do projeto");
+		}
+
+		if (!actualProject.isPresent()) {
+			logger.error("Projeto '{}' não encontrado para remover empregado '{}'", project.getId(),
+					employee.get().getEmail());
+			throw new DomainException("Projeto não encontrado para remover empregado");
+		}
+
+		if (!actualProject.get().removeEmployee(employee.get())) {
+			logger.error("Não foi possivel remover o empregado '{}' do projeto '{}'", employee.get().getEmail(),
+					actualProject.get().getName());
+			throw new DomainException("Não foi possível remover empregado do projeto");
+		}
+
+		projectRepository.save(actualProject.get());
+		commitEventPublisher.publishUpdateCommitEvent(
+				String.format("Atualizado projeto '%s'", actualProject.get().getName()),
+				creator);
 	}
 }

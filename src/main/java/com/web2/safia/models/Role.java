@@ -90,6 +90,6 @@ public class Role implements GrantedAuthority {
 
 	@Override
 	public String getAuthority() {
-		return type.toString();
+		return "ROLE_" + type.toString();
 	}
 }

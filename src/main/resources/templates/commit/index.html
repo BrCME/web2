@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<link rel="shortcut icon" th:href="@{/images/favico.ico}" type="image/x-icon">
+	<title>Eventos | SAFIA</title>
+</head>
+
+<body class="bg-center bg-cover bg-no-repeat bg-slate-800 flex flex-col justify-start items-center min-h-screen">
+	<div class="w-full" th:insert="~{fragments/header :: header}"></div>
+
+	<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 uppercase place-self-center mt-8">
+		Eventos do Sistema
+	</h1>
+
+	<table class="w-6/10" th:object="${commits}">
+		<thead class="text-gray-400 font-bold uppercase bg-slate-950">
+			<tr class="w-full h-10">
+				<th class="px-4" scope="col">Descrição</th>
+				<th class="px-4" scope="col">Tipo</th>
+				<th class="px-4" scope="col">Criador</th>
+				<th class="px-4" scope="col">Criado em</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			<tr th:if="${commits.isEmpty()}"
+				class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
+				<th>---</th>
+				<td>---</td>
+				<td>---</td>
+				<td>---</td>
+			</tr>
+			<tr th:each="commit : ${commits}"
+				class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
+				<th scope="row" class="px-4 text-left" th:text="${commit.description}">Fulaninho criou Ciclano</th>
+				<td class="px-4 text-center" th:text="${commit.type}">Criacao</td>
+				<td class="px-4 text-center" th:text="${commit.creator.name}">Jack Stalber</td>
+				<td class="px-4 text-center" th:text="${commit.createdAt.toLocalDate()}">20/01/2020</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div>
+		<button>Primeiro</button>
+		<button>1</button>
+		<button>2</button>
+		<button>3</button>
+		<button>Último</button>
+	</div>
+
+</body>
+
+</html>
