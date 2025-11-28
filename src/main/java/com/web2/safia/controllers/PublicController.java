@@ -27,6 +27,16 @@ public class PublicController {
 		return "index.html";
 	}
 
+	@GetMapping("sign-up")
+	public String signUp() {
+		return "/login/signup.html";
+	}
+
+	@GetMapping("sign-in")
+	public String signIn() {
+		return "/login/signin.html";
+	}
+
 	@GetMapping("/cep/{cep}")
 	public String getCep(@PathVariable(name = "cep") String cep) {
 		try {

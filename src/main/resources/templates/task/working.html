@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<title>Tracker | SAF.IA</title>
+</head>
+
+<body class="bg-center bg-cover bg-no-repeat bg-slate-800 flex flex-col justify-center items-center min-h-screen">
+	<script th:src="@{/scripts/workingTask.js}" type="text/javascript"></script>
+
+	<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 place-self-center">Tracker</h1>
+
+	<form method="dialog"
+		class="flex items-center justify-evenly w-5/6 bg-slate-900 rounded-lg my-4 p-4 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center">
+		<input name="descricao" class="w-4/10" placeholder="Em que está trabalhando agora?" type="text" />
+
+		<div class="w-3/10">
+			<label for="atividade">tarefa:</label>
+			<select name="atividade" id="atividade">
+				<optgroup class="text-sky-400" label="Programação Web II">
+					<option class="text-gray-800" value="design">Design</option>
+					<option class="text-gray-800" value="programacao">Programação</option>
+					<option class="text-gray-800" value="planejamento">Planejamento</option>
+					<option class="text-gray-800" value="outro">Outro</option>
+				</optgroup>
+			</select>
+		</div>
+
+		<div class="flex w-3/10 align-center justify-end text-center gap-x-4">
+			<p id="timer-display" class="text-2xl place-self-center">00:00:00</p>
+			<button th:onclick="startTimer()"
+				class="uppercase p-4 border-xl br-10 rounded-lg bg-green-700 hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+				<img th:src="@{/svgs/play.svg}" alt="pequeno ícone de começar">
+			</button>
+			<button th:onclick="stopTimer()"
+				class="uppercase p-4 border-xl br-10 rounded-lg bg-red-700 disabled hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed"
+				disabled>
+				<img th:src="@{/svgs/stop.svg}" alt="pequeno ícone de parar">
+			</button>
+		</div>
+	</form>
+
+	<div
+		class="flex flex-col items-center justify-evenly w-5/6 bg-slate-900 rounded-lg my-4 p-4 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center ">
+
+		<div class="flex w-full items-center justify-between mb-4">
+			<h3>Essa semana</h3>
+			<span>Total: <strong>00:00</strong></span>
+		</div>
+
+		<div class="w-full mb-4">
+			<div
+				class="flex w-full h-12 justify-between align-center text-center px-8 rounded-se-lg rounded-ss-lg bg-slate-400">
+				<h4 class="text-gray-600 text-center place-self-center">Hoje</h4>
+				<span class="text-gray-600 text-center place-self-center">Total: <strong>10:00</strong></span>
+			</div>
+
+			<div class="flex flex-col px-8 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+				<span class="w-full flex justify-between align-center text-left">
+					<p class="w-5/10 place-self-center">Descricao de teste kkpj aaaa</p>
+					<h5 class="w-2/10 text-sky-400 place-self-center justify-self-end">Design</h5>
+					<div class="w-1/10">
+						<p class="place-self-center">08:00</p>
+						<p class="place-self-center">09:00</p>
+					</div>
+					<p class="w-1/10 place-self-center">01:00</p>
+					<button class="w-1/10 place-self-center">. . .</button>
+				</span>
+
+				<hr class="text-slate-600 my-2">
+
+				<span class="w-full flex justify-between align-center text-left">
+					<p class="w-5/10 place-self-center">Descricao bem meme</p>
+					<h5 class="w-2/10 text-sky-400 place-self-center">Planejamento</h5>
+					<div class="w-1/10">
+						<p class="place-self-center">09:00</p>
+						<p class="place-self-center">09:30</p>
+					</div>
+					<p class="w-1/10 place-self-center">00:30</p>
+					<button class="w-1/10 place-self-center">. . .</button>
+				</span>
+
+				<hr class="text-slate-600 my-2">
+
+				<span class="w-full flex justify-between align-center text-left">
+					<p class="w-5/10 place-self-center">Vários nada</p>
+					<h5 class="w-2/10 text-sky-400 place-self-center">Outro</h5>
+					<div class="w-1/10">
+						<p class="place-self-center">10:00</p>
+						<p class="place-self-center">13:30</p>
+					</div>
+					<p class="w-1/10 place-self-center">03:30</p>
+					<button class="w-1/10 place-self-center">. . .</button>
+				</span>
+			</div>
+		</div>
+
+		<div class="w-full mb-4">
+			<div
+				class="flex w-full h-12 justify-between align-center text-center px-8 rounded-se-lg rounded-ss-lg rounded-ee-lg rounded-es-lg bg-slate-400">
+				<h4 class="text-gray-600 text-center place-self-center">Ontem</h4>
+				<span class="text-gray-600 text-center place-self-center">Total: <strong>00:00</strong></span>
+			</div>
+
+			<div class="flex flex-col px-8 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+			</div>
+		</div>
+
+		<div class="w-full mb-4">
+			<div
+				class="flex w-full h-12 justify-between align-center text-center px-8 rounded-se-lg rounded-ss-lg bg-slate-400">
+				<h4 class="text-gray-600 text-center place-self-center">Hoje</h4>
+				<span class="text-gray-600 text-center place-self-center">Total: <strong>10:00</strong></span>
+			</div>
+
+			<div class="flex flex-col px-8 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+				<span class="w-full flex justify-between align-center text-left">
+					<p class="w-5/10 place-self-center">Descricao de teste kkpj aaaa</p>
+					<h5 class="w-2/10 text-sky-400 place-self-center justify-self-end">Design</h5>
+					<div class="w-1/10">
+						<p class="place-self-center">08:00</p>
+						<p class="place-self-center">09:00</p>
+					</div>
+					<p class="w-1/10 place-self-center">01:00</p>
+					<button class="w-1/10 place-self-center">. . .</button>
+				</span>
+
+				<hr class="text-slate-600 my-2">
+
+				<span class="w-full flex justify-between align-center text-left">
+					<p class="w-5/10 place-self-center">Descricao bem meme</p>
+					<h5 class="w-2/10 text-sky-400 place-self-center">Planejamento</h5>
+					<div class="w-1/10">
+						<p class="place-self-center">09:00</p>
+						<p class="place-self-center">09:30</p>
+					</div>
+					<p class="w-1/10 place-self-center">00:30</p>
+					<button class="w-1/10 place-self-center">. . .</button>
+				</span>
+
+				<hr class="text-slate-600 my-2">
+
+				<span class="w-full flex justify-between align-center text-left">
+					<p class="w-5/10 place-self-center">Vários nada</p>
+					<h5 class="w-2/10 text-sky-400 place-self-center">Outro</h5>
+					<div class="w-1/10">
+						<p class="place-self-center">10:00</p>
+						<p class="place-self-center">13:30</p>
+					</div>
+					<p class="w-1/10 place-self-center">03:30</p>
+					<button class="w-1/10 place-self-center">. . .</button>
+				</span>
+			</div>
+		</div>
+
+		<div class="w-full mb-4">
+			<div
+				class="flex w-full h-12 justify-between align-center text-center px-8 rounded-se-lg rounded-ss-lg bg-slate-400">
+				<h4 class="text-gray-600 text-center place-self-center">Hoje</h4>
+				<span class="text-gray-600 text-center place-self-center">Total: <strong>10:00</strong></span>
+			</div>
+
+			<div class="flex flex-col px-8 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+				<span class="w-full flex justify-between align-center text-left">
+					<p class="w-5/10 place-self-center">Descricao de teste kkpj aaaa</p>
+					<h5 class="w-2/10 text-sky-400 place-self-center justify-self-end">Design</h5>
+					<div class="w-1/10">
+						<p class="place-self-center">08:00</p>
+						<p class="place-self-center">09:00</p>
+					</div>
+					<p class="w-1/10 place-self-center">01:00</p>
+					<button class="w-1/10 place-self-center">. . .</button>
+				</span>
+
+				<hr class="text-slate-600 my-2">
+
+				<span class="w-full flex justify-between align-center text-left">
+					<p class="w-5/10 place-self-center">Descricao bem meme</p>
+					<h5 class="w-2/10 text-sky-400 place-self-center">Planejamento</h5>
+					<div class="w-1/10">
+						<p class="place-self-center">09:00</p>
+						<p class="place-self-center">09:30</p>
+					</div>
+					<p class="w-1/10 place-self-center">00:30</p>
+					<button class="w-1/10 place-self-center">. . .</button>
+				</span>
+
+				<hr class="text-slate-600 my-2">
+
+				<span class="w-full flex justify-between align-center text-left">
+					<p class="w-5/10 place-self-center">Vários nada</p>
+					<h5 class="w-2/10 text-sky-400 place-self-center">Outro</h5>
+					<div class="w-1/10">
+						<p class="place-self-center">10:00</p>
+						<p class="place-self-center">13:30</p>
+					</div>
+					<p class="w-1/10 place-self-center">03:30</p>
+					<button class="w-1/10 place-self-center">. . .</button>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<p class="text-sm font-normal text-gray-200 text-left place-self-center"><a class="underline text-green-600"
+			href="/public/sign-up">Voltar ao site</a></p>
+</body>
+
+</html>

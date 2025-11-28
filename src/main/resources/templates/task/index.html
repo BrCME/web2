@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<title>Kanban | SAF.IA</title>
+</head>
+
+<body
+	class="bg-center bg-cover bg-no-repeat bg-slate-800 flex flex-col justify-center items-center min-h-screen scroll-behavior:smooth">
+
+	<h1 class="mx-4 my-3 text-4xl font-bold text-left text-gray-200 place-self-center">Kanban de Programação Web II</h1>
+
+	<div class="flex justify-end w-5/6 my-4 px-2">
+		<button
+			class="flex text-xl text-gray-200 font-bold bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 p-2 gap-x-2">
+			Nova anotação
+			<img th:src="@{/svgs/new-card.svg}" alt="ícone pequeno de anotação com símbolo de mais ao seu centro">
+		</button>
+	</div>
+
+	<div class="flex justify-between items-start w-5/6 h-[80vh]">
+		<div
+			class="flex flex-col w-24/100 h-full overflow-y-auto bg-slate-900 rounded-lg p-4 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center">
+
+			<h3 class="place-self-start	uppercase mb-4">A fazer</h3>
+
+			<div class="w-full mb-4">
+				<div
+					class="flex w-full min-h-8 justify-between align-center text-center rounded-se-lg rounded-ss-lg bg-slate-400">
+					<h4 class="text-gray-600 text-center place-self-center text-base w-full px-1 truncate text-nowrap">
+						Fazer login bem feito pelamordizeus mas evitem titulos grande pq vai que né...
+					</h4>
+				</div>
+
+				<div class="flex flex-col px-4 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+					<p class="w-full place-self-start text-xs text-left text-sky-400 my-1">Planejamento</p>
+					<p class="w-full place-self-start text-sm text-left my-1">
+						Descricao bem meme mas muuuito memee mesmo
+						NÚ. creedo que texto meme, nossinhora.
+						Mas pensa num paragrafo grande, creeedo...
+						Poderia acabar esse texto a qualquer momento, né não?
+					</p>
+
+					<div class="flex align-center justify-end w-full gap-x-2 my-2">
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed"
+							disabled>
+							<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/right-arrow.svg}" alt="ícone pequeno de seta para à direita">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-yellow-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/edit.svg}" alt="ícone pequeno de lápis">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-red-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/trash.svg}" alt="ícone pequeno de lixeira">
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="flex flex-col w-24/100 h-full overflow-y-auto bg-slate-900 rounded-lg p-4 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center ">
+
+			<h3 class="place-self-start uppercase mb-4">Em andamento</h3>
+
+			<div class="w-full mb-4">
+				<div
+					class="flex w-full min-h-8 justify-between align-center text-center rounded-se-lg rounded-ss-lg bg-slate-400">
+					<h4 class="text-gray-600 text-center place-self-center text-base w-full px-1 truncate text-nowrap">
+						Fazer login bem feito pelamordizeus mas evitem titulos grande pq vai que né...
+					</h4>
+				</div>
+
+				<div class="flex flex-col px-4 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+					<p class="w-full place-self-start text-xs text-left text-sky-400 my-1">Planejamento</p>
+					<p class="w-full place-self-start text-sm text-left my-1">
+						Descricao bem meme mas muuuito memee mesmo
+						NÚ. creedo que texto meme, nossinhora.
+						Mas pensa num paragrafo grande, creeedo...
+						Poderia acabar esse texto a qualquer momento, né não?
+					</p>
+
+					<div class="flex align-center justify-end w-full gap-x-2 my-2">
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/right-arrow.svg}" alt="ícone pequeno de seta para à direita">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-yellow-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/edit.svg}" alt="ícone pequeno de lápis">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-red-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/trash.svg}" alt="ícone pequeno de lixeira">
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="w-full mb-4">
+				<div
+					class="flex w-full min-h-8 justify-between align-center text-center rounded-se-lg rounded-ss-lg bg-slate-400">
+					<h4 class="text-gray-600 text-center place-self-center text-base w-full px-1 truncate text-nowrap">
+						Fazer login bem feito pelamordizeus mas evitem titulos grande pq vai que né...
+					</h4>
+				</div>
+
+				<div class="flex flex-col px-4 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+					<p class="w-full place-self-start text-xs text-left text-sky-400 my-1">Planejamento</p>
+					<p class="w-full place-self-start text-sm text-left my-1">
+						Descricao bem meme mas muuuito memee mesmo
+						NÚ. creedo que texto meme, nossinhora.
+						Mas pensa num paragrafo grande, creeedo...
+						Poderia acabar esse texto a qualquer momento, né não?
+					</p>
+
+					<div class="flex align-center justify-end w-full gap-x-2 my-2">
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/right-arrow.svg}" alt="ícone pequeno de seta para à direita">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-yellow-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/edit.svg}" alt="ícone pequeno de lápis">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-red-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/trash.svg}" alt="ícone pequeno de lixeira">
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="w-full mb-4">
+				<div
+					class="flex w-full min-h-8 justify-between align-center text-center rounded-se-lg rounded-ss-lg bg-slate-400">
+					<h4 class="text-gray-600 text-center place-self-center text-base w-full px-1 truncate text-nowrap">
+						Fazer login bem feito pelamordizeus mas evitem titulos grande pq vai que né...
+					</h4>
+				</div>
+
+				<div class="flex flex-col px-4 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+					<p class="w-full place-self-start text-xs text-left text-sky-400 my-1">Planejamento</p>
+					<p class="w-full place-self-start text-sm text-left my-1">
+						Descricao bem meme mas muuuito memee mesmo
+						NÚ. creedo que texto meme, nossinhora.
+						Mas pensa num paragrafo grande, creeedo...
+						Poderia acabar esse texto a qualquer momento, né não?
+					</p>
+
+					<div class="flex align-center justify-end w-full gap-x-2 my-2">
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/right-arrow.svg}" alt="ícone pequeno de seta para à direita">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-yellow-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/edit.svg}" alt="ícone pequeno de lápis">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-red-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/trash.svg}" alt="ícone pequeno de lixeira">
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="w-full mb-4">
+				<div
+					class="flex w-full min-h-8 justify-between align-center text-center rounded-se-lg rounded-ss-lg bg-slate-400">
+					<h4 class="text-gray-600 text-center place-self-center text-base w-full px-1 truncate text-nowrap">
+						Fazer login bem feito pelamordizeus mas evitem titulos grande pq vai que né...
+					</h4>
+				</div>
+
+				<div class="flex flex-col px-4 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+					<p class="w-full place-self-start text-xs text-left text-sky-400 my-1">Planejamento</p>
+					<p class="w-full place-self-start text-sm text-left my-1">
+						Descricao bem meme mas muuuito memee mesmo
+						NÚ. creedo que texto meme, nossinhora.
+						Mas pensa num paragrafo grande, creeedo...
+						Poderia acabar esse texto a qualquer momento, né não?
+					</p>
+
+					<div class="flex align-center justify-end w-full gap-x-2 my-2">
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/right-arrow.svg}" alt="ícone pequeno de seta para à direita">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-yellow-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/edit.svg}" alt="ícone pequeno de lápis">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-red-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/trash.svg}" alt="ícone pequeno de lixeira">
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="w-full mb-4">
+				<div
+					class="flex w-full min-h-8 justify-between align-center text-center rounded-se-lg rounded-ss-lg bg-slate-400">
+					<h4 class="text-gray-600 text-center place-self-center text-base w-full px-1 truncate text-nowrap">
+						Fazer login bem feito pelamordizeus mas evitem titulos grande pq vai que né...
+					</h4>
+				</div>
+
+				<div class="flex flex-col px-4 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+					<p class="w-full place-self-start text-xs text-left text-sky-400 my-1">Planejamento</p>
+					<p class="w-full place-self-start text-sm text-left my-1">
+						Descricao bem meme mas muuuito memee mesmo
+						NÚ. creedo que texto meme, nossinhora.
+						Mas pensa num paragrafo grande, creeedo...
+						Poderia acabar esse texto a qualquer momento, né não?
+					</p>
+
+					<div class="flex align-center justify-end w-full gap-x-2 my-2">
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/right-arrow.svg}" alt="ícone pequeno de seta para à direita">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-yellow-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/edit.svg}" alt="ícone pequeno de lápis">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-red-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/trash.svg}" alt="ícone pequeno de lixeira">
+						</button>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="w-full mb-4">
+				<div
+					class="flex w-full min-h-8 justify-between align-center text-center rounded-se-lg rounded-ss-lg bg-slate-400">
+					<h4 class="text-gray-600 text-center place-self-center text-base w-full px-1 truncate text-nowrap">
+						Fazer login bem feito pelamordizeus mas evitem titulos grande pq vai que né...
+					</h4>
+				</div>
+
+				<div class="flex flex-col px-4 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+					<p class="w-full place-self-start text-xs text-left text-sky-400 my-1">Planejamento</p>
+					<p class="w-full place-self-start text-sm text-left my-1">
+						Descricao bem meme mas muuuito memee mesmo
+						NÚ. creedo que texto meme, nossinhora.
+						Mas pensa num paragrafo grande, creeedo...
+						Poderia acabar esse texto a qualquer momento, né não?
+					</p>
+
+					<div class="flex align-center justify-end w-full gap-x-2 my-2">
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/right-arrow.svg}" alt="ícone pequeno de seta para à direita">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-yellow-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/edit.svg}" alt="ícone pequeno de lápis">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-red-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/trash.svg}" alt="ícone pequeno de lixeira">
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="flex flex-col w-24/100 h-full overflow-y-auto bg-slate-900 rounded-lg p-4 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center">
+
+			<h3 class="place-self-start uppercase mb-4">Em análise</h3>
+
+
+		</div>
+
+		<div
+			class="flex flex-col w-24/100 h-full overflow-y-auto bg-slate-900 rounded-lg p-4 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center">
+
+			<h3 class="place-self-start uppercase mb-4">Concluído</h3>
+
+			<div class="w-full mb-4">
+				<div
+					class="flex w-full min-h-8 justify-between align-center text-center rounded-se-lg rounded-ss-lg bg-slate-400">
+					<h4 class="text-gray-600 text-center place-self-center text-base w-full px-1 truncate text-nowrap">
+						Fazer login bem feito pelamordizeus mas evitem titulos grande pq vai que né...
+					</h4>
+				</div>
+
+				<div class="flex flex-col px-4 text-gray-600 bg-slate-200 rounded-es-lg rounded-ee-lg">
+					<p class="w-full place-self-start text-xs text-left text-sky-400 my-1">Planejamento</p>
+					<p class="w-full place-self-start text-sm text-left my-1">
+						Descricao bem meme mas muuuito memee mesmo
+						NÚ. creedo que texto meme, nossinhora.
+						Mas pensa num paragrafo grande, creeedo...
+						Poderia acabar esse texto a qualquer momento, né não?
+					</p>
+
+					<div class="flex align-center justify-end w-full gap-x-2 my-2">
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed"
+							disabled>
+							<img th:src="@{/svgs/right-arrow.svg}" alt="ícone pequeno de seta para à direita">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-yellow-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/edit.svg}" alt="ícone pequeno de lápis">
+						</button>
+						<button
+							class="text-gray-300 p-1 bg-red-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+							<img th:src="@{/svgs/trash.svg}" alt="ícone pequeno de lixeira">
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+</html>
