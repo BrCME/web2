@@ -48,4 +48,9 @@ public class PublicController {
 
 		return "/login/index.html";
 	}
+
+	@GetMapping("header")
+	public String getHeader() {
+		return "/fragments/header.html";
+	}
 }
