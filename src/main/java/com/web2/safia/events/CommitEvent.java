@@ -4,16 +4,16 @@ import java.time.LocalDateTime;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.web2.safia.models.CommitType;
+import com.web2.safia.models.Commit;
 import com.web2.safia.models.Employee;
 
 public class CommitEvent extends ApplicationEvent {
 	private String description;
-	private CommitType type;
+	private Commit.Type type;
 	private Employee creator;
 	private LocalDateTime createdAt;
 
-	public CommitEvent(Object source, String description, CommitType type, Employee creator) {
+	public CommitEvent(Object source, String description, Commit.Type type, Employee creator) {
 		super(source);
 		this.description = description;
 		this.type = type;
@@ -25,7 +25,7 @@ public class CommitEvent extends ApplicationEvent {
 		return description;
 	}
 
-	public CommitType getType() {
+	public Commit.Type getType() {
 		return type;
 	}
 

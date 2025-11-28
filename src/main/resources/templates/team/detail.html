@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<link rel="shortcut icon" th:href="@{/images/favico.ico}" type="image/x-icon">
+	<title>Equipes | SAFIA</title>
+</head>
+
+<body class="bg-center bg-cover bg-no-repeat bg-slate-800 flex flex-col justify-start items-center min-h-screen">
+	<div class="w-full" th:insert="~{fragments/header :: header}"></div>
+
+	<article class="w-6/10" th:object="${team}">
+		<h1>Informações Gerais</h1>
+
+		<span>
+			<p th:text="*{name}">Name</p>
+			<p th:text="*{description}">Description</p>
+		</span>
+
+		<button>Editar</button>
+	</article>
+
+	<article class="w-6/10">
+		<h1>Equipe</h1>
+
+		<table>
+			<thead>
+				<tr class="w-full h-12 text-gray-200 font-bold uppercase bg-slate-950">
+					<th>Nome</th>
+					<th>Email</th>
+					<th>Telefone</th>
+					<th>Aniversário</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="employee : ${team.getAllEmployees()}"
+					class="w-full h-12 text-slate-950 font-bold uppercase bg-gray-200 text-center cursor-pointer hover:opacity-80">
+					<td th:text="${employee.name}">Nome</td>
+					<td th:text="${employee.email}">Email</td>
+					<td th:text="${employee.phoneNumber}">Telefone</td>
+					<td th:text="${employee.birthDate}">Aniversário</td>
+					<td>Ações</td>
+				</tr>
+			</tbody>
+		</table>
+	</article>
+
+	<article class="w-6/10">
+		<h1>Projetos</h1>
+
+		<table class="w-6/10">
+			<thead>
+				<tr class="w-full h-12 text-gray-200 font-bold uppercase bg-slate-950">
+					<th>Nome</th>
+					<th>Descrição</th>
+					<th>Criador</th>
+					<th>Gerente</th>
+					<th>Qtd. Tarefas</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="project : ${team.getAllProjects()}"
+					class="w-full h-12 text-slate-950 font-bold uppercase bg-gray-200 text-center cursor-pointer hover:opacity-80">
+					<td th:text="${project.name}">Nome</td>
+					<td th:text="${project.description}">Descricao</td>
+					<td th:text="${project.creator.name}">Criador</td>
+					<td th:text="${project.manager.name}">Gerente</td>
+					<td th:text="${project.tasks.size()}">Qtd. Tarefas</td>
+					<td>Ações</td>
+				</tr>
+			</tbody>
+		</table>
+	</article>
+</body>
+
+</html>

@@ -43,7 +43,7 @@ public class Project extends BaseModel {
 
 	@OneToMany(mappedBy = "project")
 	@ElementCollection
-	private Set<Task> tasks = new HashSet<>();
+	private Set<Task> tasks = new HashSet<>();	
 
 	public Project() {
 		super();

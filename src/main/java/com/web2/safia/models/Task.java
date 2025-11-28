@@ -30,7 +30,7 @@ public class Task extends BaseModel {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
-	private TaskStatus status;
+	private Status status;
 
 	@NotNull(message = "Projeto é obrigatório")
 	@ManyToOne
@@ -41,10 +41,12 @@ public class Task extends BaseModel {
 	@Column(name = "dead_line", nullable = false)
 	private LocalDateTime deadLine;
 
-	@OneToMany(mappedBy = "task")
+	@OneToMany
+	@JoinColumn()
 	private Set<Work> works = new HashSet<>();
 
-	@ManyToMany(mappedBy = "tasks")
+	@ManyToMany
+	
 	private Set<Employee> employees = new HashSet<>();
 
 	public Task() {
@@ -57,7 +59,7 @@ public class Task extends BaseModel {
 			LocalDateTime deletedAt,
 			@Valid @NotBlank(message = "Nome é obrigatório") String name,
 			@Valid @NotBlank(message = "Descrição é obrigatória") String description,
-			TaskStatus status,
+			Status status,
 			@Valid @NotNull(message = "Projeto é obrigatório") Project project,
 			@Valid @Future(message = "Prazo de entrega deve estar no futuro") LocalDateTime deadLine) {
 
@@ -67,6 +69,10 @@ public class Task extends BaseModel {
 		this.status = status;
 		this.project = project;
 		this.deadLine = deadLine;
+	}
+
+	public static enum Status {
+		TO_DO, DOING, IN_ANALYSYS, DONE;
 	}
 
 	public String getName() {
@@ -89,11 +95,11 @@ public class Task extends BaseModel {
 		this.description = description;
 	}
 
-	public TaskStatus getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(TaskStatus status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
