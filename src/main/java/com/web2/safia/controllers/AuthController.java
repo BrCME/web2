@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Employee;
 import com.web2.safia.services.AuthService;
 
@@ -24,18 +23,6 @@ public class AuthController {
 		this.authService = authService;
 	}
 
-	@PostMapping("/login")
-	public String login(Employee employee) {
-		try {
-			authService.login(employee);
-			return "/index.html";
-		} catch (DomainException de) {
-			return "error.html";
-		} catch (Exception e) {
-			return "error.html";
-		}
-	}
-
 	@GetMapping("/sign-up")
 	public String signUp(
 			Employee employee,
@@ -43,17 +30,18 @@ public class AuthController {
 			HttpServletRequest request) {
 
 		model.addAttribute("employee", employee);
+
 		return "/login/signup.html";
 	}
 
 	@GetMapping("/sign-in")
-	public String signIn(
-			Employee employee,
-			Model model,
-			HttpServletRequest request) {
-
-		model.addAttribute("employee", employee);
+	public String signIn() {
 		return "/login/signin.html";
+	}
+
+	@GetMapping("/sign-out")
+	public String signOut() {
+		return "redirect:/";
 	}
 
 	@PostMapping("/new-employee")
@@ -67,5 +55,4 @@ public class AuthController {
 		authService.create(employee);
 		return "index.html";
 	}
-
 }

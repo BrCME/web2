@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.lang.NonNull;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,13 +19,30 @@ import com.web2.safia.models.Employee;
 
 @Configuration
 public class SecurityConfig implements AuditorAware<Employee> {
-	private static final String[] WHITE_LIST = { "/**", "**/**", "/employee**" };
+	private static final String[] WHITE_LIST = { "/", "/auth/sign-in", "/auth/sign-up", "/auth/sign-out",
+			"/auth/new-employee" };
+	private static final String[] CONTENT_LIST = { "/images/**", "/svgs/**", "/scripts/**" };
+	private static final String[] ADMIN_LIST = { "/teams/all", "/employee/all", "/commit/all", "/project/all",
+			"/work/all", "/task/all" };
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
-				.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
-				.formLogin(form -> form.loginPage("/login").permitAll())
+				.authorizeHttpRequests(customizer -> customizer
+						.requestMatchers(WHITE_LIST).permitAll()
+						.requestMatchers(CONTENT_LIST).permitAll()
+						.requestMatchers(ADMIN_LIST).hasRole("ADMIN")
+						.anyRequest().authenticated())
+				.formLogin(form -> form
+						.loginPage("/auth/sign-in").permitAll()
+						.defaultSuccessUrl("/").permitAll())
+				.logout(logout -> logout
+						.logoutUrl("/auth/sign-out").permitAll()
+						.invalidateHttpSession(true)
+						.clearAuthentication(true)
+						.deleteCookies("JSESSIONID")
+						.logoutSuccessUrl("/").permitAll())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 				.build();
 	}
 
@@ -42,21 +60,4 @@ public class SecurityConfig implements AuditorAware<Employee> {
 				.map(Authentication::getPrincipal)
 				.map(Employee.class::cast);
 	}
-
-	// @Bean
-	// UserDetailsService userDetailsService(DataSource dataSource) {
-	// JdbcUserDetailsManager userDetailsManager = new
-	// JdbcUserDetailsManager(dataSource);
-
-	// userDetailsManager.setUsersByUsernameQuery(
-	// "SELECT e.name, e.email, e.birth_date, (e.deleted_at IS NULL) FROM employee e
-	// WHERE e.email LIKE ?");
-	// userDetailsManager.setAuthoritiesByUsernameQuery(
-	// "SELECT e.email, r.type FROM employee e INNER JOIN role_to_employee rte ON
-	// rte.employee_id = e.id INNJER role r ON rte.role_id = r.id JOIN WHERE e.email
-	// LIKE ?");
-	// userDetailsManager.setRolePrefix("ROLE_");
-
-	// return userDetailsManager;
-	// }
 }

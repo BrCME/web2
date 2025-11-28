@@ -1,7 +1,6 @@
 package com.web2.safia.models.builders;
 
 import com.web2.safia.models.Commit;
-import com.web2.safia.models.CommitType;
 
 public class CommitBuilder extends BaseBuilder<Commit> {
 	public CommitBuilder withDescription(String description) {
@@ -9,7 +8,7 @@ public class CommitBuilder extends BaseBuilder<Commit> {
 		return this;
 	}
 
-	public CommitBuilder withType(CommitType type) {
+	public CommitBuilder withType(Commit.Type type) {
 		instance.setType(type);
 		return this;
 	}

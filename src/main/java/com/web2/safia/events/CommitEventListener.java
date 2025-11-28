@@ -19,8 +19,8 @@ public class CommitEventListener {
 		this.commitRepository = commitRepository;
 	}
 
-	@EventListener
 	@Async
+	@EventListener
 	public void onCommitEvent(CommitEvent event) {
 		var commitBuilder = new CommitBuilder();
 
@@ -33,7 +33,7 @@ public class CommitEventListener {
 			.build();
 			
 		logger.info("Evento ocorrido: {}", event);
-		logger.info("Evento disparado: {}", commit);
+		logger.info("Evento registrado: {}", commit);
 
 		commitRepository.save(commit);
 	}

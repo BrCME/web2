@@ -37,7 +37,7 @@ spring:
       maximum-pool-size: 20
 
   jpa:
-    show-sql: false
+    show-sql: true
     generate-ddl: false
     open-in-view: false
     properties:
@@ -48,6 +48,7 @@ spring:
       hibernate:
         format-sql: true
         ddl-auto: none
+        generate_statistics: true
 
   lifecycle:
     timeout-per-shutdown-phase: "30s"
@@ -56,8 +57,20 @@ spring:
     user:
       name: admin
       password: SPR1NG_4DM1N
+      roles:
+      - ADMIN
 
 management:
+  observations:
+    annotations:
+      enabled: true
+    key-values:
+      region: "south-america-1"
+      stack: "dsv"
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
   prometheus:
     metrics:
       export:

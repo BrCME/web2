@@ -4,10 +4,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import com.web2.safia.services.CommitService;
 
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequestMapping("/commit")

@@ -2,9 +2,14 @@ package com.web2.safia.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +17,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +24,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 @Entity
-public class Employee extends BaseModel {
+public class Employee extends BaseModel implements UserDetails, CredentialsContainer {
 	@Column(name = "name", nullable = false)
 	@NotBlank(message = "Nome é obrigatório")
 	private String name;
@@ -45,18 +49,22 @@ public class Employee extends BaseModel {
 	@Past(message = "Data de nascimento deve estar no passado")
 	private LocalDate birthDate;
 
-	@ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER)
-	private Set<Team> teams = new HashSet<>();
+	// @ManyToMany(mappedBy = "employees")
+	// private Set<Team> teams = new HashSet<>();
 
-	@ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER)
-	private Set<Project> projects = new HashSet<>();
+	// @ManyToMany(mappedBy = "employees")
+	// private Set<Project> projects = new HashSet<>();
 
-	@OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
-	private Set<Work> works = new HashSet<>();
+	// @OneToMany(mappedBy = "employee")
+	// private Set<Work> works = new HashSet<>();
+
+	// @ManyToMany()
+	// @JoinTable(name = "work", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "task_id"))
+	// private Set<Task> tasks = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "work", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "task_id"))
-	private Set<Task> tasks = new HashSet<>();
+	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
 	public Employee() {
 		super();
@@ -73,7 +81,12 @@ public class Employee extends BaseModel {
 			@Size(max = 20, min = 8, message = "Senha deve conter entre 8 a 20 letras") String password,
 			@Size(max = 11, min = 11, message = "Tamanho de telefone precisa ser 11") String phoneNumber,
 			@Size(max = 11, min = 11, message = "Tamanho de CPF precisa ser 11") String cpf,
-			@Past(message = "Data de nascimento deve estar no passado") LocalDate birthDate) {
+			@Past(message = "Data de nascimento deve estar no passado") LocalDate birthDate,
+			Set<Team> teams,
+			Set<Project> projects,
+			Set<Work> works,
+			Set<Task> tasks,
+			Set<Role> roles) {
 
 		super(id, creator, createdAt, updatedAt, deletedAt);
 		this.name = name;
@@ -82,6 +95,11 @@ public class Employee extends BaseModel {
 		this.phoneNumber = phoneNumber;
 		this.cpf = cpf;
 		this.birthDate = birthDate;
+		// this.teams = new HashSet<>(teams);
+		// this.projects = new HashSet<>(projects);
+		// this.works = new HashSet<>(works);
+		// this.tasks = new HashSet<>(tasks);
+		this.roles = new HashSet<>(roles);
 	}
 
 	public String getName() {
@@ -144,28 +162,64 @@ public class Employee extends BaseModel {
 		this.birthDate = birthDate;
 	}
 
-	public Set<Team> getAllTeams() {
-		return Set.copyOf(teams);
+	// public Set<Team> getAllTeams() {
+	// 	return Set.copyOf(teams);
+	// }
+
+	// public void addTeam(Team team) {
+	// 	teams.add(team);
+	// }
+
+	// public void removeTeam(Team team) {
+	// 	teams.remove(team);
+	// }
+
+	// public Set<Project> getAllProjects() {
+	// 	return Set.copyOf(projects);
+	// }
+
+	// public void addProject(Project project) {
+	// 	projects.add(project);
+	// }
+
+	// public void removeProject(Project project) {
+	// 	projects.remove(project);
+	// }
+
+	// public Set<Work> getAllWorks() {
+	// 	return Set.copyOf(works);
+	// }
+
+	// public void addWork(Work work) {
+	// 	works.add(work);
+	// }
+
+	// public void removeWork(Work work) {
+	// 	works.remove(work);
+	// }
+
+	// public Set<Task> getAllTasks() {
+	// 	return Set.copyOf(tasks);
+	// }
+
+	// public void addTask(Task task) {
+	// 	tasks.add(task);
+	// }
+
+	// public void removeTask(Task task) {
+	// 	tasks.remove(task);
+	// }
+
+	public Set<Role> getAllRoles() {
+		return Set.copyOf(roles);
 	}
 
-	public void addTeam(Team team) {
-		teams.add(team);
+	public void addRole(Role role) {
+		roles.add(role);
 	}
 
-	public void removeTeam(Team team) {
-		teams.remove(team);
-	}
-
-	public Set<Project> getAllProjects() {
-		return Set.copyOf(projects);
-	}
-
-	public void addProject(Project project) {
-		projects.add(project);
-	}
-
-	public void removeProject(Project project) {
-		projects.remove(project);
+	public void removeRole(Role role) {
+		roles.remove(role);
 	}
 
 	@Override
@@ -218,9 +272,25 @@ public class Employee extends BaseModel {
 				", deletedAt=" + deletedAt +
 				", cpf=" + cpf +
 				", birthDate=" + birthDate +
-				", teams=" + teams +
-				", projects=" + projects +
-				", works=" + works +
-				", tasks=" + tasks + "]";
+				// ", teams=" + teams +
+				// ", projects=" + projects +
+				// ", works=" + works +
+				// ", tasks=" + tasks +
+				", roles=" + roles + "]";
+	}
+
+	@Override
+	public void eraseCredentials() {
+		password = null;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
 	}
 }

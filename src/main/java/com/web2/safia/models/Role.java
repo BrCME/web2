@@ -1,7 +1,10 @@
 package com.web2.safia.models;
 
-import java.io.Serializable;
 import java.util.UUID;
+
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
+import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,23 +15,28 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Role implements Serializable {
+public class Role implements GrantedAuthority {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	protected UUID id;
 
+	@JdbcType(value = PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
-	private RoleType type;
+	private Type type;
 
 	public Role() {
 	}
 
-	public Role(UUID id, RoleType type) {
+	public Role(UUID id, Type type) {
 		this.id = id;
 		this.type = type;
+	}
+
+	public static enum Type {
+		ADMIN, OWNER, MANAGER, EMPLOYEE, NEWCOMER;
 	}
 
 	public UUID getId() {
@@ -39,11 +47,11 @@ public class Role implements Serializable {
 		this.id = id;
 	}
 
-	public RoleType getType() {
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(RoleType type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 
@@ -77,6 +85,11 @@ public class Role implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Role [id=" + id + ", type=" + type + "]";
+		return type.toString();
+	}
+
+	@Override
+	public String getAuthority() {
+		return type.toString();
 	}
 }

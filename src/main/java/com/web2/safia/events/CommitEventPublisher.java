@@ -3,7 +3,7 @@ package com.web2.safia.events;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-import com.web2.safia.models.CommitType;
+import com.web2.safia.models.Commit;
 import com.web2.safia.models.Employee;
 
 @Component
@@ -19,22 +19,22 @@ public class CommitEventPublisher {
 	}
 
 	public void publishUpdateCommitEvent(String description, Employee creator) {
-		publishCommitEvent(new CommitEvent(this, description, CommitType.ATUALIZACAO, creator));
+		publishCommitEvent(new CommitEvent(this, description, Commit.Type.ATUALIZACAO, creator));
 	}
 
 	public void publishActivateCommitEvent(String description, Employee creator) {
-		publishCommitEvent(new CommitEvent(this, description, CommitType.ATIVACAO, creator));
+		publishCommitEvent(new CommitEvent(this, description, Commit.Type.ATIVACAO, creator));
 	}
 
 	public void publishCreateCommitEvent(String description, Employee creator) {
-		publishCommitEvent(new CommitEvent(this, description, CommitType.CRIACAO, creator));
+		publishCommitEvent(new CommitEvent(this, description, Commit.Type.CRIACAO, creator));
 	}
 
 	public void publishDeactivateCommitEvent(String description, Employee creator) {
-		publishCommitEvent(new CommitEvent(this, description, CommitType.DESATIVACAO, creator));
+		publishCommitEvent(new CommitEvent(this, description, Commit.Type.DESATIVACAO, creator));
 	}
 
 	public void publishRemoveCommitEvent(String description, Employee creator) {
-		publishCommitEvent(new CommitEvent(this, description, CommitType.REMOCAO, creator));
+		publishCommitEvent(new CommitEvent(this, description, Commit.Type.REMOCAO, creator));
 	}
 }
