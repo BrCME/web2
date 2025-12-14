@@ -1,6 +1,6 @@
-<div id="team-modal" th:fragment="team-modal" th:object="${newTeam}" aria-hidden="true"
+<div id="project-modal" th:fragment="project-modal" th:object="${newProject}" aria-hidden="true"
 	class="flex align-center justify-center hidden overflow-y-auto overflow-x-hidden fixed top-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full bg-slate-950/85">
-	<form th:action="@{/team/create}" th:object="${newTeam}" method="post"
+	<form th:action="@{/project/create}" th:object="${newProject}" method="post"
 		class="flex flex-col justify-center place-self-center min-w-40/100 h-80/100 bg-slate-900 rounded-lg border-gray-200 border-xl border border-solid uppercase text-gray-200 text-xl font-bold text-center my-[auto]">
 
 		<div
@@ -8,7 +8,7 @@
 			<h1 class="text-gray-800 text-start place-self-center text-base w-full px-1 truncate text-nowrap">
 				Criar Equipe
 			</h1>
-			<button onclick="closeModal(event, 'team-modal')" class="cursor-pointer hover:opacity-80">
+			<button onclick="closeModal(event, 'project-modal')" class="cursor-pointer hover:opacity-80">
 				<img th:src="@{/svgs/close.svg}" alt="pequeno ícone vermelho de botão de fechar">
 			</button>
 		</div>

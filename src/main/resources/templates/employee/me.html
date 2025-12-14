@@ -91,7 +91,7 @@
 				</thead>
 				<tbody>
 
-					<tr th:if="${teams.isEmpty()}"
+					<tr th:if="${roles.isEmpty()}"
 						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
 						<th>—</th>
 						<td sec:authorize="hasAnyRole('ADMIN')">—</td>
@@ -101,8 +101,8 @@
 						<td class="px-4 text-left" th:text="${role.type}">A melhor equipe do bairro!</td>
 						<td sec:authorize="hasAnyRole('ADMIN')">
 							<span class="flex w-full h-full justify-evenly">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer" th:src="@{/svgs/trash-color.svg}"
-									alt="ícone pequeno de lixeira">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/trash-color.svg}" alt="ícone pequeno de lixeira">
 							</span>
 						</td>
 					</tr>
@@ -148,10 +148,10 @@
 						<td class="px-4 text-center" th:text="${team.createdAt.toLocalDate()}">20/01/2020</td>
 						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
 							<span class="flex w-full h-full justify-evenly">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer" th:src="@{/svgs/trash-color.svg}"
-									alt="ícone pequeno de lixeira">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer" th:src="@{/svgs/edit-color.svg}"
-									alt="ícone pequeno de lápis">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/trash-color.svg}" alt="ícone pequeno de lixeira">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/edit-color.svg}" alt="ícone pequeno de lápis">
 							</span>
 						</td>
 					</tr>
@@ -194,7 +194,8 @@
 					<tr th:each="project : ${projects}"
 						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
 						<th scope="row" class="px-4 text-left cursor-pointer underline"><a
-								th:href="@{/project/detail/} + ${project.id}" th:text="${project.name}">Projethon</a></th>
+								th:href="@{/project/detail/} + ${project.id}" th:text="${project.name}">Projethon</a>
+						</th>
 						<td class="px-4 text-left" th:text="${project.description}">O mió projeto que ta tendo</td>
 						<td class="px-4 text-left" th:text="${project.team.name}">Team O</td>
 						<td class="px-4 text-center" th:text="${project.getAllEmployees().size()}">5 pessoa(s)</td>
@@ -203,10 +204,10 @@
 						<td class="px-4 text-center" th:text="${project.createdAt.toLocalDate()}">20/01/2020</td>
 						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
 							<span class="flex w-full h-full justify-evenly">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer" th:src="@{/svgs/trash-color.svg}"
-									alt="ícone pequeno de lixeira">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer" th:src="@{/svgs/edit-color.svg}"
-									alt="ícone pequeno de lápis">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/trash-color.svg}" alt="ícone pequeno de lixeira">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/edit-color.svg}" alt="ícone pequeno de lápis">
 							</span>
 						</td>
 					</tr>
@@ -250,7 +251,8 @@
 						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
 						<th scope="row" class="px-4 text-left cursor-pointer underline"><a
 								th:href="@{/task/detail/} + ${task.id}" th:text="${task.name}">Atividade Física</a></th>
-						<td class="px-4 text-left" th:text="${task.description}">Saúde é o que interessa, o resto não tem pressa!</td>
+						<td class="px-4 text-left" th:text="${task.description}">Saúde é o que interessa, o resto não
+							tem pressa!</td>
 						<td class="px-4 text-center" th:text="${task.status}">A Fazer</td>
 						<td class="px-4 text-center" th:text="${team.project.name}">Projeto Verão</td>
 						<td class="px-4 text-center" th:text="${team.deadLine.toLocalDate()}">20/10/2026</td>
@@ -258,10 +260,10 @@
 						<td class="px-4 text-center" th:text="${team.createdAt.toLocalDate()}">20/01/2020</td>
 						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
 							<span class="flex w-full h-full justify-evenly">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer" th:src="@{/svgs/trash-color.svg}"
-									alt="ícone pequeno de lixeira">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer" th:src="@{/svgs/edit-color.svg}"
-									alt="ícone pequeno de lápis">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/trash-color.svg}" alt="ícone pequeno de lixeira">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/edit-color.svg}" alt="ícone pequeno de lápis">
 							</span>
 						</td>
 					</tr>
@@ -298,16 +300,17 @@
 					<tr th:each="work : ${works}"
 						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
 						<th scope="row" class="px-4 text-left cursor-pointer underline"><a
-								th:href="@{/task/detail/} + ${work.task.id}" th:text="${work.task.name}">Entrega de Projeto</a></th>
+								th:href="@{/task/detail/} + ${work.task.id}" th:text="${work.task.name}">Entrega de
+								Projeto</a></th>
 						<td class="px-4 text-left" th:text="${work.description}">Melhorei a rebimboca da parafuseta</td>
 						<td class="px-4 text-center" th:text="${work.startedAt.toLocalDate()}">28/11/2025</td>
 						<td class="px-4 text-center" th:text="${work.endedAt.toLocalDate()}">02/12/2028</td>
 						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
 							<span class="flex w-full h-full justify-evenly">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer" th:src="@{/svgs/trash-color.svg}"
-									alt="ícone pequeno de lixeira">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer" th:src="@{/svgs/edit-color.svg}"
-									alt="ícone pequeno de lápis">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/trash-color.svg}" alt="ícone pequeno de lixeira">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/edit-color.svg}" alt="ícone pequeno de lápis">
 							</span>
 						</td>
 					</tr>

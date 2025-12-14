@@ -54,6 +54,7 @@ public class TeamController extends BaseController {
 		var teams = teamService.getAllByCreator(pageable, creator);
 		model.addAttribute("teams", teams);
 		model.addAttribute("total", teams.getTotalElements());
+		model.addAttribute("newTeam", new Team());
 
 		return "/team/me.html";
 	}

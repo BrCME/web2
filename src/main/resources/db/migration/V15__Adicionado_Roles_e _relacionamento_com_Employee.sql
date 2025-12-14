@@ -1,7 +1,4 @@
 
-INSERT INTO role(type)
-VALUES ('ADMIN'), ('OWNER'), ('MANAGER'), ('EMPLOYEE'), ('NEWCOMER');
-
 CREATE TABLE employee_role(
 	role_id UUID,
 	employee_id UUID,

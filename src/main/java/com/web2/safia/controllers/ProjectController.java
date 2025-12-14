@@ -78,6 +78,7 @@ public class ProjectController extends BaseController {
 			HttpServletRequest request) {
 
 		model.addAttribute("project", project);
+		model.addAttribute("newProject", new Project());
 
 		return "/team/create.html";
 	}
