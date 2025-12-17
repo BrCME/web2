@@ -4,10 +4,13 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -27,7 +30,6 @@ public class Project extends BaseModel {
 	@Column(name = "description", nullable = false)
 	private String description;
 
-	@NotNull(message = "Time é obrigatório")
 	@ManyToOne
 	@JoinColumn(name = "team_id")
 	private Team team;
@@ -36,7 +38,7 @@ public class Project extends BaseModel {
 	@JoinColumn(name = "manager_id")
 	private Employee manager;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "employee_to_project", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
 	@ElementCollection
 	private Set<Employee> employees = new HashSet<>();
@@ -108,18 +110,6 @@ public class Project extends BaseModel {
 		return result;
 	}
 
-	public Set<Employee> getAllEmployees() {
-		return Set.copyOf(employees);
-	}
-
-	public boolean addEmployee(Employee employee) {
-		return employees.add(employee);
-	}
-
-	public boolean removeEmployee(Employee employee) {
-		return employees.remove(employee);
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -142,17 +132,41 @@ public class Project extends BaseModel {
 		return true;
 	}
 
+	public Set<Employee> getAllEmployees() {
+		return Set.copyOf(employees);
+	}
+
+	public boolean addEmployee(Employee employee) {
+		return employees.add(employee);
+	}
+
+	public boolean removeEmployee(Employee employee) {
+		return employees.remove(employee);
+	}
+
+	public Set<Task> getAllTasks() {
+		return Set.copyOf(tasks);
+	}
+
+	public boolean addTask(Task task) {
+		return tasks.add(task);
+	}
+
+	public boolean removeTask(Task task) {
+		return tasks.remove(task);
+	}
+
 	@Override
 	public String toString() {
 		return "Project [id=" + id +
 				", name=" + name +
-				", creator=" + creator +
+				", creator=" + creator.getEmail() +
 				", createdAt=" + createdAt +
 				", description=" + description +
 				", updatedAt=" + updatedAt +
-				", team=" + team +
-				", manager=" + manager +
-				", deletedAt=" + deletedAt +
-				", employees=" + employees + "]";
+				", team=" + team.getName() +
+				", manager=" + manager.getEmail() +
+				", employees=" + employees.size() +
+				", deletedAt=" + deletedAt + "]";
 	}
 }

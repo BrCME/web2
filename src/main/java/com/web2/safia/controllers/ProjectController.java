@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Project;
+import com.web2.safia.models.Team;
 import com.web2.safia.services.EmployeeService;
 import com.web2.safia.services.ProjectService;
 
@@ -85,6 +86,7 @@ public class ProjectController extends BaseController {
 
 	@PostMapping("/create")
 	public String create(
+			Team team,
 			@Valid Project project,
 			Model model,
 			HttpServletRequest request,
@@ -92,7 +94,7 @@ public class ProjectController extends BaseController {
 			RedirectAttributes redirect) throws DomainException {
 
 		var creator = getCreator(request.getUserPrincipal().getName());
-		projectService.create(project, creator);
+		projectService.create(team, project, creator);
 
 		return getAllByCreator(Pageable.ofSize(20), model, request);
 	}

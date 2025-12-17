@@ -40,6 +40,12 @@
 					<div th:text="*{description}"
 						class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
 				</span>
+
+				<span class="my-2 h-6 flex">
+					<h3 class="font-bold text-left text-gray-200" for="description">Criador:</h3>
+					<div th:text="*{creator.name}"
+						class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+				</span>
 			</fieldset>
 
 			<fieldset class="mb-4" disabled>
@@ -66,7 +72,7 @@
 			class="bg-sky-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
 			Adicionar Pessoa
 		</button>
-		<button
+		<button onclick="openModal('new-project-modal')"
 			class="bg-sky-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
 			Novo Projeto
 		</button>
@@ -78,6 +84,7 @@
 
 	<div th:replace="~{fragments/team-modal :: edit-team-modal}"></div>
 	<div th:replace="~{fragments/team-modal :: add-employee-team-modal}"></div>
+	<div th:replace="~{fragments/project-modal :: new-project-modal}"></div>
 
 	<article th:object="${team}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
 		<h3 class="place-self-start uppercase text-xl font-bold text-gray-100 mb-4">

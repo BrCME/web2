@@ -8,13 +8,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.web2.safia.events.CommitEventPublisher;
 import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Employee;
 import com.web2.safia.models.Project;
+import com.web2.safia.models.Team;
 import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
 import com.web2.safia.repositories.adapters.JpaProjectRepository;
+import com.web2.safia.repositories.adapters.JpaTeamRepository;
 
 import jakarta.validation.Valid;
 
@@ -24,15 +27,18 @@ public class ProjectService extends BaseService {
 
 	private final JpaEmployeeRepository employeeRepository;
 	private final JpaProjectRepository projectRepository;
+	private final JpaTeamRepository teamRepository;
 
 	public ProjectService(
 			CommitEventPublisher commitEventPublisher,
 			JpaEmployeeRepository employeeRepository,
-			JpaProjectRepository projectRepository) {
+			JpaProjectRepository projectRepository,
+			JpaTeamRepository teamRepository) {
 
 		super(commitEventPublisher);
 		this.employeeRepository = employeeRepository;
 		this.projectRepository = projectRepository;
+		this.teamRepository = teamRepository;
 	}
 
 	public Page<Project> getAll(Pageable pageable) {
@@ -54,7 +60,25 @@ public class ProjectService extends BaseService {
 		return project.get();
 	}
 
-	public void create(@Valid Project project, Employee creator) {
+	public void create(Team team, @Valid Project project, Employee creator) throws DomainException {
+		var actualTeam = teamRepository.findById(team.getId());
+
+		if (!actualTeam.isPresent()) {
+			logger.error("Equipe com id '{}' não encontrada", team.getId());
+			throw new DomainException(String.format("Equipe com id '%s' não encontrada", team.getId()));
+		}
+
+		if (StringUtils.hasText(project.getManager().getEmail())) {
+			var manager = employeeRepository.findByEmail(project.getManager().getEmail());
+			if (!manager.isPresent()) {
+				logger.error("Gerente com email '{}' não encontrado", project.getManager().getEmail());
+				throw new DomainException(String.format("Gerente com email '%s' não encontrado", project.getManager().getEmail()));
+			}
+			project.setManager(manager.get());
+		}
+
+		project.setId(null);
+		project.setTeam(actualTeam.get());
 		project.setCreator(creator);
 		project.addEmployee(creator);
 		projectRepository.save(project);

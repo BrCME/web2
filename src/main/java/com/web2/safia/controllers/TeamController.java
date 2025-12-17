@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.web2.safia.exceptions.DomainException;
+import com.web2.safia.models.Employee;
 import com.web2.safia.models.Project;
 import com.web2.safia.models.Team;
 import com.web2.safia.services.EmployeeService;
@@ -69,6 +70,7 @@ public class TeamController extends BaseController {
 		var team = teamService.getById(id);
 		model.addAttribute("team", team);
 		model.addAttribute("editTeam", team);
+		model.addAttribute("newEmployee", new Employee());
 		model.addAttribute("newProject", new Project());
 
 		return "/team/detail.html";
@@ -123,15 +125,15 @@ public class TeamController extends BaseController {
 		return getAllByCreator(Pageable.ofSize(20), model, request);
 	}
 
-	@PostMapping("/add-employee/{employeeEmail}")
+	@PostMapping("/add-employee")
 	public String addEmployee(
-			@PathVariable("employeeEmail") String employeeEmail,
 			Team team,
+			Employee employee,
 			Model model,
 			HttpServletRequest request) throws DomainException {
 
 		var creator = getCreator(request.getUserPrincipal().getName());
-		teamService.addEmployee(team, employeeEmail, creator);
+		teamService.addEmployee(team, employee.getEmail(), creator);
 
 		return getAllByCreator(Pageable.ofSize(20), model, request);
 	}

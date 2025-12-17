@@ -164,6 +164,8 @@
 		<h3 class="place-self-start uppercase text-xl font-bold text-gray-100 mb-4">
 			Meus Projetos:
 		</h3>
+
+
 		<span class="w-full h-full flex justify-center items-center gap-x-8 border-2">
 			<table class="w-full" th:object="${projects}">
 				<thead class="text-gray-400 font-bold uppercase bg-slate-950">
@@ -179,7 +181,6 @@
 					</tr>
 				</thead>
 				<tbody>
-
 					<tr th:if="${projects.isEmpty()}"
 						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
 						<th>—</th>

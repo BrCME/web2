@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.thymeleaf.exceptions.TemplateEngineException;
+import org.thymeleaf.exceptions.TemplateInputException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -50,7 +51,8 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler({
-		TemplateEngineException.class
+		TemplateEngineException.class,
+		TemplateInputException.class
 	})
 	public String handleTemplateExceptions(Exception ex, Model model) {
 		logger.error("Exceção de Thymeleaf: ", ex);
