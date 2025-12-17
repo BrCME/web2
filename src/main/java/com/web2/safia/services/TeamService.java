@@ -98,22 +98,22 @@ public class TeamService extends BaseService {
 				creator);
 	}
 
-	public void addEmployee(@Valid Team team, UUID employeeId, Employee creator) throws DomainException {
+	public void addEmployee(@Valid Team team, String employeeEmail, Employee creator) throws DomainException {
 		var actualTeam = teamRepository.findById(team.getId());
-		var employee = employeeRepository.findById(employeeId);
-
-		if (!employee.isPresent()) {
-			logger.error("Empregado '{}' não encontrado para adicionar à equipe '{}'", employeeId, team.getName());
-			throw new DomainException("Empregado não encontrado para adicionar à equipe");
-		}
 
 		if (!actualTeam.isPresent()) {
-			logger.error("Equipe '{}' não encontrada para adicionar empregado '{}'", team.getId(),
-					employee.get().getEmail());
+			logger.error("Equipe '{}' não encontrada para adicionar empregado '{}'", team.getId(), employeeEmail);
 			throw new DomainException("Equipe não encontrada para adicionar empregado");
 		}
 
-		if (!actualTeam.get().addEmployee(creator)) {
+		var employee = employeeRepository.findByEmail(employeeEmail);
+
+		if (!employee.isPresent()) {
+			logger.error("Empregado '{}' não encontrado para adicionar à equipe '{}'", employeeEmail, team.getName());
+			throw new DomainException("Empregado não encontrado para adicionar à equipe");
+		}
+
+		if (!actualTeam.get().addEmployee(employee.get())) {
 			logger.error("Não foi possível adicionar o empregado '{}' à equipe '{}'", employee.get().getEmail(),
 					actualTeam.get().getName());
 			throw new DomainException("Não foi possível adicionar empregado à equipe");
@@ -128,17 +128,18 @@ public class TeamService extends BaseService {
 
 	public void removeEmployee(@Valid Team team, UUID employeeId, Employee creator) throws DomainException {
 		var actualTeam = teamRepository.findById(team.getId());
+
+		if (!actualTeam.isPresent()) {
+			logger.error("Equipe '{}' não encontrado para remover empregado '{}'", team.getId(),
+					employeeId);
+			throw new DomainException("Equipe não encontrado para remover empregado");
+		}
+
 		var employee = employeeRepository.findById(employeeId);
 
 		if (!employee.isPresent()) {
 			logger.error("Empregado '{}' não encontrado para remover da equipe '{}'", employeeId, team.getName());
 			throw new DomainException("Empregado não encontrado para remover da equipe");
-		}
-
-		if (!actualTeam.isPresent()) {
-			logger.error("Equipe '{}' não encontrado para remover empregado '{}'", team.getId(),
-					employee.get().getEmail());
-			throw new DomainException("Equipe não encontrado para remover empregado");
 		}
 
 		if (!actualTeam.get().removeEmployee(employee.get())) {

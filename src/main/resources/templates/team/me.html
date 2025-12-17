@@ -27,18 +27,17 @@
 	</article>
 
 	<span class="w-6/10 flex align-center justify-between">
-		<button onclick="openModal('team-modal')"
+		<button
 			class="bg-sky-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
 			Gerar Relatório
 		</button>
-		<button onclick="openModal('team-modal')"
+		<button onclick="openModal('new-team-modal')"
 			class="bg-green-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
 			Nova Equipe
 		</button>
 	</span>
 
-
-	<div th:replace="~{fragments/team-modal :: team-modal}">
+	<div th:replace="~{fragments/team-modal :: new-team-modal}">
 
 	</div>
 

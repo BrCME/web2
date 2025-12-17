@@ -10,76 +10,172 @@
 </head>
 
 <body class="bg-center bg-cover bg-no-repeat bg-slate-800 flex flex-col justify-start items-center min-h-screen">
+	<script th:src="@{/scripts/modal.js}" type="text/javascript"></script>
+
 	<div class="w-full" th:insert="~{fragments/header :: header}"></div>
 
-	<article class="w-6/10" th:object="${team}">
-		<h1>Informações Gerais</h1>
+	<article th:object="${team}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem] mt-4">
+		<h3 class="place-self-start uppercase text-xl font-bold text-gray-100 mb-4">
+			Meus dados:
+		</h3>
 
-		<span>
-			<p th:text="*{name}">Name</p>
-			<p th:text="*{description}">Description</p>
+		<form class="flex flex-col w-full place-self-center my-4">
+			<fieldset class="mb-4" disabled>
+				<legend class="font-bold text-gray-200 text-left mb-4">Dados de Equipe</legend>
+
+				<span class="my-2 h-6 flex">
+					<h3 class="font-bold text-left text-gray-200" for="id">Id:</h3>
+					<div th:text="*{id}" class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full">
+					</div>
+				</span>
+
+				<span class="my-2 h-6 flex">
+					<h3 class="font-bold text-left text-gray-200" for="name">Nome:</h3>
+					<div th:text="*{name}" class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full">
+					</div>
+				</span>
+
+				<span class="my-2 h-6 flex">
+					<h3 class="font-bold text-left text-gray-200" for="description">Descrição:</h3>
+					<div th:text="*{description}"
+						class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+				</span>
+			</fieldset>
+
+			<fieldset class="mb-4" disabled>
+				<legend class="font-bold text-gray-200 text-left mb-4">Dados Extras</legend>
+
+				<span class="my-2 h-6 flex">
+					<h3 class="font-bold text-left text-gray-200" for="employees">Pessoas:</h3>
+					<div th:text="*{getAllEmployees().size()}"
+						class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+				</span>
+
+				<span class="my-2 h-6 flex">
+					<h3 class="font-bold text-left text-gray-200" for="projects">Projetos:</h3>
+					<div th:text="*{getAllProjects().size()}"
+						class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+				</span>
+			</fieldset>
+		</form>
+
+	</article>
+
+	<span class="w-6/10 flex align-center justify-between">
+		<button onclick="openModal('add-employee-team-modal')"
+			class="bg-sky-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
+			Adicionar Pessoa
+		</button>
+		<button
+			class="bg-sky-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
+			Novo Projeto
+		</button>
+		<button onclick="openModal('edit-team-modal')"
+			class="bg-yellow-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
+			Editar Equipe
+		</button>
+	</span>
+
+	<div th:replace="~{fragments/team-modal :: edit-team-modal}"></div>
+	<div th:replace="~{fragments/team-modal :: add-employee-team-modal}"></div>
+
+	<article th:object="${team}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
+		<h3 class="place-self-start uppercase text-xl font-bold text-gray-100 mb-4">
+			Pessoas
+		</h3>
+		<span class="w-full h-full flex justify-center items-center gap-x-8 border-2">
+			<table class="w-full" th:object="${team.getAllEmployees()}">
+				<thead class="text-gray-400 font-bold uppercase bg-slate-950">
+					<tr class="w-full h-10">
+						<th class="px-4" scope="col">Nome</th>
+						<th class="px-4" scope="col">Email</th>
+						<th class="px-4" scope="col">Telefone</th>
+						<th class="px-4" scope="col">Aniversário</th>
+						<th class="px-4" scope="col" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${team.getAllEmployees().isEmpty()}"
+						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
+						<th>—</th>
+						<td>—</td>
+						<td>—</td>
+						<td>—</td>
+						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">—</td>
+					</tr>
+					<tr th:each="employee : ${team.getAllEmployees()}"
+						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
+						<th scope="row" class="px-4 text-left" th:text="${employee.name}">Geraldo</th>
+						<td class="px-4 text-left" th:text="${employee.email}">geraldo@mail</td>
+						<td class="px-4 text-left" th:text="${employee.phoneNumber}">33279797</td>
+						<td class="px-4 text-center" th:text="${employee.createdAt.toLocalDate()}">20/01/2020</td>
+						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+							<span class="flex w-full h-full justify-evenly">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/trash-color.svg}" alt="ícone pequeno de lixeira">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/edit-color.svg}" alt="ícone pequeno de lápis">
+							</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</span>
-
-		<button>Editar</button>
 	</article>
 
-	<button onclick="openModal('project-modal')"
-		class="bg-green-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
-		Novo Projeto
-	</button>
-
-	<article class="w-6/10">
-		<h1>Equipe</h1>
-
-		<table>
-			<thead>
-				<tr class="w-full h-12 text-gray-200 font-bold uppercase bg-slate-950">
-					<th>Nome</th>
-					<th>Email</th>
-					<th>Telefone</th>
-					<th>Aniversário</th>
-					<th>Ações</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="employee : ${team.getAllEmployees()}"
-					class="w-full h-12 text-slate-950 font-bold uppercase bg-gray-200 text-center cursor-pointer hover:opacity-80">
-					<td th:text="${employee.name}">Nome</td>
-					<td th:text="${employee.email}">Email</td>
-					<td th:text="${employee.phoneNumber}">Telefone</td>
-					<td th:text="${employee.birthDate}">Aniversário</td>
-					<td>Ações</td>
-				</tr>
-			</tbody>
-		</table>
-	</article>
-
-	<article class="w-6/10">
-		<h1>Projetos</h1>
-
-		<table class="w-6/10">
-			<thead>
-				<tr class="w-full h-12 text-gray-200 font-bold uppercase bg-slate-950">
-					<th>Nome</th>
-					<th>Descrição</th>
-					<th>Criador</th>
-					<th>Gerente</th>
-					<th>Qtd. Tarefas</th>
-					<th>Ações</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="project : ${team.getAllProjects()}"
-					class="w-full h-12 text-slate-950 font-bold uppercase bg-gray-200 text-center cursor-pointer hover:opacity-80">
-					<td th:text="${project.name}">Nome</td>
-					<td th:text="${project.description}">Descricao</td>
-					<td th:text="${project.creator.name}">Criador</td>
-					<td th:text="${project.manager.name}">Gerente</td>
-					<td th:text="${project.tasks.size()}">Qtd. Tarefas</td>
-					<td>Ações</td>
-				</tr>
-			</tbody>
-		</table>
+	<article th:object="${team}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
+		<h3 class="place-self-start uppercase text-xl font-bold text-gray-100 mb-4">
+			Projetos:
+		</h3>
+		<span class="w-full h-full flex justify-center items-center gap-x-8 border-2">
+			<table class="w-full" th:object="${team.getAllProjects()}">
+				<thead class="text-gray-400 font-bold uppercase bg-slate-950">
+					<tr class="w-full h-10">
+						<th class="px-4" scope="col">Nome</th>
+						<th class="px-4" scope="col">Descrição</th>
+						<th class="px-4" scope="col">Equipe</th>
+						<th class="px-4" scope="col">Pessoa(s)</th>
+						<th class="px-4" scope="col">Gerente</th>
+						<th class="px-4" scope="col">Criador</th>
+						<th class="px-4" scope="col">Criado em</th>
+						<th class="px-4" scope="col" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${team.getAllProjects().isEmpty()}"
+						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
+						<th>—</th>
+						<td>—</td>
+						<td>—</td>
+						<td>—</td>
+						<td>—</td>
+						<td>—</td>
+						<td>—</td>
+						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">—</td>
+					</tr>
+					<tr th:each="project : ${team.getAllProjects()}"
+						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
+						<th scope="row" class="px-4 text-left cursor-pointer underline"><a
+								th:href="@{/project/detail/} + ${project.id}" th:text="${project.name}">Projethon</a>
+						</th>
+						<td class="px-4 text-left" th:text="${project.description}">O mió projeto que ta tendo</td>
+						<td class="px-4 text-left" th:text="${project.team.name}">Team O</td>
+						<td class="px-4 text-center" th:text="${project.getAllEmployees().size()}">5 pessoa(s)</td>
+						<td class="px-4 text-left" th:text="${project.manager.name}">Ademir</td>
+						<td class="px-4 text-center" th:text="${project.creator.name}">Jack Stalber</td>
+						<td class="px-4 text-center" th:text="${project.createdAt.toLocalDate()}">20/01/2020</td>
+						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+							<span class="flex w-full h-full justify-evenly">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/trash-color.svg}" alt="ícone pequeno de lixeira">
+								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
+									th:src="@{/svgs/edit-color.svg}" alt="ícone pequeno de lápis">
+							</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</span>
 	</article>
 </body>
 
