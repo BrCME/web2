@@ -1,4 +1,3 @@
-
 CREATE TABLE employee_role(
 	role_id UUID,
 	employee_id UUID,

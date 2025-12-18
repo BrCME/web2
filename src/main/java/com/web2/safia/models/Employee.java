@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -48,6 +50,10 @@ public class Employee extends BaseModel implements UserDetails, CredentialsConta
 	@Column(name = "birth_date", nullable = false)
 	@Past(message = "Data de nascimento deve estar no passado")
 	private LocalDate birthDate;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status", nullable = false)
+	private Status status = Status.PENDING;
 
 	// @ManyToMany(mappedBy = "employees")
 	// private Set<Team> teams = new HashSet<>();
@@ -86,7 +92,8 @@ public class Employee extends BaseModel implements UserDetails, CredentialsConta
 			Set<Project> projects,
 			Set<Work> works,
 			Set<Task> tasks,
-			Set<Role> roles) {
+			Set<Role> roles,
+			Status status) {
 
 		super(id, creator, createdAt, updatedAt, deletedAt);
 		this.name = name;
@@ -100,6 +107,7 @@ public class Employee extends BaseModel implements UserDetails, CredentialsConta
 		// this.works = new HashSet<>(works);
 		// this.tasks = new HashSet<>(tasks);
 		this.roles = new HashSet<>(roles);
+		this.status = status;
 	}
 
 	public String getName() {
@@ -160,6 +168,14 @@ public class Employee extends BaseModel implements UserDetails, CredentialsConta
 			@Valid @Past(message = "Data de nascimento deve estar no passado") LocalDate birthDate) {
 
 		this.birthDate = birthDate;
+	}
+
+	public Status getStatus() {
+    	return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 	// public Set<Team> getAllTeams() {
