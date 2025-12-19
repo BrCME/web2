@@ -180,6 +180,36 @@ public class Task extends BaseModel {
 		return works.remove(work);
 	}
 
+	public boolean promote() {
+		if (this.status.equals(Task.Status.DONE)) {
+			return false;
+		}
+		
+		this.status = switch(this.status) {
+			case Task.Status.TO_DO -> Task.Status.DOING;
+			case Task.Status.DOING -> Task.Status.IN_ANALYSYS;
+			case Task.Status.IN_ANALYSYS -> Task.Status.DONE;
+			default -> this.status;
+		};
+		
+		return true;
+	}
+
+	public boolean demote() {
+		if (this.status.equals(Task.Status.TO_DO)) {
+			return false;
+		}
+		
+		this.status = switch(this.status) {
+			case Task.Status.DONE -> Task.Status.IN_ANALYSYS;
+			case Task.Status.IN_ANALYSYS -> Task.Status.DOING;
+			case Task.Status.DOING -> Task.Status.TO_DO;
+			default -> this.status;
+		};
+		
+		return true;
+	}
+
 	@Override
 	public String toString() {
 		return "Task [id=" + id +

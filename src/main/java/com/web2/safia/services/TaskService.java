@@ -82,6 +82,48 @@ public class TaskService extends BaseService {
 				creator);
 	}
 
+	public void promote(Task task, Employee creator) throws DomainException {
+		var actualTask = taskRepository.findById(task.getId());
+
+		if (!actualTask.isPresent()) {
+			logger.error("Atividade com id '{}' não encontrada", task.getId());
+			throw new DomainException(String.format("Atividade com id '%s' não encontrada", task.getId()));
+		}
+
+		if (!actualTask.get().promote()) {
+			logger.error("Atividade com id '{}' já foi finalizada", task.getId());
+			throw new DomainException(String.format("Atividade com id '%s' já foi finalizada", task.getId()));
+		}
+
+		taskRepository.save(actualTask.get());
+		logger.info("Promovida atividade '{}' nova por '{}' para '{}'", actualTask.get().getName(), creator.getEmail());
+
+		commitEventPublisher.publishUpdateCommitEvent(
+				String.format("Promovida atividade '%s' novo para '%s'", actualTask.get().getName(), actualTask.get().getStatus().toString()),
+				creator);
+	}
+
+	public void demote(Task task, Employee creator) throws DomainException {
+		var actualTask = taskRepository.findById(task.getId());
+
+		if (!actualTask.isPresent()) {
+			logger.error("Atividade com id '{}' não encontrada", task.getId());
+			throw new DomainException(String.format("Atividade com id '%s' não encontrada", task.getId()));
+		}
+
+		if (!actualTask.get().promote()) {
+			logger.error("Atividade com id '{}' já está para fazer", task.getId());
+			throw new DomainException(String.format("Atividade com id '%s' já está para fazer", task.getId()));
+		}
+
+		taskRepository.save(actualTask.get());
+		logger.info("Promovida atividade '{}' nova por '{}' para '{}'", actualTask.get().getName(), creator.getEmail());
+
+		commitEventPublisher.publishUpdateCommitEvent(
+				String.format("Promovida atividade '%s' novo para '%s'", actualTask.get().getName(), actualTask.get().getStatus().toString()),
+				creator);
+	}
+
 	public void deleteById(UUID id, Employee creator) throws DomainException {
 		var task = taskRepository.findById(id);
 

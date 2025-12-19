@@ -100,6 +100,34 @@ public class TaskController extends BaseController {
 		return getAllByCreator(Pageable.ofSize(20), model, request);
 	}
 
+	@PostMapping("/promote")
+	public String promote(
+			@Valid Task task,
+			Model model,
+			HttpServletRequest request,
+			BindingResult result,
+			RedirectAttributes redirect) throws DomainException {
+
+		var creator = getCreator(request.getUserPrincipal().getName());
+		taskService.promote(task, creator);
+
+		return getAllByCreator(Pageable.ofSize(20), model, request);
+	}
+
+	@PostMapping("/demote")
+	public String demote(
+			@Valid Task task,
+			Model model,
+			HttpServletRequest request,
+			BindingResult result,
+			RedirectAttributes redirect) throws DomainException {
+
+		var creator = getCreator(request.getUserPrincipal().getName());
+		taskService.demote(task, creator);
+
+		return getAllByCreator(Pageable.ofSize(20), model, request);
+	}
+
 	@PostMapping("/delete/{id}")
 	public String deleteById(
 			@PathVariable("id") UUID id,
