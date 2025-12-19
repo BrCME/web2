@@ -113,9 +113,16 @@ public class ProjectService extends BaseService {
 			throw new DomainException("Projeto não encontrado");
 		}
 
+		var manager = employeeRepository.findByEmail(project.getManager().getEmail());
+
+		if (!actualProject.isPresent()) {
+			logger.error("Empregado '{}' não encontrado para atualizar como gerente", project.getManager().getEmail());
+			throw new DomainException("Empregado gerente não encontrado");
+		}
+
 		actualProject.get().setName(project.getName());
 		actualProject.get().setDescription(project.getDescription());
-		actualProject.get().setManager(project.getManager());
+		actualProject.get().setManager(manager.get());
 
 		projectRepository.save(actualProject.get());
 		commitEventPublisher.publishUpdateCommitEvent(
@@ -123,22 +130,23 @@ public class ProjectService extends BaseService {
 				creator);
 	}
 
-	public void addEmployee(@Valid Project project, UUID employeeId, Employee creator) throws DomainException {
+	public void addEmployee(@Valid Project project, String employeeEmail, Employee creator) throws DomainException {
 		var actualProject = projectRepository.findById(project.getId());
-		var employee = employeeRepository.findById(employeeId);
-
-		if (!employee.isPresent()) {
-			logger.error("Empregado '{}' não encontrado para adicionar ao projeto '{}'", employeeId, project.getName());
-			throw new DomainException("Empregado não encontrado para adicionar ao projeto");
-		}
 
 		if (!actualProject.isPresent()) {
 			logger.error("Projeto '{}' não encontrado para adicionar empregado '{}'", project.getId(),
-					employee.get().getEmail());
+					employeeEmail);
 			throw new DomainException("Projeto não encontrado para adicionar empregado");
 		}
 
-		if (!actualProject.get().addEmployee(creator)) {
+		var employee = employeeRepository.findByEmail(employeeEmail);
+
+		if (!employee.isPresent()) {
+			logger.error("Empregado '{}' não encontrado para adicionar ao projeto '{}'", employeeEmail, project.getName());
+			throw new DomainException("Empregado não encontrado para adicionar ao projeto");
+		}
+
+		if (!actualProject.get().addEmployee(employee.get())) {
 			logger.error("Não foi possível adicionar o empregado '{}' ao projeto '{}'", employee.get().getEmail(),
 					actualProject.get().getName());
 			throw new DomainException("Não foi possível adicionar empregado ao projeto");

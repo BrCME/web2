@@ -18,14 +18,6 @@
 		Minhas Equipes
 	</h1>
 
-	<article>
-		<h2>Informações</h2>
-
-		<span th:text="'Total de Equipe(s): ' + ${total}">
-			<span th:text="'Novo: ' + ${newTeam}">
-			</span>
-	</article>
-
 	<span class="w-6/10 flex align-center justify-between">
 		<button
 			class="bg-sky-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
@@ -37,9 +29,7 @@
 		</button>
 	</span>
 
-	<div th:replace="~{fragments/team-modal :: new-team-modal}">
-
-	</div>
+	<div th:replace="~{fragments/team-modal :: new-team-modal}"></div>
 
 	<table class="w-6/10" th:object="${teams}">
 		<thead class="text-gray-400 font-bold uppercase bg-slate-950">

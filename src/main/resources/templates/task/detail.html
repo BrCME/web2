@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 	<link rel="shortcut icon" th:href="@{/images/favico.ico}" type="image/x-icon">
-	<title>Equipes | SAFIA</title>
+	<title>Projetos | SAFIA</title>
 </head>
 
 <body class="bg-center bg-cover bg-no-repeat bg-slate-800 flex flex-col justify-start items-center min-h-screen">
@@ -14,14 +14,14 @@
 
 	<div class="w-full" th:insert="~{fragments/header :: header}"></div>
 
-	<article th:object="${team}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem] mt-4">
-		<h3 class="place-self-start uppercase text-xl font-bold text-gray-100 mb-4" th:text="${team.name}">
+	<article th:object="${project}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem] mt-4">
+		<h3 class="place-self-start uppercase text-xl font-bold text-gray-100 mb-4" th:text="${project.name}">
 			Meus dados:
 		</h3>
 
 		<form class="flex flex-col w-full place-self-center my-4">
 			<fieldset class="mb-4" disabled>
-				<legend class="font-bold text-gray-200 text-left mb-4">Dados de Equipe</legend>
+				<legend class="font-bold text-gray-200 text-left mb-4">Dados de Projeto</legend>
 
 				<span class="my-2 h-6 flex">
 					<h3 class="font-bold text-left text-gray-200" for="id">Id:</h3>
@@ -42,6 +42,18 @@
 				</span>
 
 				<span class="my-2 h-6 flex">
+					<h3 class="font-bold text-left text-gray-200" for="description">Projeto:</h3>
+					<div th:text="*{team.name}"
+						class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+				</span>
+
+				<span class="my-2 h-6 flex">
+					<h3 class="font-bold text-left text-gray-200" for="description">Gerente:</h3>
+					<div th:text="*{manager.name}"
+						class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
+				</span>
+
+				<span class="my-2 h-6 flex">
 					<h3 class="font-bold text-left text-gray-200" for="description">Criador:</h3>
 					<div th:text="*{creator.name}"
 						class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
@@ -58,8 +70,8 @@
 				</span>
 
 				<span class="my-2 h-6 flex">
-					<h3 class="font-bold text-left text-gray-200" for="projects">Projetos:</h3>
-					<div th:text="*{getAllProjects().size()}"
+					<h3 class="font-bold text-left text-gray-200" for="employees">Atividades:</h3>
+					<div th:text="*{getAllTasks().size()}"
 						class="px-2 ml-2 bg-none border-gray-200 border-b-2 text-gray-400 size-full"></div>
 				</span>
 			</fieldset>
@@ -68,120 +80,64 @@
 	</article>
 
 	<span class="w-6/10 flex align-center justify-between">
-		<button onclick="openModal('add-employee-team-modal')"
+		<button onclick="openModal('add-employee-project-modal')"
 			class="bg-sky-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
 			Adicionar Pessoa
 		</button>
-		<button onclick="openModal('new-project-modal')"
+		<button onclick="openModal('new-task-modal')"
 			class="bg-sky-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
-			Novo Projeto
+			Adicionar Atividade
 		</button>
-		<button onclick="openModal('edit-team-modal')"
+		<button onclick="openModal('edit-project-modal')"
 			class="bg-yellow-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
-			Editar Equipe
+			Editar Projeto
 		</button>
 	</span>
 
-	<div th:replace="~{fragments/team-modal :: edit-team-modal}"></div>
-	<div th:replace="~{fragments/team-modal :: add-employee-team-modal}"></div>
-	<div th:replace="~{fragments/project-modal :: new-project-modal}"></div>
+	<div th:replace="~{fragments/task-modal :: new-task-modal}"></div>
+	<div th:replace="~{fragments/project-modal :: edit-project-modal}"></div>
+	<div th:replace="~{fragments/project-modal :: add-employee-project-modal}"></div>
 
-	<article th:object="${team}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
+	<article th:object="${project}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
 		<h3 class="place-self-start uppercase text-xl font-bold text-gray-100 mb-4">
 			Pessoas:
 		</h3>
 		<span class="w-full h-full flex justify-center items-center gap-x-8 border-2">
-			<table class="w-full" th:object="${team.getAllEmployees()}">
+			<table class="w-full" th:object="${project.getAllEmployees()}">
 				<thead class="text-gray-400 font-bold uppercase bg-slate-950">
 					<tr class="w-full h-10">
 						<th class="px-4" scope="col">Nome</th>
 						<th class="px-4" scope="col">Email</th>
 						<th class="px-4" scope="col">Telefone</th>
 						<th class="px-4" scope="col">Aniversário</th>
-						<th class="px-4" scope="col" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">Ações</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:if="${team.getAllEmployees().isEmpty()}"
+					<tr th:if="${project.getAllEmployees().isEmpty()}"
 						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
 						<th>—</th>
 						<td>—</td>
 						<td>—</td>
 						<td>—</td>
-						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">—</td>
 					</tr>
-					<tr th:each="employee : ${team.getAllEmployees()}"
+					<tr th:each="employee : ${project.getAllEmployees()}"
 						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
 						<th scope="row" class="px-4 text-left" th:text="${employee.name}">Geraldo</th>
 						<td class="px-4 text-left" th:text="${employee.email}">geraldo@mail</td>
 						<td class="px-4 text-left" th:text="${employee.phoneNumber}">33279797</td>
 						<td class="px-4 text-center" th:text="${employee.createdAt.toLocalDate()}">20/01/2020</td>
-						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
-							<span class="flex w-full h-full justify-evenly">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
-									th:src="@{/svgs/trash-color.svg}" alt="ícone pequeno de lixeira">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
-									th:src="@{/svgs/edit-color.svg}" alt="ícone pequeno de lápis">
-							</span>
-						</td>
 					</tr>
 				</tbody>
 			</table>
 		</span>
 	</article>
 
-	<article th:object="${team}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
+	<article th:object="${project}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
 		<h3 class="place-self-start uppercase text-xl font-bold text-gray-100 mb-4">
-			Projetos:
+			Atividades:
 		</h3>
 		<span class="w-full h-full flex justify-center items-center gap-x-8 border-2">
-			<table class="w-full" th:object="${team.getAllProjects()}">
-				<thead class="text-gray-400 font-bold uppercase bg-slate-950">
-					<tr class="w-full h-10">
-						<th class="px-4" scope="col">Nome</th>
-						<th class="px-4" scope="col">Descrição</th>
-						<th class="px-4" scope="col">Equipe</th>
-						<th class="px-4" scope="col">Pessoa(s)</th>
-						<th class="px-4" scope="col">Gerente</th>
-						<th class="px-4" scope="col">Criador</th>
-						<th class="px-4" scope="col">Criado em</th>
-						<th class="px-4" scope="col" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">Ações</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:if="${team.getAllProjects().isEmpty()}"
-						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
-						<th>—</th>
-						<td>—</td>
-						<td>—</td>
-						<td>—</td>
-						<td>—</td>
-						<td>—</td>
-						<td>—</td>
-						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">—</td>
-					</tr>
-					<tr th:each="project : ${team.getAllProjects()}"
-						class="w-full h-10 text-slate-950 font-bold uppercase bg-gray-200 text-center hover:opacity-80 border-b-2 border-slate-400">
-						<th scope="row" class="px-4 text-left cursor-pointer underline"><a
-								th:href="@{/project/detail/} + ${project.id}" th:text="${project.name}">Projethon</a>
-						</th>
-						<td class="px-4 text-left" th:text="${project.description}">O mió projeto que ta tendo</td>
-						<td class="px-4 text-left" th:text="${project.team.name}">Team O</td>
-						<td class="px-4 text-center" th:text="${project.getAllEmployees().size()}">5 pessoa(s)</td>
-						<td class="px-4 text-left" th:text="${project.manager.name}">Ademir</td>
-						<td class="px-4 text-center" th:text="${project.creator.name}">Jack Stalber</td>
-						<td class="px-4 text-center" th:text="${project.createdAt.toLocalDate()}">20/01/2020</td>
-						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
-							<span class="flex w-full h-full justify-evenly">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
-									th:src="@{/svgs/trash-color.svg}" alt="ícone pequeno de lixeira">
-								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"
-									th:src="@{/svgs/edit-color.svg}" alt="ícone pequeno de lápis">
-							</span>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+
 		</span>
 	</article>
 </body>

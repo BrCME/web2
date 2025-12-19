@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import com.web2.safia.events.CommitEventPublisher;
 import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Employee;
+import com.web2.safia.models.Project;
 import com.web2.safia.models.Task;
 import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
+import com.web2.safia.repositories.adapters.JpaProjectRepository;
 import com.web2.safia.repositories.adapters.JpaTaskRepository;
 import com.web2.safia.repositories.adapters.JpaWorkRepository;
 
@@ -26,17 +28,20 @@ public class TaskService extends BaseService {
 	private final JpaEmployeeRepository employeeRepository;
 	private final JpaWorkRepository workRepository;
 	private final JpaTaskRepository taskRepository;
+	private final JpaProjectRepository projectRepository;
 
 	public TaskService(
 			CommitEventPublisher commitEventPublisher,
 			JpaEmployeeRepository employeeRepository,
 			JpaWorkRepository workRepository,
-			JpaTaskRepository taskRepository) {
+			JpaTaskRepository taskRepository,
+			JpaProjectRepository projectRepository) {
 
 		super(commitEventPublisher);
 		this.employeeRepository = employeeRepository;
 		this.workRepository = workRepository;
 		this.taskRepository = taskRepository;
+		this.projectRepository = projectRepository;
 	}
 
 	public Page<Task> getAll(Pageable pageable) {
@@ -58,9 +63,17 @@ public class TaskService extends BaseService {
 		return task.get();
 	}
 
-	public void create(@Valid Task task, Employee creator) {
+	public void create(Project project, @Valid Task task, Employee creator) throws DomainException {
+		var actualProject = projectRepository.findById(project.getId());
+
+		if (!actualProject.isPresent()) {
+			logger.error("Projeto com id '{}' não encontrado", project.getId());
+			throw new DomainException(String.format("Projeto com id '%s' não encontrado", project.getId()));
+		}
+		
+		task.setId(null);
+		task.setProject(actualProject.get());
 		task.setCreator(creator);
-		task.addEmployee(creator);
 		taskRepository.save(task);
 		logger.info("Criada atividade '{}' nova por '{}", task.getName(), creator.getEmail());
 
@@ -97,61 +110,6 @@ public class TaskService extends BaseService {
 		actualTask.get().setDescription(task.getDescription());
 		actualTask.get().setDeadLine(task.getDeadLine());
 		actualTask.get().setStatus(task.getStatus());
-
-		taskRepository.save(actualTask.get());
-		commitEventPublisher.publishUpdateCommitEvent(
-				String.format("Atualizada atividade '%s'", actualTask.get().getName()),
-				creator);
-	}
-
-	public void addEmployee(@Valid Task task, UUID employeeId, Employee creator) throws DomainException {
-		var actualTask = taskRepository.findById(task.getId());
-		var employee = employeeRepository.findById(employeeId);
-
-		if (!employee.isPresent()) {
-			logger.error("Empregado '{}' não encontrado para adicionar à atividade '{}'", employeeId, task.getName());
-			throw new DomainException("Empregado não encontrado para adicionar à atividade");
-		}
-
-		if (!actualTask.isPresent()) {
-			logger.error("Atividade '{}' não encontrada para adicionar empregado '{}'", task.getId(),
-					employee.get().getEmail());
-			throw new DomainException("Atividade não encontrada para adicionar empregado");
-		}
-
-		if (!actualTask.get().addEmployee(creator)) {
-			logger.error("Não foi possível adicionar o empregado '{}' à equipe '{}'", employee.get().getEmail(),
-					actualTask.get().getName());
-			throw new DomainException("Não foi possível adicionar empregado à equipe");
-		}
-
-		taskRepository.save(actualTask.get());
-		commitEventPublisher.publishUpdateCommitEvent(
-				String.format("Atualizada atividade '%s' com novo empregado '%s'", actualTask.get().getName(),
-						employee.get().getEmail()),
-				creator);
-	}
-
-	public void removeEmployee(@Valid Task task, UUID employeeId, Employee creator) throws DomainException {
-		var actualTask = taskRepository.findById(task.getId());
-		var employee = employeeRepository.findById(employeeId);
-
-		if (!employee.isPresent()) {
-			logger.error("Empregado '{}' não encontrado para remover da atividade '{}'", employeeId, task.getName());
-			throw new DomainException("Empregado não encontrado para remover da atividade");
-		}
-
-		if (!actualTask.isPresent()) {
-			logger.error("Atividade '{}' não encontrado para remover empregado '{}'", task.getId(),
-					employee.get().getEmail());
-			throw new DomainException("Atividade não encontrado para remover empregado");
-		}
-
-		if (!actualTask.get().removeEmployee(employee.get())) {
-			logger.error("Não foi possivel remover o empregado '{}' da atividade '{}'", employee.get().getEmail(),
-					actualTask.get().getName());
-			throw new DomainException("Não foi possível remover empregado da atividade");
-		}
 
 		taskRepository.save(actualTask.get());
 		commitEventPublisher.publishUpdateCommitEvent(

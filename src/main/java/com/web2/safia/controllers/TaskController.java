@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.web2.safia.exceptions.DomainException;
+import com.web2.safia.models.Project;
 import com.web2.safia.models.Task;
 import com.web2.safia.services.EmployeeService;
 import com.web2.safia.services.TaskService;
@@ -40,6 +41,7 @@ public class TaskController extends BaseController {
 
 		var tasks = taskService.getAll(pageable);
 		model.addAttribute("tasks", tasks);
+
 
 		return "/task/index.html";
 	}
@@ -83,6 +85,7 @@ public class TaskController extends BaseController {
 
 	@PostMapping("/create")
 	public String create(
+			Project project,
 			@Valid Task task,
 			Model model,
 			HttpServletRequest request,
@@ -90,7 +93,7 @@ public class TaskController extends BaseController {
 			RedirectAttributes redirect) throws DomainException {
 
 		var creator = getCreator(request.getUserPrincipal().getName());
-		taskService.create(task, creator);
+		taskService.create(project, task, creator);
 
 		return getAllByCreator(Pageable.ofSize(20), model, request);
 	}
@@ -115,32 +118,6 @@ public class TaskController extends BaseController {
 
 		var creator = getCreator(request.getUserPrincipal().getName());
 		taskService.updateById(task, creator);
-
-		return getAllByCreator(Pageable.ofSize(20), model, request);
-	}
-
-	@PostMapping("/add-employee/{employeeId}")
-	public String addEmployee(
-			@PathVariable("employeeId") UUID employeeId,
-			Task task,
-			Model model,
-			HttpServletRequest request) throws DomainException {
-
-		var creator = getCreator(request.getUserPrincipal().getName());
-		taskService.addEmployee(task, employeeId, creator);
-
-		return getAllByCreator(Pageable.ofSize(20), model, request);
-	}
-
-	@PostMapping("/remove-employee/{employeeId}")
-	public String removeEmployee(
-			@PathVariable("employeeId") UUID employeeId,
-			Task task,
-			Model model,
-			HttpServletRequest request) throws DomainException {
-
-		var creator = getCreator(request.getUserPrincipal().getName());
-		taskService.removeEmployee(task, employeeId, creator);
 
 		return getAllByCreator(Pageable.ofSize(20), model, request);
 	}

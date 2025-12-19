@@ -16,18 +16,12 @@
 		Meus Projetos
 	</h1>
 
-	<article>
-		<h2>Informações</h2>
-
-		<span th:text="'Total de Equipe(s): ' + ${total}">
-		</span>
-	</article>
-
-
-	<a th:href="@{/project/create}"
-		class="place-self-end bg-green-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
-		Novo Projeto
-	</a>
+	<span class="w-6/10 flex align-center justify-between">
+		<button
+			class="bg-sky-600 rounded-lg my-2 py-4 px-12 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
+			Gerar Relatório
+		</button>
+	</span>
 
 	<table class="w-6/10" th:object="${projects}">
 		<thead class="text-gray-400 font-bold uppercase bg-slate-950">

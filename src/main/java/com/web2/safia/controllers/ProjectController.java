@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.web2.safia.exceptions.DomainException;
+import com.web2.safia.models.Employee;
 import com.web2.safia.models.Project;
+import com.web2.safia.models.Task;
 import com.web2.safia.models.Team;
 import com.web2.safia.services.EmployeeService;
 import com.web2.safia.services.ProjectService;
@@ -68,6 +70,9 @@ public class ProjectController extends BaseController {
 
 		var project = projectService.getById(id);
 		model.addAttribute("project", project);
+		model.addAttribute("editProject", project);
+		model.addAttribute("newEmployee", new Employee());
+		model.addAttribute("newTask", new Task());
 
 		return "/project/detail.html";
 	}
@@ -123,15 +128,15 @@ public class ProjectController extends BaseController {
 		return getAllByCreator(Pageable.ofSize(20), model, request);
 	}
 
-	@PostMapping("/add-employee/{employeeId}")
+	@PostMapping("/add-employee")
 	public String addEmployee(
-			@PathVariable("employeeId") UUID employeeId,
 			Project project,
+			Employee employee,
 			Model model,
 			HttpServletRequest request) throws DomainException {
 
 		var creator = getCreator(request.getUserPrincipal().getName());
-		projectService.addEmployee(project, employeeId, creator);
+		projectService.addEmployee(project, employee.getEmail(), creator);
 
 		return getAllByCreator(Pageable.ofSize(20), model, request);
 	}

@@ -37,15 +37,15 @@ public class Project extends BaseModel {
 	@ManyToOne
 	@JoinColumn(name = "manager_id")
 	private Employee manager;
-	
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "employee_to_project", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
 	@ElementCollection
 	private Set<Employee> employees = new HashSet<>();
 
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
 	@ElementCollection
-	private Set<Task> tasks = new HashSet<>();	
+	private Set<Task> tasks = new HashSet<>();
 
 	public Project() {
 		super();
@@ -146,6 +146,20 @@ public class Project extends BaseModel {
 
 	public Set<Task> getAllTasks() {
 		return Set.copyOf(tasks);
+	}
+
+	public Set<Task> getAllTasks(String status) {
+		return tasks
+				.stream()
+				.filter(task -> task.getStatus().equals(Task.Status.valueOf(status)))
+				.collect(Collectors.toSet());
+	}
+
+	public Set<Task> getAllTasks(Task.Status status) {
+		return tasks
+				.stream()
+				.filter(task -> task.getStatus().equals(status))
+				.collect(Collectors.toSet());
 	}
 
 	public boolean addTask(Task task) {

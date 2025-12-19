@@ -8,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 import com.web2.safia.events.CommitEventPublisher;
 import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
 import com.web2.safia.repositories.adapters.JpaProjectRepository;
+import com.web2.safia.repositories.adapters.JpaTeamRepository;
 
 public class ProjectServiceTest {
 	private ProjectService underTest;
@@ -21,10 +22,13 @@ public class ProjectServiceTest {
 	@Mock
 	private JpaProjectRepository projectRepository;
 	
+	@Mock
+	private JpaTeamRepository teamRepository;
+	
 	@BeforeAll
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		underTest = new ProjectService(commitEventPublisher, employeeRepository, projectRepository);
+		underTest = new ProjectService(commitEventPublisher, employeeRepository, projectRepository, teamRepository);
 	}
 
 	@Test

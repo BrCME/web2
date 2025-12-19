@@ -4,13 +4,17 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
@@ -28,26 +32,20 @@ public class Task extends BaseModel {
 	@Column(name = "description", nullable = false)
 	private String description;
 
+	@JdbcType(value = PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
 	private Status status;
 
-	@NotNull(message = "Projeto é obrigatório")
 	@ManyToOne
 	@JoinColumn(name = "project_id")
 	private Project project;
 
-	@Future(message = "Prazo de entrega deve estar no futuro")
 	@Column(name = "dead_line", nullable = false)
 	private LocalDateTime deadLine;
 
-	@OneToMany
-	@JoinColumn()
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "task")
 	private Set<Work> works = new HashSet<>();
-
-	@ManyToMany
-	
-	private Set<Employee> employees = new HashSet<>();
 
 	public Task() {
 	}
@@ -61,7 +59,7 @@ public class Task extends BaseModel {
 			@Valid @NotBlank(message = "Descrição é obrigatória") String description,
 			Status status,
 			@Valid @NotNull(message = "Projeto é obrigatório") Project project,
-			@Valid @Future(message = "Prazo de entrega deve estar no futuro") LocalDateTime deadLine) {
+			LocalDateTime deadLine) {
 
 		super(id, creator, createdAt, updatedAt, deletedAt);
 		this.name = name;
@@ -123,18 +121,6 @@ public class Task extends BaseModel {
 		this.deadLine = deadLine;
 	}
 
-	public Set<Employee> getAllEmployees() {
-		return employees;
-	}
-
-	public boolean addEmployee(Employee employee) {
-		return employees.add(employee);
-	}
-
-	public boolean removeEmployee(Employee employee) {
-		return employees.remove(employee);
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -173,6 +159,25 @@ public class Task extends BaseModel {
 		} else if (!deadLine.equals(other.deadLine))
 			return false;
 		return true;
+	}
+
+	public Set<Employee> getAllEmployees() {
+		return works
+			.stream()
+			.map(work -> work.getEmployee())
+			.collect(Collectors.toSet());
+	}
+
+	public Set<Work> getAllWorks() {
+		return Set.copyOf(works);
+	}
+
+	public boolean addWork(Work work) {
+		return works.add(work);
+	}
+
+	public boolean removeWork(Work work) {
+		return works.remove(work);
 	}
 
 	@Override
