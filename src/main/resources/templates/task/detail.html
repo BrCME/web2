@@ -90,11 +90,11 @@
 			<form th:action="@{/work/create}" method="post" th:object="${work}"
 				class="flex items-center justify-evenly w-full bg-slate-900 rounded-lg my-4 p-4 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center">
 				<input name="descricao" class="w-6/10" placeholder="Em que está trabalhando agora?" type="text"
-					th:value="${work.description}" />
+					th:field="${work.description}" />
 
 				<input id="task-id" type="text" th:field="${task.id}" hidden />
-				<input id="start-timer-value" type="datetime" th:field="${work.startedAt}" hidden />
-				<input id="stop-timer-value" type="datetime" th:field="${work.endedAt}" hidden />
+				<input id="start-timer-value" type="datetime-local" th:field="${work.startedAt}" hidden />
+				<input id="stop-timer-value" type="datetime-local" th:field="${work.endedAt}" hidden />
 
 				<div class="flex w-3/10 align-center justify-end text-center gap-x-4">
 					<p id="timer-display" class="text-2xl place-self-center">00:00:00</p>
@@ -107,8 +107,8 @@
 						<img th:src="@{/svgs/stop.svg}" alt="pequeno ícone de parar">
 					</button>
 
-					<input value="Registrar" type="submit" 
-						class="uppercase border-xl br-10 rounded-lg bg-red-700 hover:cursor-pointer hover:opacity-80">
+					<input id="register-timer-button" value="Registrar" type="submit" disabled
+						class="uppercase border-xl br-10 rounded-lg bg-red-700 hover:cursor-pointer hover:opacity-80 disabled:hidden">
 				</div>
 			</form>
 		</span>

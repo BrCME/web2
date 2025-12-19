@@ -41,6 +41,9 @@ public class WorkController extends BaseController {
 		var creator = getCreator(request.getUserPrincipal().getName());
 		workService.create(work, task, creator);
 
-		return "/task/detail/".concat(task.getId().toString());
+		model.addAttribute("task", work.getTask());
+		model.addAttribute("work", new Work());
+
+		return "/task/detail.html";
 	}
 }

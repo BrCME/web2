@@ -20,6 +20,8 @@ function startTimer(event) {
 	document.getElementById("start-timer-button").disabled = true
 	document.getElementById("stop-timer-button").disabled = false
 
+	document.getElementById("start-timer-value").value = new Date(begin).toISOString().slice(0, -8)
+
 	isTracking = true;
 	begin = Date.now();
 
@@ -28,6 +30,7 @@ function startTimer(event) {
 			end = Date.now();
 			extractInterval(begin, end)
 			document.getElementById("timer-display").innerText = formatTime();
+			document.getElementById("stop-timer-value").value = new Date(end).toISOString().slice(0, -8);
 		}
 	}, 1_000);
 }
@@ -35,12 +38,13 @@ function startTimer(event) {
 function stopTimer(event) {
 	event.preventDefault()
 	isTracking = false;
-	
+
 	document.getElementById("start-timer-button").disabled = false
 	document.getElementById("stop-timer-button").disabled = true
+	document.getElementById("register-timer-button").disabled = false
 
-	document.getElementById("start-timer-value").value = begin
-	document.getElementById("stop-timer-value").value = end
+	document.getElementById("start-timer-value").value = new Date(begin).toISOString().slice(0, -8)
+	document.getElementById("stop-timer-value").value = new Date(end).toISOString().slice(0, -8)
 
 	console.log(document.getElementById("start-timer-value"))
 	console.log(document.getElementById("stop-timer-value"))
