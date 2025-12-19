@@ -36,7 +36,7 @@ public class Role implements GrantedAuthority {
 	}
 
 	public static enum Type {
-		ADMIN, OWNER, MANAGER, EMPLOYEE, NEWCOMER;
+		ADMIN, MANAGER, EMPLOYEE, NEWCOMER;
 	}
 
 	public UUID getId() {

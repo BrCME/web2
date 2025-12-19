@@ -110,6 +110,10 @@ public class Employee extends BaseModel implements UserDetails, CredentialsConta
 		this.status = status;
 	}
 
+	public static enum Status {
+		PENDING, ACTIVE, BLOCKED;
+	}
+
 	public String getName() {
 		return name;
 	}

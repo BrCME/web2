@@ -58,6 +58,8 @@ public class AuthService implements UserDetailsService {
 		var encodedPassword = passwordEncoder.encode(employee.getPassword());
 		employee.setPassword(encodedPassword);
 
+		employee.setStatus(Employee.Status.ACTIVE);
+
 		var roles = roleRepository.findAllByType(Set.of(Role.Type.EMPLOYEE.name(), Role.Type.NEWCOMER.name()));
 
 		roles.stream().forEach(role -> employee.addRole(role));
