@@ -72,9 +72,7 @@
 		class="bg-green-600 rounded-lg my-4 py-2 px-8 border-gray-200 border-xl br-10 uppercase text-gray-200 text-xl font-bold text-center cursor-pointer hover:opacity-80">
 		Editar Perfil
 	</button> -->
-
 	</article>
-
 
 	<article th:object="${roles}" class="flex flex-col justify-center items-center w-6/10 min-h-[12rem]">
 		<h3 class="place-self-start uppercase text-xl font-bold text-gray-100 mb-4">
@@ -165,7 +163,6 @@
 			Meus Projetos:
 		</h3>
 
-
 		<span class="w-full h-full flex justify-center items-center gap-x-8 border-2">
 			<table class="w-full" th:object="${projects}">
 				<thead class="text-gray-400 font-bold uppercase bg-slate-950">
@@ -255,10 +252,10 @@
 						<td class="px-4 text-left" th:text="${task.description}">Saúde é o que interessa, o resto não
 							tem pressa!</td>
 						<td class="px-4 text-center" th:text="${task.status}">A Fazer</td>
-						<td class="px-4 text-center" th:text="${team.project.name}">Projeto Verão</td>
-						<td class="px-4 text-center" th:text="${team.deadLine.toLocalDate()}">20/10/2026</td>
-						<td class="px-4 text-center" th:text="${team.creator.name}">Jack Stalber</td>
-						<td class="px-4 text-center" th:text="${team.createdAt.toLocalDate()}">20/01/2020</td>
+						<td class="px-4 text-center" th:text="${task.project.name}">Projeto Verão</td>
+						<td class="px-4 text-center" th:text="${task.deadLine.toLocalDate()}">20/10/2026</td>
+						<td class="px-4 text-center" th:text="${task.creator.name}">Jack Stalber</td>
+						<td class="px-4 text-center" th:text="${task.createdAt.toLocalDate()}">20/01/2020</td>
 						<td sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
 							<span class="flex w-full h-full justify-evenly">
 								<img class="hover:opacity-80 hover:animate-bounce cursor-pointer"

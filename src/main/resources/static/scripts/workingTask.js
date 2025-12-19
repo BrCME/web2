@@ -14,26 +14,36 @@ function extractInterval(now, then) {
 	hours = Math.floor(interval / MS_TO_HOURS) % 60;
 }
 
-function startTimer() {
+function startTimer(event) {
+	event.preventDefault()
+
+	document.getElementById("start-timer-button").disabled = true
+	document.getElementById("stop-timer-button").disabled = false
+
 	isTracking = true;
 	begin = Date.now();
 
-	const timerDisplay = document.getElementById("timer-display");
 	setInterval(() => {
 		if (isTracking) {
 			end = Date.now();
 			extractInterval(begin, end)
-			timerDisplay.innerText = formatTime();
+			document.getElementById("timer-display").innerText = formatTime();
 		}
 	}, 1_000);
 }
 
-function stopTimer() {
+function stopTimer(event) {
+	event.preventDefault()
 	isTracking = false;
-	alert(`Tempo registrado: ${formatTime()}`);
-	alert(`Está cronometrando? ${isTracking}`);
-	alert(`Tempo final: ${end}`);
-	confirm(`Deseja Registrar o tempo entre ${new Date(begin)} e ${new Date(end)}?`)
+	
+	document.getElementById("start-timer-button").disabled = false
+	document.getElementById("stop-timer-button").disabled = true
+
+	document.getElementById("start-timer-value").value = begin
+	document.getElementById("stop-timer-value").value = end
+
+	console.log(document.getElementById("start-timer-value"))
+	console.log(document.getElementById("stop-timer-value"))
 }
 
 function formatTime() {

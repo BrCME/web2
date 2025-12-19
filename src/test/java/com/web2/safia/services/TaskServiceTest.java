@@ -6,6 +6,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.web2.safia.events.CommitEventPublisher;
 import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
+import com.web2.safia.repositories.adapters.JpaProjectRepository;
 import com.web2.safia.repositories.adapters.JpaTaskRepository;
 import com.web2.safia.repositories.adapters.JpaWorkRepository;
 
@@ -23,11 +24,14 @@ public class TaskServiceTest {
 	
 	@Mock
 	private JpaTaskRepository taskRepository;
+
+	@Mock
+	private JpaProjectRepository projectRepository;
 	
 	@BeforeAll
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		underTest = new TaskService(commitEventPublisher, employeeRepository, workRepository, taskRepository);
+		underTest = new TaskService(commitEventPublisher, employeeRepository, workRepository, taskRepository, projectRepository);
 	}
 	
 }

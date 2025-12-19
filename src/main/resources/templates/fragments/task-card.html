@@ -67,8 +67,7 @@
 
 		<div class="flex align-center justify-end w-full gap-x-2 my-2">
 			<button
-				class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed"
-				disabled>
+				class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
 				<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
 			</button>
 			<button
@@ -107,8 +106,7 @@
 
 		<div class="flex align-center justify-end w-full gap-x-2 my-2">
 			<button
-				class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed"
-				disabled>
+				class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
 				<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
 			</button>
 			<button
@@ -147,19 +145,19 @@
 
 		<div class="flex align-center justify-end w-full gap-x-2 my-2">
 			<button
-				class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed"
-				disabled>
+				class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
 				<img th:src="@{/svgs/left-arrow.svg}" alt="ícone pequeno de seta para à esquerda">
 			</button>
 			<button
-				class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
+				class="text-gray-300 p-1 bg-green-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed"
+				disabled>
 				<img th:src="@{/svgs/right-arrow.svg}" alt="ícone pequeno de seta para à direita">
 			</button>
 			<button
 				class="text-gray-300 p-1 bg-yellow-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
 				<img th:src="@{/svgs/edit.svg}" alt="ícone pequeno de lápis">
 			</button>
-			<button
+			<button onclick="location.href='/project/detail/ + ${project.id}'"
 				class="text-gray-300 p-1 bg-red-700 border-xl rounded-lg hover:cursor-pointer hover:opacity-80 disabled:bg-gray-700 disabled:cursor-not-allowed">
 				<img th:src="@{/svgs/trash.svg}" alt="ícone pequeno de lixeira">
 			</button>

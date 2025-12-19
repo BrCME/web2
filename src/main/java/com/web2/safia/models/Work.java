@@ -23,25 +23,23 @@ public class Work implements Serializable {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 
-	@NotBlank(message = "Descrição é obrigatória")
+	// @NotBlank(message = "Descrição é obrigatória")
 	@Column(name = "description", nullable = false)
 	private String description;
 
-	@NotNull(message = "Empregado é obrigatório")
 	@ManyToOne
 	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
-	@NotNull(message = "Tarefa é obrigatória")
 	@ManyToOne
 	@JoinColumn(name = "task_id")
 	private Task task;
 
-	@NotNull(message = "Inicio é obrigatório")
+	// @NotNull(message = "Inicio é obrigatório")
 	@Column(name = "started_at", nullable = false)
 	private LocalDateTime startedAt;
 
-	@NotNull(message = "Fim é obrigatório")
+	// @NotNull(message = "Fim é obrigatório")
 	@Column(name = "ended_at", nullable = false)
 	private LocalDateTime endedAt;
 
@@ -51,8 +49,8 @@ public class Work implements Serializable {
 	public Work(
 			UUID id,
 			@Valid @NotBlank(message = "Descrição é obrigatória") String description,
-			@Valid @NotNull(message = "Empregado é obrigatório") Employee employee,
-			@Valid @NotNull(message = "Tarefa é obrigatória") Task task,
+			Employee employee,
+			Task task,
 			@Valid @NotNull(message = "Inicio é obrigatório") LocalDateTime startedAt,
 			@Valid @NotNull(message = "Fim é obrigatório") LocalDateTime endedAt) {
 

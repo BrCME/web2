@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.models.Project;
 import com.web2.safia.models.Task;
+import com.web2.safia.models.Work;
 import com.web2.safia.services.EmployeeService;
 import com.web2.safia.services.TaskService;
 
@@ -68,6 +69,7 @@ public class TaskController extends BaseController {
 
 		var task = taskService.getById(id);
 		model.addAttribute("task", task);
+		model.addAttribute("work", new Work());
 
 		return "/task/detail.html";
 	}
