@@ -1,0 +1,33 @@
+package com.web2.safia.employee;
+
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.web2.safia.employee.dtos.EmployeeResponseDto;
+import com.web2.safia.exceptions.DomainException;
+
+@Controller
+@RequestMapping("/api/employees/")
+public class EmployeeController {
+	private final EmployeeService employeeService;
+
+	public EmployeeController(EmployeeService employeeService) {
+		this.employeeService = employeeService;
+	}
+
+	@GetMapping("me")
+	public ResponseEntity<EmployeeResponseDto> getMe() throws DomainException {
+		return ResponseEntity.ok(employeeService.getById(UUID.randomUUID()));
+	}
+
+	@GetMapping
+	public ResponseEntity<Page<EmployeeResponseDto>> getAll(Pageable pageable) {
+		return ResponseEntity.ok(employeeService.getAll(pageable));
+	}
+}

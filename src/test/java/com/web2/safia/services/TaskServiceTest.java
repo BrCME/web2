@@ -4,11 +4,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.web2.safia.events.CommitEventPublisher;
-import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
-import com.web2.safia.repositories.adapters.JpaProjectRepository;
-import com.web2.safia.repositories.adapters.JpaTaskRepository;
-import com.web2.safia.repositories.adapters.JpaWorkRepository;
+import com.web2.safia.commit.CommitEventPublisher;
+import com.web2.safia.project.JpaProjectRepository;
+import com.web2.safia.safia.employee.JpaEmployeeRepository;
+import com.web2.safia.task.JpaTaskRepository;
+import com.web2.safia.task.TaskService;
+import com.web2.safia.work.JpaWorkRepository;
 
 public class TaskServiceTest {
 	private TaskService underTest;

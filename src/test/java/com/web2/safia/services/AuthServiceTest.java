@@ -6,9 +6,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.web2.safia.events.CommitEventPublisher;
-import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
-import com.web2.safia.repositories.adapters.JpaRoleRepository;
+import com.web2.safia.auth.AuthService;
+import com.web2.safia.commit.CommitEventPublisher;
+import com.web2.safia.safia.employee.JpaEmployeeRepository;
+import com.web2.safia.safia.employee.JpaRoleRepository;
 
 public class AuthServiceTest {
 	private AuthService underTest;

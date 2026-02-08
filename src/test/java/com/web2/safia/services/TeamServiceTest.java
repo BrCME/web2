@@ -5,9 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.web2.safia.events.CommitEventPublisher;
-import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
-import com.web2.safia.repositories.adapters.JpaTeamRepository;
+import com.web2.safia.commit.CommitEventPublisher;
+import com.web2.safia.safia.employee.JpaEmployeeRepository;
+import com.web2.safia.team.JpaTeamRepository;
+import com.web2.safia.team.TeamService;
 
 
 class TeamServiceTest {

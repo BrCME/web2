@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.web2.safia.repositories.adapters.JpaCommitRepository;
+import com.web2.safia.commit.JpaCommitRepository;
+import com.web2.safia.common.CommitService;
 
 public class CommitServiceTest {
 	private CommitService underTest;

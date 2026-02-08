@@ -53,12 +53,22 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: "30s"
 
+  # modulith:
+    # detection-strategy: explicitly-annotated
+
   security:
     user:
       name: admin
       password: SPR1NG_4DM1N
       roles:
       - ADMIN
+
+  web:
+    error:
+      whitelabel:
+        enabled: true
+        # include-message: never
+        # include-stacktrace: never
 
 management:
   observations:
@@ -83,9 +93,3 @@ server:
     max-connections: 256
     threads:
       max: 20
-
-  error:
-    whitelabel:
-      enabled: true
-    # include-message: never
-    # include-stacktrace: never

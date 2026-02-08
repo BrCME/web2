@@ -1,25 +1,26 @@
-package com.web2.safia.events;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+package com.web2.safia.events;@Valid
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.Mock;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
-import com.web2.safia.models.Commit;
-import com.web2.safia.models.builders.EmployeeBuilder;
-import com.web2.safia.repositories.adapters.JpaCommitRepository;
+import com.web2.safia.commit.Commit;
+import com.web2.safia.commit.CommitService;
+import com.web2.safia.commit.JpaCommitRepository;
+import com.web2.safia.commit.events.CreateCommitEvent;
+import com.web2.safia.safia.employee.EmployeeBuilder;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class CommitEventListenerTest {
-	private CommitEventListener underTest;
+	private CommitService underTest;
 
 	@Mock
 	private JpaCommitRepository commitRepository;
@@ -27,13 +28,13 @@ class CommitEventListenerTest {
 	@BeforeAll
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		underTest = new CommitEventListener(commitRepository);
+		underTest = new CommitService(commitRepository);
 	}
 
 	@Test
 	void givenInvalidCommitEvent_whenOnCommitEvent_thenThrowsException() {
 		assertThrows(IllegalArgumentException.class,
-				() -> underTest.onCommitEvent(new CommitEvent(this, "Commit inválido", Commit.Type.ATIVACAO, null)));
+				() -> underTest.onCommitEvent(new CreateCommitEvent(this, "Commit inválido", Commit.Type.ATIVACAO, null)));
 	}
 
 	@Test
@@ -45,7 +46,7 @@ class CommitEventListenerTest {
 				.withId(UUID.randomUUID())
 				.build();
 
-		var validCommitEvent = new CommitEvent(this, "Criado usuário 'user@mail.com' novo", Commit.Type.CRIACAO,
+		var validCommitEvent = new CreateCommitEvent(this, "Criado usuário 'user@mail.com' novo", Commit.Type.CRIACAO,
 				creator);
 		var validCommitModel = new Commit("Criado usuário 'user@mail.com' novo", Commit.Type.CRIACAO);
 

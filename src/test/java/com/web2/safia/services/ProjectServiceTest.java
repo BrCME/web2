@@ -5,10 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.web2.safia.events.CommitEventPublisher;
-import com.web2.safia.repositories.adapters.JpaEmployeeRepository;
-import com.web2.safia.repositories.adapters.JpaProjectRepository;
-import com.web2.safia.repositories.adapters.JpaTeamRepository;
+import com.web2.safia.commit.CommitEventPublisher;
+import com.web2.safia.project.JpaProjectRepository;
+import com.web2.safia.project.ProjectService;
+import com.web2.safia.safia.employee.JpaEmployeeRepository;
+import com.web2.safia.team.JpaTeamRepository;
 
 public class ProjectServiceTest {
 	private ProjectService underTest;
