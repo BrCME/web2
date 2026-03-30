@@ -57,7 +57,7 @@ public class ProjectController {
 	@PutMapping("{id}")
 	public ResponseEntity<ProjectResponseDto> updateById(
 			@PathVariable UUID id,
-			@RequestBody UpdateProjectRequestDto requestDto) {
+			@Valid @RequestBody UpdateProjectRequestDto requestDto) {
 
 		return ResponseEntity.ok(projectService.updateById(id, requestDto, new Employee()));
 	}

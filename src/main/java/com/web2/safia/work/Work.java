@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.web2.safia.employee.Employee;
-import com.web2.safia.safia.employee.Employee;
 import com.web2.safia.task.Task;
+import com.web2.safia.work.dtos.CreateWorkRequestDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +27,6 @@ public class Work implements Serializable {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 
-	// @NotBlank(message = "Descrição é obrigatória")
 	@Column(name = "description", nullable = false)
 	private String description;
 
@@ -39,11 +38,9 @@ public class Work implements Serializable {
 	@JoinColumn(name = "task_id")
 	private Task task;
 
-	// @NotNull(message = "Inicio é obrigatório")
 	@Column(name = "started_at", nullable = false)
 	private LocalDateTime startedAt;
 
-	// @NotNull(message = "Fim é obrigatório")
 	@Column(name = "ended_at", nullable = false)
 	private LocalDateTime endedAt;
 
@@ -52,11 +49,11 @@ public class Work implements Serializable {
 
 	public Work(
 			UUID id,
-			@Valid @NotBlank(message = "Descrição é obrigatória") String description,
+			String description,
 			Employee employee,
 			Task task,
-			@Valid @NotNull(message = "Inicio é obrigatório") LocalDateTime startedAt,
-			@Valid @NotNull(message = "Fim é obrigatório") LocalDateTime endedAt) {
+			LocalDateTime startedAt,
+			LocalDateTime endedAt) {
 
 		this.id = id;
 		this.description = description;
@@ -64,6 +61,10 @@ public class Work implements Serializable {
 		this.task = task;
 		this.startedAt = startedAt;
 		this.endedAt = endedAt;
+	}
+
+	public Work(CreateWorkRequestDto requestDto) {
+		this.description = requestDto.description();
 	}
 
 	public UUID getId() {
@@ -79,7 +80,7 @@ public class Work implements Serializable {
 	}
 
 	public void setDescription(
-			@Valid @NotBlank(message = "Descrição é obrigatória") String description) {
+			@Valid @NotBlank(message = "Description is required") String description) {
 
 		this.description = description;
 	}
@@ -89,7 +90,7 @@ public class Work implements Serializable {
 	}
 
 	public void setEmployee(
-			@Valid @NotNull(message = "Empregado é obrigatório") Employee employee) {
+			@Valid @NotNull(message = "Employee is required") Employee employee) {
 
 		this.employee = employee;
 	}
@@ -99,7 +100,7 @@ public class Work implements Serializable {
 	}
 
 	public void setTask(
-			@Valid @NotNull(message = "Tarefa é obrigatória") Task task) {
+			@Valid @NotNull(message = "Task is required") Task task) {
 
 		this.task = task;
 	}
@@ -109,7 +110,7 @@ public class Work implements Serializable {
 	}
 
 	public void setStartedAt(
-			@Valid @NotNull(message = "Inicio é obrigatório") LocalDateTime startedAt) {
+			@Valid @NotNull(message = "Started At is required") LocalDateTime startedAt) {
 
 		this.startedAt = startedAt;
 	}
@@ -119,7 +120,7 @@ public class Work implements Serializable {
 	}
 
 	public void setEndedAt(
-			@Valid @NotNull(message = "Fim é obrigatório") LocalDateTime endedAt) {
+			@Valid @NotNull(message = "Ended At is required") LocalDateTime endedAt) {
 
 		this.endedAt = endedAt;
 	}

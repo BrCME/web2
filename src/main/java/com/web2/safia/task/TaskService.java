@@ -8,23 +8,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.Commit;
 import com.web2.safia.commit.events.CreateCommitEvent;
 import com.web2.safia.common.BaseService;
 import com.web2.safia.employee.Employee;
-import com.web2.safia.employee.JpaEmployeeRepository;
+import com.web2.safia.exceptions.InputValidationException;
 import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.exceptions.EntityNotFoundException;
-import com.web2.safia.project.JpaProjectRepository;
-import com.web2.safia.project.Project;
 import com.web2.safia.task.dtos.BriefTaskResponseDto;
 import com.web2.safia.task.dtos.CreateTaskRequestDto;
 import com.web2.safia.task.dtos.TaskResponseDto;
-import com.web2.safia.work.JpaWorkRepository;
+import com.web2.safia.task.dtos.UpdateTaskRequestDto;
 
-import jakarta.validation.Valid;
-
+@Service
 public class TaskService extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
@@ -59,14 +57,16 @@ public class TaskService extends BaseService {
 				});
 	}
 
-	public void create(CreateTaskRequestDto requestDto, Employee user) throws DomainException {
+	public TaskResponseDto create(CreateTaskRequestDto requestDto, Employee user) throws InputValidationException {
 
-		eventPublisher.publishEvent(new GetProjectByIdRequestEvent(requestDto.projectId()));
-		
+		// eventPublisher.publishEvent(new
+		// GetProjectByIdRequestEvent(requestDto.projectId()));
+
 		// var actualProject = projectRepository.findById();
 		// if (!actualProject.isPresent()) {
-		// 	logger.error("Projeto com id '{}' não encontrado", project.getId());
-		// 	throw new DomainException(String.format("Projeto com id '%s' não encontrado", project.getId()));
+		// logger.error("Projeto com id '{}' não encontrado", project.getId());
+		// throw new DomainException(String.format("Projeto com id '%s' não encontrado",
+		// project.getId()));
 		// }
 
 		var task = new Task(requestDto);
@@ -75,26 +75,30 @@ public class TaskService extends BaseService {
 		task.setId(null);
 		task.setCreator(user);
 		taskRepository.save(task);
-		logger.info("Criada atividade '{}' nova por '{}", task.getName(), creator.getEmail());
+		logger.info("Criada atividade '{}' nova por '{}", task.getName(), user.getEmail());
 
 		eventPublisher.publishEvent(
 				new CreateCommitEvent(
 						String.format("Criada atividade '%s' novo", task.getId().toString()),
 						Commit.Type.CREATE,
 						user));
+
+		return new TaskResponseDto(task);
 	}
 
-	public BriefTaskResponseDto promote(UUID id, Employee user) throws DomainException {
+	public BriefTaskResponseDto promote(UUID id, Employee user) throws InputValidationException {
 		var task = taskRepository
 				.findById(id)
 				.orElseThrow(() -> {
 					logger.error("Task with id '{}' not found to promote", id);
-					throw new DomainException(String.format("Task with id '%s' not found to promote", id.toString()));
+					throw new InputValidationException(
+							String.format("Task with id '%s' not found to promote", id.toString()));
 				});
 
 		if (!task.promote()) {
 			logger.error("Task with id '{}' already in '{}'", id, task.getStatus().name());
-			throw new DomainException(String.format("Task with id '%s' already in '%s'", id, task.getStatus().name()));
+			throw new InputValidationException(
+					String.format("Task with id '%s' already in '%s'", id, task.getStatus().name()));
 		}
 
 		taskRepository.save(task);
@@ -109,17 +113,19 @@ public class TaskService extends BaseService {
 		return new BriefTaskResponseDto(task);
 	}
 
-	public BriefTaskResponseDto demote(UUID id, Employee user) throws DomainException {
+	public BriefTaskResponseDto demote(UUID id, Employee user) throws InputValidationException {
 		var task = taskRepository
 				.findById(id)
 				.orElseThrow(() -> {
 					logger.error("Task with id '{}' not found to demote", id);
-					throw new DomainException(String.format("Task with id '%s' not found to demote", id.toString()));
+					throw new InputValidationException(
+							String.format("Task with id '%s' not found to demote", id.toString()));
 				});
 
 		if (!task.demote()) {
 			logger.error("Task with id '{}' already in '{}'", id, task.getStatus().name());
-			throw new DomainException(String.format("Task with id '%s' already in '%s'", id, task.getStatus().name()));
+			throw new InputValidationException(
+					String.format("Task with id '%s' already in '%s'", id, task.getStatus().name()));
 		}
 
 		taskRepository.save(task);
@@ -134,12 +140,12 @@ public class TaskService extends BaseService {
 		return new BriefTaskResponseDto(task);
 	}
 
-	public void deleteById(UUID id, Employee user) throws DomainException {
+	public void deleteById(UUID id, Employee user) throws InputValidationException {
 		var task = taskRepository
 				.findById(id)
 				.orElseThrow(() -> {
 					logger.error("Task with id '{}' not found to deactivate", id);
-					throw new DomainException(
+					throw new InputValidationException(
 							String.format("Task with id '%s' not found to deactivate", id.toString()));
 				});
 
@@ -153,22 +159,51 @@ public class TaskService extends BaseService {
 						user));
 	}
 
-	public void updateById(@Valid Task task, Employee user) throws DomainException {
-		var actualTask = taskRepository.findById(task.getId());
+	public BriefTaskResponseDto updateById(UUID id, UpdateTaskRequestDto requestDto, Employee user)
+			throws DomainException, EntityNotFoundException, InputValidationException {
+		var task = taskRepository
+				.findById(id)
+				.orElseThrow(() -> {
+					logger.error("Task with id '{}' not found to update", id);
+					throw new EntityNotFoundException(
+							String.format("Task with id '%s' not found to update", id.toString()));
+				});
 
-		if (!actualTask.isPresent()) {
-			logger.error("Atividade '{}' não encontrado para atualizar", task.getId());
-			throw new DomainException("Atividade não encontrada");
+		if (!task.isEnabled()) {
+			logger.error("Task with id '{}' is not able to update", id);
+			throw new DomainException(String.format("Task with id '%s' is not able to update", id.toString()));
 		}
 
-		actualTask.get().setName(task.getName());
-		actualTask.get().setDescription(task.getDescription());
-		actualTask.get().setDeadLine(task.getDeadLine());
-		actualTask.get().setStatus(task.getStatus());
+		requestDto
+				.deadLine()
+				.ifPresent(deadline -> {
+					if (deadline.isBefore(LocalDateTime.now())) {
+						logger.error("Deadline must be in future");
+						throw new InputValidationException("Deadline must be in future");
+					}
 
-		taskRepository.save(actualTask.get());
-		commitEventPublisher.publishUpdateCommitEvent(
-				String.format("Atualizada atividade '%s'", actualTask.get().getName()),
-				creator);
+					task.setDeadLine(deadline);
+				});
+
+		requestDto
+				.description()
+				.ifPresent(description -> task.setDescription(description));
+
+		requestDto
+				.name()
+				.ifPresent(name -> task.setName(name));
+
+		requestDto
+				.projectId()
+				.ifPresent(projectId -> logger.info("Project to update: {}", projectId));
+
+		taskRepository.save(task);
+		eventPublisher.publishEvent(
+				new CreateCommitEvent(
+						String.format("Task with id '%s' updated", id.toString()),
+						Commit.Type.UPDATE,
+						user));
+
+		return new BriefTaskResponseDto(task);
 	}
 }

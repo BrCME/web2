@@ -1,5 +1,6 @@
 package com.web2.safia.team;
 
+import java.net.URI;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -12,10 +13,18 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.web2.safia.employee.Employee;
+import com.web2.safia.team.dtos.BriefTeamResponseDto;
+import com.web2.safia.team.dtos.CreateTeamRequestDto;
+import com.web2.safia.team.dtos.UpdateTeamRequestDto;
+
+import jakarta.validation.Valid;
+
 @Controller
-@RequestMapping("/apis/teams/")
+@RequestMapping("/api/teams/")
 public class TeamController {
 	private final TeamService teamService;
 
@@ -24,44 +33,48 @@ public class TeamController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Void> getAll(Pageable pageable) {
-		var teams = teamService.getAll(pageable);
+	public ResponseEntity<Page<BriefTeamResponseDto>> getAll(Pageable pageable) {
+		return ResponseEntity.ok(teamService.getAll(pageable));
 	}
 
 	@GetMapping("me")
-	public ResponseEntity<Void> getAllByCreator(Pageable pageable) {
-		var creator = getCreator(request.getUserPrincipal().getName());
-		var teams = teamService.getAllByCreator(pageable, creator);
+	public ResponseEntity<Page<BriefTeamResponseDto>> getAllByIssuer(Pageable pageable) {
+		return ResponseEntity.ok(teamService.getAllByIssuer(pageable, new Employee()));
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> create() {
+	public ResponseEntity<Void> create(@Valid @RequestBody CreateTeamRequestDto requestDto) {
+		var response = teamService.create(requestDto, new Employee());
+		return ResponseEntity.created(URI.create(response.id().toString())).build();
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<Void> deleteById(
-			@PathVariable UUID id) {
-
-		teamService.deleteById(id, creator);
+	public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
+		teamService.deleteById(id, new Employee());
+		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping("")
-	public ResponseEntity<Void> updateById() {
+	@PutMapping("{id}")
+	public ResponseEntity<BriefTeamResponseDto> updateById(
+			@PathVariable UUID id,
+			@Valid @RequestBody UpdateTeamRequestDto requestDto) {
 
-		teamService.updateById(team, creator);
-
+		return ResponseEntity.ok(teamService.updateById(id, requestDto, new Employee()));
 	}
 
-	@PatchMapping("/add-employee")
-	public ResponseEntity<Void> addEmployee() {
+	@PatchMapping("{id}/add-employee/{employeeId}")
+	public ResponseEntity<BriefTeamResponseDto> addEmployee(
+			@PathVariable UUID id,
+			@PathVariable UUID employeeId) {
 
-		teamService.addEmployee(team, employee.getEmail(), creator);
-
+		return ResponseEntity.ok(teamService.addEmployee(id, employeeId, new Employee()));
 	}
 
-	@PatchMapping("/remove-employee/{employeeId}")
-	public ResponseEntity<Void> removeEmployee(@PathVariable UUID employeeId) {
-		teamService.removeEmployee(team, employeeId, creator);
-
+	@PatchMapping("{id}/remove-employee/{employeeId}")
+	public ResponseEntity<BriefTeamResponseDto> removeEmployee(
+		@PathVariable UUID id,
+		@PathVariable UUID employeeId) {
+		
+		return ResponseEntity.ok(teamService.removeEmployee(id, employeeId, new Employee()));
 	}
 }

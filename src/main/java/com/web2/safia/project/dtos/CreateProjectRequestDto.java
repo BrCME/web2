@@ -9,5 +9,4 @@ public record CreateProjectRequestDto(
 		String description,
 		UUID teamId,
 		Optional<UUID> managerId,
-		List<UUID> employeesId) {
-}
+		List<UUID> employeesId) {}

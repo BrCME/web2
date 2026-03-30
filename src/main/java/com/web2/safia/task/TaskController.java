@@ -20,11 +20,12 @@ import com.web2.safia.employee.Employee;
 import com.web2.safia.task.dtos.BriefTaskResponseDto;
 import com.web2.safia.task.dtos.CreateTaskRequestDto;
 import com.web2.safia.task.dtos.TaskResponseDto;
+import com.web2.safia.task.dtos.UpdateTaskRequestDto;
 
 import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/apis/tasks/")
+@RequestMapping("/api/tasks/")
 public class TaskController {
 	private final TaskService taskService;
 
@@ -49,9 +50,11 @@ public class TaskController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Void> updateById(@PathVariable UUID id, @Valid @RequestBody UpdateTaskRequestDto requestDto) {
-		var response = taskService.updateById(requestDto, new Employee());
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<BriefTaskResponseDto> updateById(
+			@PathVariable UUID id,
+			@Valid @RequestBody UpdateTaskRequestDto requestDto) {
+
+		return ResponseEntity.ok(taskService.updateById(id, requestDto, new Employee()));
 	}
 
 	@DeleteMapping("{id}")

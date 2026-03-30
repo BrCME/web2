@@ -1,9 +1,17 @@
 package com.web2.safia.work;
 
+import java.net.URI;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.web2.safia.employee.Employee;
+import com.web2.safia.work.dtos.CreateWorkRequestDto;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/api/works/")
@@ -11,12 +19,12 @@ public class WorkController {
 	private final WorkService workService;
 
 	public WorkController(WorkService workService) {
-
 		this.workService = workService;
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> create() {
-		workService.create(work, task, creator);
+	public ResponseEntity<Void> create(@Valid @RequestBody CreateWorkRequestDto requestDto) {
+		var response = workService.create(requestDto, new Employee());
+		return ResponseEntity.created(URI.create(response.id().toString())).build();
 	}
 }

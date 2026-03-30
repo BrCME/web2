@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.Commit;
 import com.web2.safia.commit.Commit.Type;
@@ -21,12 +22,15 @@ import com.web2.safia.employee.events.GetEmployeeToRemoveByIdRequestEvent;
 import com.web2.safia.employee.events.GetEmployeeToRemoveByIdResponseEvent;
 import com.web2.safia.employee.events.GetManagerByIdRequestEvent;
 import com.web2.safia.exceptions.DomainException;
+import com.web2.safia.exceptions.EntityNotFoundException;
+import com.web2.safia.exceptions.InputValidationException;
 import com.web2.safia.project.dtos.BriefProjectResponseDto;
 import com.web2.safia.project.dtos.CreateProjectRequestDto;
 import com.web2.safia.project.dtos.ProjectResponseDto;
 import com.web2.safia.project.dtos.UpdateProjectRequestDto;
 import com.web2.safia.team.events.GetTeamByIdRequestEvent;
 
+@Service
 public class ProjectService extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
 
@@ -52,18 +56,19 @@ public class ProjectService extends BaseService {
 				.map(project -> new ProjectResponseDto(project));
 	}
 
-	public ProjectResponseDto getById(UUID id) throws DomainException {
+	public ProjectResponseDto getById(UUID id) throws EntityNotFoundException {
 		return projectRepository
 				.findById(id)
 				.map(project -> new ProjectResponseDto(project))
 				.orElseThrow(() -> {
 					logger.error("Project with id '{}' not found", id);
-					throw new DomainException(String.format("Project with id '%s' not found", id));
+					throw new EntityNotFoundException(String.format("Project with id '%s' not found", id));
 				});
 	}
 
-	@EventListener(classes = { GetTeamByIdRequestEvent.class, GetManagerByIdRequestEvent.class })
-	public BriefProjectResponseDto create(CreateProjectRequestDto requestDto, Employee user) throws DomainException {
+	// @EventListener(classes = { GetTeamByIdRequestEvent.class })
+	public BriefProjectResponseDto create(CreateProjectRequestDto requestDto, Employee user)
+			throws InputValidationException {
 		var project = new Project(requestDto);
 
 		eventPublisher.publishEvent(new GetTeamByIdRequestEvent(requestDto.teamId()));
@@ -93,12 +98,12 @@ public class ProjectService extends BaseService {
 		return new BriefProjectResponseDto(project);
 	}
 
-	public void deleteById(UUID id, Employee user) throws DomainException {
+	public void deleteById(UUID id, Employee user) throws EntityNotFoundException {
 		var project = projectRepository
 				.findById(id)
 				.orElseThrow(() -> {
 					logger.error("Project with id '{}' not found to deactivate", id);
-					throw new DomainException(
+					throw new EntityNotFoundException(
 							String.format("Project with id '%s' not found to deactivate", id.toString()));
 				});
 
@@ -107,31 +112,37 @@ public class ProjectService extends BaseService {
 
 		eventPublisher.publishEvent(
 				new CreateCommitEvent(
-						String.format("Project with id '%s' deactivated", project.getName()),
+						String.format("Project with id '%s' deactivated", id.toString()),
 						Commit.Type.DEACTIVATE,
 						user));
 	}
 
 	public ProjectResponseDto updateById(UUID id, UpdateProjectRequestDto requestDto, Employee user)
-			throws DomainException {
+			throws DomainException, EntityNotFoundException {
 		var project = projectRepository
 				.findById(id)
 				.orElseThrow(() -> {
 					logger.error("Project with id '{}' not found to update", id);
-					throw new DomainException(
+					throw new EntityNotFoundException(
 							String.format("Project with id '%s' not found to update", id.toString()));
 				});
+
+		if (!project.isEnabled()) {
+			logger.error("Project with id '{}' is not able to update", id);
+			throw new DomainException(
+					String.format("Project with id '%s' is not able to update", id.toString()));
+		}
 
 		project.setName(requestDto.name());
 		project.setDescription(requestDto.description());
 
-		// requestDto
-		// .managerId()
-		// .ifPresent(managerId -> project.setManager(managerId));
+		requestDto
+				.managerId()
+				.ifPresent(managerId -> logger.info("Manager to update: {}", managerId));
 
-		// requestDto
-		// .teamId()
-		// .ifPresent(teamId -> project.setTeam(teamId));
+		requestDto
+				.teamId()
+				.ifPresent(teamId -> logger.info("Team to update: {}", teamId));
 
 		projectRepository.save(project);
 		eventPublisher.publishEvent(
@@ -143,13 +154,13 @@ public class ProjectService extends BaseService {
 		return new ProjectResponseDto(project);
 	}
 
-	@EventListener(classes = { GetEmployeeToAddByIdResponseEvent.class })
-	public ProjectResponseDto addEmployee(UUID id, UUID employeeId, Employee user) throws DomainException {
+	// @EventListener(classes = { GetEmployeeToAddByIdResponseEvent.class })
+	public ProjectResponseDto addEmployee(UUID id, UUID employeeId, Employee user) throws InputValidationException {
 		var project = projectRepository
 				.findById(id)
 				.orElseThrow(() -> {
 					logger.error("Project with id '{}' not found to add employee '{}'", id, employeeId);
-					throw new DomainException(
+					throw new InputValidationException(
 							String.format("Project with id '%s' not found to add employee '%s'",
 									id.toString(), employeeId.toString()));
 				});
@@ -160,24 +171,31 @@ public class ProjectService extends BaseService {
 		projectRepository.save(project);
 		eventPublisher.publishEvent(
 				new CreateCommitEvent(
-						String.format("Project with id '%s' updated with new employee with id '%s'", id.toString(),
-								employeeId.toString()),
+						String.format("Project with id '%s' updated with new employee with id '%s'",
+								id.toString(), employeeId.toString()),
 						Commit.Type.UPDATE,
 						user));
 
 		return new ProjectResponseDto(project);
 	}
 
-	@EventListener(classes = { GetEmployeeToRemoveByIdResponseEvent.class })
-	public ProjectResponseDto removeEmployee(UUID id, UUID employeeId, Employee user) throws DomainException {
+	// @EventListener(classes = { GetEmployeeToRemoveByIdResponseEvent.class })
+	public ProjectResponseDto removeEmployee(UUID id, UUID employeeId, Employee user)
+			throws DomainException, EntityNotFoundException {
 		var project = projectRepository
 				.findById(id)
 				.orElseThrow(() -> {
 					logger.error("Project with id '{}' not found to remove employee '{}'", id, employeeId);
-					throw new DomainException(
+					throw new EntityNotFoundException(
 							String.format("Project with id '%s' not found to remove employee '%s'",
 									id.toString(), employeeId.toString()));
 				});
+
+		if (!project.isEnabled()) {
+			logger.error("Project with id '{}' is not able to remove employee", id);
+			throw new EntityNotFoundException(
+					String.format("Project with id '%s' is not able to remove employee", id.toString()));
+		}
 
 		eventPublisher.publishEvent(new GetEmployeeToRemoveByIdRequestEvent(employeeId));
 		// var employee = employeeRepository.findByEmail(employeeEmail);

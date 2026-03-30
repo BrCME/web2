@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.Commit;
 import com.web2.safia.commit.events.CreateCommitEvent;
@@ -18,12 +18,12 @@ import com.web2.safia.employee.Employee;
 import com.web2.safia.exceptions.DomainException;
 import com.web2.safia.exceptions.EntityNotFoundException;
 import com.web2.safia.team.dtos.BriefTeamResponseDto;
-import com.web2.safia.team.events.TeamByIdRequestEvent;
+import com.web2.safia.team.dtos.CreateTeamRequestDto;
+import com.web2.safia.team.dtos.UpdateTeamRequestDto;
 import com.web2.safia.team.events.GetTeamByIdRequestEvent;
 import com.web2.safia.team.events.GetTeamByIdResponseEvent;
 
-import jakarta.validation.Valid;
-
+@Service
 public class TeamService extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(TeamService.class);
 
@@ -37,137 +37,173 @@ public class TeamService extends BaseService {
 		this.teamRepository = teamRepository;
 	}
 
-	public Page<Team> getAll(Pageable pageable) {
-		return teamRepository.findAll(pageable);
+	public Page<BriefTeamResponseDto> getAll(Pageable pageable) {
+		return teamRepository
+				.findAll(pageable)
+				.map(team -> new BriefTeamResponseDto(team));
 	}
 
-	public Page<Team> getAllByCreator(Pageable pageable, Employee creator) {
-		return teamRepository.findAllByCreator(pageable, creator);
+	public Page<BriefTeamResponseDto> getAllByIssuer(Pageable pageable, Employee user) {
+		return teamRepository
+				.findAllByCreator(pageable, user)
+				.map(team -> new BriefTeamResponseDto(team));
 	}
 
-	public Team getById(UUID id) throws DomainException {
-		var team = teamRepository.findById(id);
-
-		if (!team.isPresent()) {
-			logger.error("Equipe com id '{}' não encontrada", id);
-			throw new DomainException(String.format("Equipe com id '%s' não encontrada", id));
-		}
-
-		return team.get();
+	public BriefTeamResponseDto getById(UUID id) throws EntityNotFoundException {
+		return teamRepository
+				.findById(id)
+				.map(team -> new BriefTeamResponseDto(team))
+				.orElseThrow(() -> {
+					logger.error("Team with id '{}' not found", id);
+					throw new EntityNotFoundException(String.format("Team with id '%s' not found", id));
+				});
 	}
 
-	public void create(@Valid Team team, Employee creator) {
-		team.setCreator(creator);
-		team.addEmployee(creator);
+	public BriefTeamResponseDto create(CreateTeamRequestDto requestDto, Employee user) {
+		var team = new Team(requestDto);
+
+		requestDto.employeesId()
+				.forEach(id -> logger.info("Employee to add: {}", id));
+
+		requestDto.projectsId()
+				.forEach(id -> logger.info("Project to add: {}", id));
+
+		team.setCreator(user);
+		team.addEmployee(user);
+
 		teamRepository.save(team);
-		logger.info("Criada equipe '{}' novo por '{}", team.getName(), creator.getEmail());
+		logger.info("Team created with name '{}' by '{}", team.getName(), user.getEmail());
 
-		eventPublisher.publishCreateCommitEvent(
-				String.format("Criada equipe '%s' novo", team.getName()),
-				creator);
-	}
-
-	public void deleteById(UUID id, Employee creator) throws DomainException {
-		var team = teamRepository.findById(id);
-
-		if (!team.isPresent()) {
-			logger.error("Equipe '{}' não encontrada para deletar", id);
-			throw new DomainException();
-		}
-
-		team.get().setDeletedAt(LocalDateTime.now());
-		teamRepository.save(team.get());
-
-		eventPublisher.publishDeactivateCommitEvent(
-				String.format("Deletada equipe '%s'", team.get().getName()),
-				creator);
-	}
-
-	public void updateById(@Valid Team team, Employee creator) throws DomainException {
-		var actualTeam = teamRepository.findById(team.getId());
-
-		if (!actualTeam.isPresent()) {
-			logger.error("Equipe '{}' não encontrado para atualizar", team.getId());
-			throw new DomainException("Equipe não encontrada");
-		}
-
-		actualTeam.get().setName(team.getName());
-		actualTeam.get().setDescription(team.getDescription());
-
-		teamRepository.save(actualTeam.get());
-		eventPublisher.publishUpdateCommitEvent(
-				String.format("Atualizada equipe '%s'", actualTeam.get().getName()),
-				creator);
-	}
-
-	public void addEmployee(@Valid Team team, String employeeEmail, Employee creator) throws DomainException {
-		var actualTeam = teamRepository.findById(team.getId());
-
-		if (!actualTeam.isPresent()) {
-			logger.error("Equipe '{}' não encontrada para adicionar empregado '{}'", team.getId(), employeeEmail);
-			throw new DomainException("Equipe não encontrada para adicionar empregado");
-		}
-
-		var employee = employeeRepository.findByEmail(employeeEmail);
-
-		if (!employee.isPresent()) {
-			logger.error("Empregado '{}' não encontrado para adicionar à equipe '{}'", employeeEmail, team.getName());
-			throw new DomainException("Empregado não encontrado para adicionar à equipe");
-		}
-
-		if (!actualTeam.get().addEmployee(employee.get())) {
-			logger.error("Não foi possível adicionar o empregado '{}' à equipe '{}'", employee.get().getEmail(),
-					actualTeam.get().getName());
-			throw new DomainException("Não foi possível adicionar empregado à equipe");
-		}
-
-		teamRepository.save(actualTeam.get());
-		eventPublisher.publishUpdateCommitEvent(
-				String.format("Atualizada equipe '%s' com novo empregado '%s'", actualTeam.get().getName(),
-						employee.get().getEmail()),
-				creator);
-	}
-
-	public void removeEmployee(@Valid Team team, UUID employeeId, Employee user) throws DomainException {
-		var actualTeam = teamRepository.findById(team.getId());
-
-		if (!actualTeam.isPresent()) {
-			logger.error("Equipe '{}' não encontrado para remover empregado '{}'", team.getId(),
-					employeeId);
-			throw new DomainException("Equipe não encontrado para remover empregado");
-		}
-
-		var employee = employeeRepository.findById(employeeId);
-
-		if (!employee.isPresent()) {
-			logger.error("Empregado '{}' não encontrado para remover da equipe '{}'", employeeId, team.getName());
-			throw new DomainException("Empregado não encontrado para remover da equipe");
-		}
-
-		if (!actualTeam.get().removeEmployee(employee.get())) {
-			logger.error("Não foi possivel remover o empregado '{}' da equipe '{}'", employee.get().getEmail(),
-					actualTeam.get().getName());
-			throw new DomainException("Não foi possível remover empregado da equipe");
-		}
-
-		teamRepository.save(actualTeam.get());
 		eventPublisher.publishEvent(
 				new CreateCommitEvent(
-						String.format("Atualizada equipe '%s'", actualTeam.get().getName()),
-						Commit.Type.UPDATE,
+						String.format("Team created with name '%s'", team.getName()),
+						Commit.Type.CREATE,
+						user));
+
+		return new BriefTeamResponseDto(team);
+	}
+
+	public void deleteById(UUID id, Employee user) throws EntityNotFoundException {
+		var team = teamRepository
+				.findById(id)
+				.orElseThrow(() -> {
+					logger.error("Team with id '{}' not found to deactivate", id);
+					throw new EntityNotFoundException(
+							String.format("Team with id '%s' not found to deactivate", id.toString()));
+				});
+
+		team.setDeletedAt(LocalDateTime.now());
+		teamRepository.save(team);
+
+		eventPublisher.publishEvent(
+				new CreateCommitEvent(
+						String.format("Team with id '%s' deactivated", id.toString()),
+						Commit.Type.DEACTIVATE,
 						user));
 	}
 
-	@EventListener
-	public void onGetTeamByIdRequestEvent(GetTeamByIdRequestEvent requestEvent) throws EntityNotFoundException {
+	public BriefTeamResponseDto updateById(UUID id, UpdateTeamRequestDto requestDto, Employee user)
+			throws DomainException, EntityNotFoundException {
 		var team = teamRepository
-				.findById(requestEvent.id())
+				.findById(id)
 				.orElseThrow(() -> {
-					logger.error("Team with id '{}' not found", requestEvent.id());
+					logger.error("Team with id '{}' not found to update", id);
 					throw new EntityNotFoundException(
-							String.format("Team with id '%s' not found", requestEvent.id().toString()));
+							String.format("Team with id '%s' not found to update", id.toString()));
 				});
 
-		eventPublisher.publishEvent(new GetTeamByIdResponseEvent(team));
+		if (!team.isEnabled()) {
+			logger.error("Team with id '{}' not able to update", id);
+			throw new DomainException(
+					String.format("Team with id '%s' not able to update", id.toString()));
+		}
+
+		requestDto
+				.name()
+				.ifPresent(name -> team.setName(name));
+
+		requestDto
+				.description()
+				.ifPresent(description -> team.setDescription(description));
+
+		teamRepository.save(team);
+		eventPublisher.publishEvent(
+				new CreateCommitEvent(
+						String.format("Team with id '%s' updated", id.toString()),
+						Commit.Type.UPDATE,
+						user));
+
+		return new BriefTeamResponseDto(team);
 	}
+
+	public BriefTeamResponseDto addEmployee(UUID id, UUID employeeId, Employee user)
+			throws DomainException, EntityNotFoundException {
+		var team = teamRepository
+				.findById(id)
+				.orElseThrow(() -> {
+					logger.error("Team with id '{}' not found to add employee '{}'", id, employeeId);
+					throw new EntityNotFoundException(
+							String.format("Team with id '%s' not found to add employee '%d'",
+									id.toString(), employeeId.toString()));
+				});
+
+		if (!team.isEnabled()) {
+			logger.error("Team with id '{}' is not able to add employee", id);
+			throw new DomainException(String.format("Team with id '{}' is not able to add employee", id.toString()));
+		}
+
+		// var employee = employeeRepository.findByEmail(employeeEmail);
+
+		teamRepository.save(team);
+		eventPublisher.publishEvent(
+				new CreateCommitEvent(
+						String.format("Team with id '%s' updated with new employee with id '%s'",
+								id.toString(), employeeId.toString()),
+						Commit.Type.UPDATE,
+						user));
+
+		return new BriefTeamResponseDto(team);
+	}
+
+	public BriefTeamResponseDto removeEmployee(UUID id, UUID employeeId, Employee user)
+			throws DomainException, EntityNotFoundException {
+		var team = teamRepository
+				.findById(id)
+				.orElseThrow(() -> {
+					logger.error("Team with id '{}' not found to remove employee '{}'", id, employeeId);
+					throw new EntityNotFoundException(
+							String.format("Team with id '%s' not found to remove employee '%s'",
+									id.toString(), employeeId.toString()));
+				});
+
+		if (!team.isEnabled()) {
+			logger.error("Team with id '{}' not found to remove employee '{}'", id, employeeId);
+			throw new DomainException(
+					String.format("Team with id '%s' not found to remove employee '%s'",
+							id.toString(), employeeId.toString()));
+		}
+
+		teamRepository.save(team);
+		eventPublisher.publishEvent(
+				new CreateCommitEvent(
+						String.format("Team with id '%s' update without employee with id '%s'",
+								id.toString(), employeeId.toString()),
+						Commit.Type.UPDATE,
+						user));
+
+		return new BriefTeamResponseDto(team);
+	}
+
+	// @EventListener
+	// public void onGetTeamByIdRequestEvent(GetTeamByIdRequestEvent requestEvent) throws EntityNotFoundException {
+	// 	var team = teamRepository
+	// 			.findById(requestEvent.id())
+	// 			.orElseThrow(() -> {
+	// 				logger.error("Team with id '{}' not found", requestEvent.id());
+	// 				throw new EntityNotFoundException(
+	// 						String.format("Team with id '%s' not found", requestEvent.id().toString()));
+	// 			});
+
+	// 	eventPublisher.publishEvent(new GetTeamByIdResponseEvent(team));
+	// }
 }

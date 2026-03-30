@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.web2.safia.employee.dtos.EmployeeResponseDto;
-import com.web2.safia.exceptions.DomainException;
+import com.web2.safia.exceptions.InputValidationException;
+
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @Controller
 @RequestMapping("/api/employees/")
@@ -22,7 +24,8 @@ public class EmployeeController {
 	}
 
 	@GetMapping("me")
-	public ResponseEntity<EmployeeResponseDto> getMe() throws DomainException {
+	@ApiResponse
+	public ResponseEntity<EmployeeResponseDto> getMe() throws InputValidationException {
 		return ResponseEntity.ok(employeeService.getById(UUID.randomUUID()));
 	}
 

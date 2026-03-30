@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.web2.safia.common.BaseEntity;
 import com.web2.safia.employee.Employee;
 import com.web2.safia.project.Project;
+import com.web2.safia.team.dtos.CreateTeamRequestDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -50,6 +51,12 @@ public class Team extends BaseEntity {
 		super(id, creator, createdAt, updatedAt, deletedAt);
 		this.name = name;
 		this.description = description;
+	}
+
+	public Team(CreateTeamRequestDto requestDto) {
+		super();
+		this.name = requestDto.name();
+		this.description = requestDto.description();
 	}
 
 	public String getName() {

@@ -52,6 +52,10 @@ spring:
 
   lifecycle:
     timeout-per-shutdown-phase: "30s"
+  
+  # mvc:
+  #   problemdetails:
+  #     enabled: true
 
   # modulith:
     # detection-strategy: explicitly-annotated
@@ -71,6 +75,12 @@ spring:
         # include-stacktrace: never
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - health
+        - modulith
   observations:
     annotations:
       enabled: true
@@ -93,3 +103,11 @@ server:
     max-connections: 256
     threads:
       max: 20
+
+
+springdoc:
+  packages-to-scan:
+  - employee
+  - com.web2.safia.task
+  - com.web2.safia.project.ProjectController.java
+  - team.TaskController.java

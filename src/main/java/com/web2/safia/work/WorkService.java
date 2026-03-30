@@ -2,60 +2,66 @@ package com.web2.safia.work;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.web2.safia.commit.CommitEventPublisher;
+import com.web2.safia.commit.Commit.Type;
+import com.web2.safia.commit.events.CreateCommitEvent;
 import com.web2.safia.common.BaseService;
-import com.web2.safia.exceptions.DomainException;
-import com.web2.safia.safia.employee.Employee;
-import com.web2.safia.task.JpaTaskRepository;
-import com.web2.safia.task.Task;
-
-import jakarta.validation.Valid;
+import com.web2.safia.employee.Employee;
+import com.web2.safia.work.dtos.BriefWorkResponseDto;
+import com.web2.safia.work.dtos.CreateWorkRequestDto;
 
 @Service
 public class WorkService extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(WorkService.class);
 
 	private final JpaWorkRepository workRepository;
-	private final JpaTaskRepository taskRepository;
 
 	public WorkService(
-			CommitEventPublisher commitEventPublisher,
-			JpaWorkRepository workRepository,
-			JpaTaskRepository taskRepository) {
+			ApplicationEventPublisher eventPublisher,
+			JpaWorkRepository workRepository) {
 
-		super(commitEventPublisher);
+		super(eventPublisher);
 		this.workRepository = workRepository;
-		this.taskRepository = taskRepository;
 	}
 
-	public Page<Work> getAll(Pageable pageable) {
-		return workRepository.findAll(pageable);
+	public Page<BriefWorkResponseDto> getAll(Pageable pageable) {
+		return workRepository
+				.findAll(pageable)
+				.map(work -> new BriefWorkResponseDto(work));
 	}
 
-	public Page<Work> getAllByCreator(Pageable pageable, Employee creator) {
-		return workRepository.findAllByEmployee(pageable, creator);
+	public Page<BriefWorkResponseDto> getAllByIssuer(Pageable pageable, Employee creator) {
+		return workRepository
+				.findAllByEmployee(pageable, creator)
+				.map(work -> new BriefWorkResponseDto(work));
 	}
-	
-	public void create(@Valid Work work, Task task, Employee creator) throws DomainException {
-		var actualTask = taskRepository.findById(task.getId());
 
-		if (!actualTask.isPresent()) {
-			logger.error("Atividade com id '{}' não encontrada", task.getId());
-			throw new DomainException(String.format("Atividade com id '%s' não encontrada", task.getId()));
-		}
+	public BriefWorkResponseDto create(CreateWorkRequestDto requestDto, Employee user) {
+		// var actualTask = taskRepository.findById(task.getId());
 
-		work.setId(null);
-		work.setTask(actualTask.get());
-		work.setEmployee(creator);
+		// if (!actualTask.isPresent()) {
+		// logger.error("Atividade com id '{}' não encontrada", task.getId());
+		// throw new InputValidationException(String.format("Atividade com id '%s' não
+		// encontrada", task.getId()));
+		// }
+		// work.setTask(actualTask.get());
+
+		var work = new Work(requestDto);
+
+		// work.setEmployee(creator);
 		workRepository.save(work);
-		logger.info("Criado trabalho '{}' novo por '{}", work.getDescription(), creator.getEmail());
+		logger.info("Criado trabalho '{}' novo por '{}", work.getDescription(), user.getEmail());
 
-		commitEventPublisher.publishCreateCommitEvent(
-				String.format("Criado trabalho '%s' novo", work.getDescription()),
-				creator);
+		eventPublisher.publishEvent(
+				new CreateCommitEvent(
+						String.format("Criado trabalho '%s' novo", work.getDescription()),
+						Type.CREATE,
+						user));
+
+		return new BriefWorkResponseDto(work);
 	}
 }

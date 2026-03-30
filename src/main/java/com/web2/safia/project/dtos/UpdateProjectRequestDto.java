@@ -7,5 +7,4 @@ public record UpdateProjectRequestDto(
 		String name,
 		String description,
 		Optional<UUID> teamId,
-		Optional<UUID> managerId) {
-}
+		Optional<UUID> managerId) {}

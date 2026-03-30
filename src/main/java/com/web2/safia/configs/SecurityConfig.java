@@ -18,18 +18,20 @@ import com.web2.safia.employee.Employee;
 
 @Configuration
 public class SecurityConfig implements AuditorAware<Employee> {
-	private static final String[] WHITE_LIST = { "/api/auth/employee", "/api/auth/sign-in", "/api/auth/sign-up",
-			"/api/auth/sign-out" };
-	private static final String[] ADMIN_LIST = { "/api/teams/", "/api/employee/", "/api/commit/",
-			"/api/project/", "/api/work/", "/api/task/" };
+	private static final String[] WHITE_LIST = { "/**", "/actuator", "/actuator/**", "/api/auth/employee",
+			"/api/auth/sign-in", "/api/auth/sign-up", "/api/auth/sign-out", "/swagger-ui/index.html" };
+	private static final String[] ADMIN_LIST = { "/api/teams/**", "/api/employees/**", "/api/commits/**",
+			"/api/projects/**", "/api/works/**", "/api/tasks/**" };
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 				.authorizeHttpRequests(customizer -> customizer
 						.requestMatchers(WHITE_LIST).permitAll()
-						.requestMatchers(ADMIN_LIST).hasRole("ADMIN")
-						.anyRequest().authenticated())
+						// .requestMatchers(ADMIN_LIST).hasRole("ADMIN")
+						// .anyRequest().authenticated()
+						.anyRequest().permitAll()
+					)
 				// .formLogin(form -> form
 				// .loginPage("/auth/sign-in").permitAll()
 				// .defaultSuccessUrl("/").permitAll())

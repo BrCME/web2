@@ -6,12 +6,12 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.dtos.CommitResponseDto;
 import com.web2.safia.commit.events.CreateCommitEvent;
 
-@Component
+@Service
 public class CommitService {
 	private static final Logger logger = LoggerFactory.getLogger(CommitService.class);
 
@@ -27,14 +27,14 @@ public class CommitService {
 				.map(commit -> new CommitResponseDto(commit));
 	}
 
-	@Async
-	@EventListener
-	public void onCreateCommitEvent(CreateCommitEvent event) {
-		logger.info("Occurred event: {}", event);
+	// @Async
+	// @EventListener
+	// public void onCreateCommitEvent(CreateCommitEvent event) {
+	// 	logger.info("Occurred event: {}", event);
 
-		var commit = new Commit(event);
-		logger.info("Registered event: {}", commit);
+	// 	var commit = new Commit(event);
+	// 	logger.info("Registered event: {}", commit);
 
-		commitRepository.save(commit);
-	}
+	// 	commitRepository.save(commit);
+	// }
 }
