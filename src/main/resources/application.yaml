@@ -89,6 +89,9 @@ spring:
 
   modulith:
     detection-strategy: explicitly-annotated
+    runtime:
+      verification-enabled: true
+      flyway-enabled: true
 
   profiles:
     active:
@@ -113,4 +116,3 @@ spring:
 
 springdoc:
   show-actuator: false
-

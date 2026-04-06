@@ -15,7 +15,7 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.web2.safia.employee.Employee;
+import com.web2.safia.employee.internal.Employee;
 
 @Configuration
 public class SecurityConfig implements AuditorAware<Employee> {

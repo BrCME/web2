@@ -8,7 +8,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import com.web2.safia.employee.Employee;
+import com.web2.safia.employee.internal.Employee;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

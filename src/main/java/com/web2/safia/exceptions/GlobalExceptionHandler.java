@@ -31,6 +31,8 @@ public class GlobalExceptionHandler {
 		var response = ProblemDetail
 				.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
 
+		setWebProperties(response, request);
+
 		return response;
 	}
 
@@ -43,6 +45,8 @@ public class GlobalExceptionHandler {
 
 		var response = ProblemDetail
 				.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+
+		setWebProperties(response, request);
 
 		return response;
 	}
@@ -62,31 +66,31 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler({ Exception.class })
-	public ProblemDetail handleGenericExceptions(Exception ex) {
+	public ProblemDetail handleGenericExceptions(Exception ex, WebRequest request) {
 		logger.error("Unhandled Generic Exception: ", ex);
 
 		var response = ProblemDetail
 				.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 
-		response.setProperty("timestamp", LocalDateTime.now());
+		setWebProperties(response, request);
 
 		return response;
 	}
 
 	private void setWebProperties(ProblemDetail problemDetail, WebRequest request) {
-		problemDetail.setProperty("sessionId", request.getSessionId());
-		problemDetail.setProperty("ip", request.getRemoteUser());
-		problemDetail.setProperty("timestamp", LocalDateTime.now());
+		problemDetail.setProperty("session", request.getSessionId());
+		problemDetail.setProperty("remote", request.getRemoteUser());
 		problemDetail.setProperty("principal", request.getUserPrincipal());
 		problemDetail.setProperty("secure", request.isSecure());
 		problemDetail.setProperty("locale", request.getLocale());
 		problemDetail.setProperty("context", request.getContextPath());
-		problemDetail.setProperty("description", request.getDescription(true));
 
 		var headers = request.getHeaderNames();
-		while(headers.hasNext()) {
+		while (headers.hasNext()) {
 			problemDetail.setProperty(headers.toString(), request.getHeaderValues(headers.toString()));
 			headers.next();
 		}
+
+		problemDetail.setProperty("timestamp", LocalDateTime.now());
 	}
 }
