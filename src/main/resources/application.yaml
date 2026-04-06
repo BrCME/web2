@@ -2,7 +2,37 @@ logging:
   log4j2:
     config:
       override:
-      -  log4j2-spring.xml
+        - log4j2-spring.xml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - modulith
+  observations:
+    annotations:
+      enabled: true
+    key-values:
+      region: "south-america-1"
+      stack: "dsv"
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+server:
+  port: 8080
+
+  tomcat:
+    max-connections: 256
+    threads:
+      max: 20
 
 spring:
   application:
@@ -48,24 +78,31 @@ spring:
       hibernate:
         format-sql: true
         ddl-auto: none
-        generate_statistics: true
+        "[generate_statistics]": true
 
   lifecycle:
     timeout-per-shutdown-phase: "30s"
-  
-  # mvc:
-  #   problemdetails:
-  #     enabled: true
 
-  # modulith:
-    # detection-strategy: explicitly-annotated
+  mvc:
+    problemdetails:
+      enabled: true
+
+  modulith:
+    detection-strategy: explicitly-annotated
+
+  profiles:
+    active:
+      - dev
+      - stg
+      - prd
+    default: dev
 
   security:
     user:
       name: admin
       password: SPR1NG_4DM1N
       roles:
-      - ADMIN
+        - ADMIN
 
   web:
     error:
@@ -74,40 +111,6 @@ spring:
         # include-message: never
         # include-stacktrace: never
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include:
-        - health
-        - modulith
-  observations:
-    annotations:
-      enabled: true
-    key-values:
-      region: "south-america-1"
-      stack: "dsv"
-  otlp:
-    metrics:
-      export:
-        url: http://localhost:4318/v1/metrics
-  prometheus:
-    metrics:
-      export:
-        enabled: true
-
-server:
-  port: 8080
-
-  tomcat:
-    max-connections: 256
-    threads:
-      max: 20
-
-
 springdoc:
-  packages-to-scan:
-  - employee
-  - com.web2.safia.task
-  - com.web2.safia.project.ProjectController.java
-  - team.TaskController.java
+  show-actuator: false
+

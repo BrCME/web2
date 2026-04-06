@@ -2,14 +2,11 @@ package com.web2.safia.commit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.dtos.CommitResponseDto;
-import com.web2.safia.commit.events.CreateCommitEvent;
 
 @Service
 public class CommitService {

@@ -5,20 +5,14 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.web2.safia.common.BaseService;
 import com.web2.safia.employee.dtos.EmployeeResponseDto;
-import com.web2.safia.employee.events.GetEmployeeToAddByIdRequestEvent;
-import com.web2.safia.employee.events.GetEmployeeToAddByIdResponseEvent;
-import com.web2.safia.employee.events.GetEmployeeToRemoveByIdRequestEvent;
-import com.web2.safia.employee.events.GetEmployeeToRemoveByIdResponseEvent;
-import com.web2.safia.employee.events.GetManagerByIdRequestEvent;
-import com.web2.safia.employee.events.GetManagerByIdResponseEvent;
 import com.web2.safia.exceptions.InputValidationException;
 import com.web2.safia.exceptions.EntityNotFoundException;
 

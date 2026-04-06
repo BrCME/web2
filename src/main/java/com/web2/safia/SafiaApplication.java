@@ -15,7 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableFeignClients
 @EnableJpaAuditing
 @EnableWebSecurity
-// @Modulithic
+@Modulithic
 public class SafiaApplication {
 	public static void main(String[] args) {
 		// var modules = ApplicationModuleInitializer.of(SafiaApplication.class);

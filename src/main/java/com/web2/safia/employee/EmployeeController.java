@@ -5,16 +5,16 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.web2.safia.employee.dtos.EmployeeResponseDto;
 import com.web2.safia.exceptions.InputValidationException;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
-@Controller
+@RestController
 @RequestMapping("/api/employees/")
 public class EmployeeController {
 	private final EmployeeService employeeService;
