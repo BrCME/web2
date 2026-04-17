@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.api.CreateCommitEvent;
 import com.web2.safia.commit.api.CommitType;
-import com.web2.safia.common.BaseService;
 import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.shared.base.BaseService;
 import com.web2.safia.work.api.BriefWorkResponseDto;
 import com.web2.safia.work.api.CreateWorkRequestDto;
 

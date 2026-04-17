@@ -1,4 +1,4 @@
-package com.web2.safia.configs;
+package com.web2.safia.shared.config;
 
 import java.time.Duration;
 

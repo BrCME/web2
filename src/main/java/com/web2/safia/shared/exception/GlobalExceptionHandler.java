@@ -1,4 +1,4 @@
-package com.web2.safia.exceptions;
+package com.web2.safia.shared.exception;
 
 import java.time.LocalDateTime;
 

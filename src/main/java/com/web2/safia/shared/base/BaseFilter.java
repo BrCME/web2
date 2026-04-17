@@ -1,4 +1,4 @@
-package com.web2.safia.common;
+package com.web2.safia.shared.base;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

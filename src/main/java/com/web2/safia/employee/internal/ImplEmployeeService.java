@@ -10,11 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.web2.safia.common.BaseService;
 import com.web2.safia.employee.api.EmployeeResponseDto;
 import com.web2.safia.employee.api.EmployeeService;
-import com.web2.safia.exceptions.InputValidationException;
-import com.web2.safia.exceptions.EntityNotFoundException;
+import com.web2.safia.shared.base.BaseService;
+import com.web2.safia.shared.exception.EntityNotFoundException;
+import com.web2.safia.shared.exception.InputValidationException;
 
 @Service
 public class ImplEmployeeService extends BaseService implements EmployeeService {

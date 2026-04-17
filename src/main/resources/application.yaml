@@ -11,19 +11,24 @@ management:
         include:
           - health
           - modulith
+          - "*"
   observations:
     annotations:
       enabled: true
     key-values:
       region: "south-america-1"
       stack: "dsv"
-  otlp:
-    metrics:
-      export:
-        url: http://localhost:4318/v1/metrics
+  # otlp:
+  #   metrics:
+  #     export:
+  #       url: http://localhost:4318/v1/metrics
   prometheus:
     metrics:
+      tags:
+        application: safia
       export:
+        pushgateway:
+          job: safia-actuator
         enabled: true
 
 server:
@@ -70,6 +75,8 @@ spring:
     show-sql: true
     generate-ddl: false
     open-in-view: false
+    hibernate:
+      ddl-auto: none
     properties:
       jakarta:
         persistence:
@@ -78,7 +85,7 @@ spring:
       hibernate:
         format-sql: true
         ddl-auto: none
-        "[generate_statistics]": true
+        generate_statistics: true
 
   lifecycle:
     timeout-per-shutdown-phase: "30s"
@@ -91,7 +98,7 @@ spring:
     detection-strategy: explicitly-annotated
     runtime:
       verification-enabled: true
-      flyway-enabled: true
+      flyway-enabled: false
 
   profiles:
     active:

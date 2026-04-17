@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/reports/")
+@RequestMapping("/api/reports")
 public class ReportController {
     private final ReportsService reportsService;
 
@@ -25,7 +25,7 @@ public class ReportController {
         return hidrateReportHeadersResponse(report, "All_Projects.pdf");
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<byte[]> getProjectReportsById(@PathVariable UUID id) {
         byte[] report = reportsService.generateProjectReportById(id);
         return hidrateReportHeadersResponse(report, "Project_".concat(id.toString()).concat(".pdf"));

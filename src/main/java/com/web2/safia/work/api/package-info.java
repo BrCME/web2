@@ -1,6 +1,6 @@
 @org.springframework.modulith.ApplicationModule(
 	type = Type.OPEN,
-	displayName = "Work"
+	displayName = "work"
 )
 package com.web2.safia.work.api;
 

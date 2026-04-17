@@ -21,7 +21,7 @@ public class SafiaApplication {
 	public static void main(String[] args) {
 		var modules = ApplicationModules.of(SafiaApplication.class);
 		modules.forEach(System.out::println);
-
+		
 		SpringApplication.run(SafiaApplication.class, args);
 	}
 }

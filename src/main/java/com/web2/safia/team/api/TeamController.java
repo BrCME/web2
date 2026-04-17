@@ -22,7 +22,7 @@ import com.web2.safia.team.internal.TeamService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/teams/")
+@RequestMapping("/api/teams")
 public class TeamController {
 	private final TeamService teamService;
 
@@ -35,7 +35,7 @@ public class TeamController {
 		return ResponseEntity.ok(teamService.getAll(pageable));
 	}
 
-	@GetMapping("me")
+	@GetMapping("/me")
 	public ResponseEntity<Page<BriefTeamResponseDto>> getAllByIssuer(Pageable pageable) {
 		return ResponseEntity.ok(teamService.getAllByIssuer(pageable, new Employee()));
 	}
@@ -46,13 +46,13 @@ public class TeamController {
 		return ResponseEntity.created(URI.create(response.id().toString())).build();
 	}
 
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
 		teamService.deleteById(id, new Employee());
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping("{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<BriefTeamResponseDto> updateById(
 			@PathVariable UUID id,
 			@Valid @RequestBody UpdateTeamRequestDto requestDto) {
@@ -60,7 +60,7 @@ public class TeamController {
 		return ResponseEntity.ok(teamService.updateById(id, requestDto, new Employee()));
 	}
 
-	@PatchMapping("{id}/add-employee/{employeeId}")
+	@PatchMapping("/{id}/add-employee/{employeeId}")
 	public ResponseEntity<BriefTeamResponseDto> addEmployee(
 			@PathVariable UUID id,
 			@PathVariable UUID employeeId) {
@@ -68,7 +68,7 @@ public class TeamController {
 		return ResponseEntity.ok(teamService.addEmployee(id, employeeId, new Employee()));
 	}
 
-	@PatchMapping("{id}/remove-employee/{employeeId}")
+	@PatchMapping("/{id}/remove-employee/{employeeId}")
 	public ResponseEntity<BriefTeamResponseDto> removeEmployee(
 		@PathVariable UUID id,
 		@PathVariable UUID employeeId) {

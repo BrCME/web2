@@ -33,7 +33,7 @@ services:
     networks:
       - localnet
 
-  sonarqube:
+  code-quality:
     image: sonarqube:lts-community
     container_name: safia-code-quality
     restart: always
@@ -50,10 +50,30 @@ services:
       - localnet
     # token: sqp_67c73551a443a9fa2d849c51999d47339786f686
 
+  telemetry:
+    image: prom/prometheus
+    container_name: safia-telemetry
+    extra_hosts:
+      - "vpn:host-gateway"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+    networks:
+      - localnet
+
+  monitoring:
+    image: grafana/grafana
+    container_name: safia-monitoring
+    ports:
+      - "3000:3000" 
+    networks:
+      - localnet
+
 # Application - SAF.IA
   # app:
   #   image: openjdk21
-  #   container_name: safia
+  #   container_name: safia-app
   #   build:
   #     context: .
   #     dockerfile: Dockerfile

@@ -1,7 +1,7 @@
 @org.springframework.modulith.ApplicationModule(
 	type = Type.OPEN,
-	displayName = "report"
+	displayName = "exception"
 )
-package com.web2.safia.report;
+package com.web2.safia.shared.exception;
 
 import org.springframework.modulith.ApplicationModule.Type;

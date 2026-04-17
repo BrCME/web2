@@ -1,4 +1,4 @@
-package com.web2.safia.common;
+package com.web2.safia.shared.base;
 
 import org.springframework.context.ApplicationEventPublisher;
 

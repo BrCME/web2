@@ -22,7 +22,7 @@ import com.web2.safia.task.internal.TaskService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/tasks/")
+@RequestMapping("/api/tasks")
 public class TaskController {
 	private final TaskService taskService;
 
@@ -35,7 +35,7 @@ public class TaskController {
 		return ResponseEntity.ok(taskService.getAll(pageable));
 	}
 
-	@GetMapping("me")
+	@GetMapping("/me")
 	public ResponseEntity<Page<TaskResponseDto>> getAllByIssuer(Pageable pageable) {
 		return ResponseEntity.ok(taskService.getAllByIssuer(pageable, new Employee()));
 	}
@@ -46,7 +46,7 @@ public class TaskController {
 		return ResponseEntity.created(URI.create(response.id().toString())).build();
 	}
 
-	@PutMapping("{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<BriefTaskResponseDto> updateById(
 			@PathVariable UUID id,
 			@Valid @RequestBody UpdateTaskRequestDto requestDto) {
@@ -54,18 +54,18 @@ public class TaskController {
 		return ResponseEntity.ok(taskService.updateById(id, requestDto, new Employee()));
 	}
 
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
 		taskService.deleteById(id, new Employee());
 		return ResponseEntity.noContent().build();
 	}
 
-	@PatchMapping("{id}/promote")
+	@PatchMapping("/{id}/promote")
 	public ResponseEntity<BriefTaskResponseDto> promoteById(@PathVariable UUID id) {
 		return ResponseEntity.ok(taskService.promote(id, new Employee()));
 	}
 
-	@PatchMapping("{id}/demote")
+	@PatchMapping("/{id}/demote")
 	public ResponseEntity<BriefTaskResponseDto> demoteById(@PathVariable UUID id) {
 		return ResponseEntity.ok(taskService.demote(id, new Employee()));
 	}

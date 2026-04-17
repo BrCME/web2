@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.api.CommitType;
 import com.web2.safia.commit.api.CreateCommitEvent;
-import com.web2.safia.common.BaseService;
 import com.web2.safia.employee.internal.Employee;
-import com.web2.safia.exceptions.DomainException;
-import com.web2.safia.exceptions.EntityNotFoundException;
+import com.web2.safia.shared.base.BaseService;
+import com.web2.safia.shared.exception.DomainException;
+import com.web2.safia.shared.exception.EntityNotFoundException;
 import com.web2.safia.team.api.BriefTeamResponseDto;
 import com.web2.safia.team.api.CreateTeamRequestDto;
 import com.web2.safia.team.api.UpdateTeamRequestDto;

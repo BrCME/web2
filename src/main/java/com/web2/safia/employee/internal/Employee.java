@@ -15,8 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.web2.safia.auth.api.SignUpUserRequestDto;
 import com.web2.safia.auth.internal.Role;
-import com.web2.safia.common.BaseEntity;
 import com.web2.safia.project.internal.Project;
+import com.web2.safia.shared.base.BaseEntity;
 import com.web2.safia.task.internal.Task;
 import com.web2.safia.team.internal.Team;
 import com.web2.safia.work.internal.Work;
@@ -30,6 +30,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -37,6 +38,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 @Entity
+@Table(name = "employee")
 public class Employee extends BaseEntity implements UserDetails, CredentialsContainer {
 	@Column(name = "name", nullable = false)
 	private String name;

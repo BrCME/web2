@@ -16,7 +16,7 @@ import com.web2.safia.auth.internal.AuthService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/auths/")
+@RequestMapping("/api/auth")
 public class AuthController {
 	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -26,21 +26,21 @@ public class AuthController {
 		this.authService = authService;
 	}
 
-	@PostMapping("sign-up")
+	@PostMapping("/sign-up")
 	public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpUserRequestDto requestDto) {
 		logger.info("User trying to sign up: ", requestDto);
 		var response = authService.signUp(requestDto);
 		return ResponseEntity.created(URI.create(response.username())).build();
 	}
 
-	@PostMapping("sign-in")
+	@PostMapping("/sign-in")
 	public ResponseEntity<Void> signIn(@Valid @RequestBody SignInUserRequestDto requestDto) {
 		logger.info("User trying to sign in: ", requestDto);
 		authService.signIn(requestDto);
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("sign-out")
+	@GetMapping("/sign-out")
 	public ResponseEntity<Void> signOut() {
 		return ResponseEntity.noContent().build();
 	}

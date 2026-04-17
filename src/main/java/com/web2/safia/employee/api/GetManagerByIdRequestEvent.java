@@ -1,4 +1,4 @@
-package com.web2.safia.employee.events;
+package com.web2.safia.employee.api;
 
 import java.util.UUID;
 

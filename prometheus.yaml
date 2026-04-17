@@ -1,0 +1,13 @@
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - vpn:9090
+    
+  - job_name: safia-actuator
+    metrics_path: /actuator/prometheus
+    scrape_interval: 5s
+    scrape_timeout: 2s
+    static_configs:
+      - targets:
+          - vpn:8080

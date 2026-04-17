@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import com.web2.safia.common.BaseEntity;
 import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.project.internal.Project;
+import com.web2.safia.shared.base.BaseEntity;
 import com.web2.safia.team.api.CreateTeamRequestDto;
 
 import jakarta.persistence.Column;
@@ -18,10 +18,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
+@Table(name = "team")
 public class Team extends BaseEntity {
 	@Column(name = "name", nullable = false)
 	private String name;

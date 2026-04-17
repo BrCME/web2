@@ -22,7 +22,7 @@ import com.web2.safia.project.internal.ProjectService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/projects/")
+@RequestMapping("/api/projects")
 public class ProjectController {
 	private final ProjectService projectService;
 
@@ -35,7 +35,7 @@ public class ProjectController {
 		return ResponseEntity.ok(projectService.getAll(pageable));
 	}
 
-	@GetMapping("me")
+	@GetMapping("/me")
 	public ResponseEntity<Page<ProjectResponseDto>> getAllByIssuer(Pageable pageable) {
 		return ResponseEntity.ok(projectService.getAllByIssuer(pageable, new Employee()));
 	}
@@ -46,13 +46,13 @@ public class ProjectController {
 		return ResponseEntity.created(URI.create(response.id().toString())).build();
 	}
 
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
 		projectService.deleteById(id, new Employee());
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping("{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<ProjectResponseDto> updateById(
 			@PathVariable UUID id,
 			@Valid @RequestBody UpdateProjectRequestDto requestDto) {
@@ -60,7 +60,7 @@ public class ProjectController {
 		return ResponseEntity.ok(projectService.updateById(id, requestDto, new Employee()));
 	}
 
-	@PatchMapping("{id}/add-employee/{employeeId}")
+	@PatchMapping("/{id}/add-employee/{employeeId}")
 	public ResponseEntity<ProjectResponseDto> addEmployee(
 			@PathVariable UUID id,
 			@PathVariable UUID employeeId) {
@@ -68,7 +68,7 @@ public class ProjectController {
 		return ResponseEntity.ok(projectService.addEmployee(id, employeeId, new Employee()));
 	}
 
-	@PatchMapping("{id}/remove-employee/{employeeId}")
+	@PatchMapping("/{id}/remove-employee/{employeeId}")
 	public ResponseEntity<ProjectResponseDto> removeEmployee(
 			@PathVariable UUID id,
 			@PathVariable UUID employeeId) {

@@ -1,7 +1,7 @@
 @org.springframework.modulith.ApplicationModule(
 	type = Type.OPEN,
-	displayName = "report"
+	displayName = "shared"
 )
-package com.web2.safia.report;
+package com.web2.safia.shared;
 
 import org.springframework.modulith.ApplicationModule.Type;

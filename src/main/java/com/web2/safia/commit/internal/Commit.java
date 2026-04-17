@@ -8,17 +8,19 @@ import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 
 import com.web2.safia.commit.api.CommitType;
 import com.web2.safia.commit.api.CreateCommitEvent;
-import com.web2.safia.common.BaseEntity;
 import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.shared.base.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
+@Table(name = "commit")
 public class Commit extends BaseEntity {
     @Column(name = "description", nullable = false)
     private String description;

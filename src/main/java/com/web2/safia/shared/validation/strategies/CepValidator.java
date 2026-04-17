@@ -1,8 +1,8 @@
-package com.web2.safia.validations.strategies;
+package com.web2.safia.shared.validation.strategies;
 
 import java.util.Optional;
 
-import com.web2.safia.validations.Validator;
+import com.web2.safia.shared.validation.Validator;
 
 public class CepValidator implements Validator<String> {
 	private static final String CEP_PATTERN = "\\d{3}.\\d{3}.\\d{3}-\\d{2}";

@@ -6,9 +6,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.web2.safia.common.BaseEntity;
 import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.project.api.CreateProjectRequestDto;
+import com.web2.safia.shared.base.BaseEntity;
 import com.web2.safia.task.internal.Task;
 import com.web2.safia.team.internal.Team;
 
@@ -21,11 +21,13 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "project")
 public class Project extends BaseEntity {
 	@Column(name = "name", nullable = false)
 	private String name;

@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.web2.safia.employee.internal.Employee;
-import com.web2.safia.project.internal.Project;
-import com.web2.safia.task.internal.Task;
-import com.web2.safia.team.internal.Team;
-import com.web2.safia.work.internal.Work;
+import com.web2.safia.project.api.ProjectResponseDto;
+import com.web2.safia.task.api.TaskResponseDto;
+import com.web2.safia.team.api.BriefTeamResponseDto;
+import com.web2.safia.work.api.BriefWorkResponseDto;
 
 public record EmployeeResponseDto(
 		String name,
@@ -16,10 +16,10 @@ public record EmployeeResponseDto(
 		String cpf,
 		LocalDate birthDate,
 		String status,
-		List<Team> teams,
-		List<Project> projects,
-		List<Work> works,
-		List<Task> tasks) {
+		List<BriefTeamResponseDto> teams,
+		List<ProjectResponseDto> projects,
+		List<BriefWorkResponseDto> works,
+		List<TaskResponseDto> tasks) {
 
 	public EmployeeResponseDto(Employee employee) {
 		this(
@@ -29,9 +29,9 @@ public record EmployeeResponseDto(
 				employee.getCpf(),
 				employee.getBirthDate(),
 				employee.getStatus().name(),
-				List.copyOf(employee.getAllTeams()),
-				List.copyOf(employee.getAllProjects()),
-				List.copyOf(employee.getAllWorks()),
-				List.copyOf(employee.getAllTasks()));
+				employee.getAllTeams().stream().map(team -> new BriefTeamResponseDto(team)).toList(),
+				employee.getAllProjects().stream().map(project -> new ProjectResponseDto(project)).toList(),
+				employee.getAllWorks().stream().map(work -> new BriefWorkResponseDto(work)).toList(),
+				employee.getAllTasks().stream().map(task -> new TaskResponseDto(task)).toList());
 	}
 }

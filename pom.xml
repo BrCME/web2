@@ -73,6 +73,22 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
@@ -142,6 +158,12 @@
 			<artifactId>spring-modulith-starter-core</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.modulith</groupId>
+			<artifactId>spring-modulith-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Source:
 		https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
 		<dependency>
@@ -174,24 +196,6 @@
 		</dependency>
 
 		<!-- Source:
-		https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-starter-jpa -->
-		<!-- <dependency>
-			<groupId>org.springframework.modulith</groupId>
-			<artifactId>spring-modulith-starter-jpa</artifactId>
-			<version>2.0.5</version>
-			<scope>compile</scope>
-		</dependency> -->
-
-		<!-- Source:
-		https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-starter-jdbc -->
-		<!-- <dependency>
-			<groupId>org.springframework.modulith</groupId>
-			<artifactId>spring-modulith-starter-jdbc</artifactId>
-			<version>2.0.5</version>
-			<scope>test</scope>
-		</dependency> -->
-
-		<!-- Source:
 		https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-starters -->
 		<dependency>
 			<groupId>org.springframework.modulith</groupId>
@@ -214,7 +218,7 @@
 			<dependency>
 				<groupId>org.springframework.modulith</groupId>
 				<artifactId>spring-modulith-bom</artifactId>
-				<version>2.0.5</version>
+				<version>${spring-modulith.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -226,19 +230,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-
-			<plugin>
-				<groupId>org.flywaydb</groupId>
-				<artifactId>flyway-maven-plugin</artifactId>
-				<!-- <configuration>
-					<user>user_safia</user>
-					<password>P455W0RD_S4F14</password>
-					<schemas>
-						<schema>public</schema>
-					</schemas>
-					<locations>filesystem:db/migration</locations>
-				</configuration> -->
 			</plugin>
 		</plugins>
 	</build>

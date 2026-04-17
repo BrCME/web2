@@ -1,4 +1,4 @@
-package com.web2.safia.common;
+package com.web2.safia.shared.base;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

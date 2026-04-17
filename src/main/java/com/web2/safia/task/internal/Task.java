@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 
-import com.web2.safia.common.BaseEntity;
 import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.project.internal.Project;
+import com.web2.safia.shared.base.BaseEntity;
 import com.web2.safia.task.api.CreateTaskRequestDto;
 import com.web2.safia.work.internal.Work;
 
@@ -23,12 +23,14 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "task")
 public class Task extends BaseEntity {
 	@Column(name = "name", nullable = false)
 	private String name;

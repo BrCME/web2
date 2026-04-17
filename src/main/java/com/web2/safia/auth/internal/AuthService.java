@@ -19,10 +19,10 @@ import com.web2.safia.auth.api.SignUpUserRequestDto;
 import com.web2.safia.auth.api.SignUpUserResponseDto;
 import com.web2.safia.commit.api.CommitType;
 import com.web2.safia.commit.api.CreateCommitEvent;
-import com.web2.safia.common.BaseService;
 import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.employee.internal.JpaEmployeeRepository;
 import com.web2.safia.employee.internal.JpaRoleRepository;
+import com.web2.safia.shared.base.BaseService;
 
 @Service
 public class AuthService extends BaseService implements UserDetailsService {

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web2.safia.commit.internal.CommitService;
 
 @RestController
-@RequestMapping("/api/commits/")
+@RequestMapping("/api/commits")
 public class CommitController {
 	private final CommitService commitService;
 

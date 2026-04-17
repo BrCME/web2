@@ -12,19 +12,16 @@ import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.api.CreateCommitEvent;
 import com.web2.safia.commit.api.CommitType;
-import com.web2.safia.common.BaseService;
 import com.web2.safia.employee.api.GetEmployeeToAddByIdRequestEvent;
-import com.web2.safia.employee.api.GetEmployeeToRemoveByIdRequestEvent;
-import com.web2.safia.employee.api.GetManagerByIdRequestEvent;
 import com.web2.safia.employee.internal.Employee;
-import com.web2.safia.exceptions.DomainException;
-import com.web2.safia.exceptions.EntityNotFoundException;
-import com.web2.safia.exceptions.InputValidationException;
 import com.web2.safia.project.api.BriefProjectResponseDto;
 import com.web2.safia.project.api.CreateProjectRequestDto;
 import com.web2.safia.project.api.ProjectResponseDto;
 import com.web2.safia.project.api.UpdateProjectRequestDto;
-import com.web2.safia.team.api.GetTeamByIdRequestEvent;
+import com.web2.safia.shared.base.BaseService;
+import com.web2.safia.shared.exception.DomainException;
+import com.web2.safia.shared.exception.EntityNotFoundException;
+import com.web2.safia.shared.exception.InputValidationException;
 
 @Service
 public class ProjectService extends BaseService {
@@ -190,7 +187,7 @@ public class ProjectService extends BaseService {
 					String.format("Project with id '%s' is not able to remove employee", id.toString()));
 		}
 
-		eventPublisher.publishEvent(new GetEmployeeToRemoveByIdRequestEvent(employeeId));
+		// eventPublisher.publishEvent(new GetEmployeeToRemoveByIdRequestEvent(employeeId));
 		// var employee = employeeRepository.findByEmail(employeeEmail);
 
 		projectRepository.save(project);

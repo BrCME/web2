@@ -1,4 +1,4 @@
-package com.web2.safia.validations;
+package com.web2.safia.shared.validation;
 
 import java.util.Optional;
 

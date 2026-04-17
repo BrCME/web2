@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web2.safia.employee.internal.ImplEmployeeService;
-import com.web2.safia.exceptions.InputValidationException;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
-@RequestMapping("/api/employees/")
+@RequestMapping("/api/employees")
 public class EmployeeController {
 	private final ImplEmployeeService employeeService;
 
@@ -23,7 +22,7 @@ public class EmployeeController {
 		this.employeeService = employeeService;
 	}
 
-	@GetMapping("me")
+	@GetMapping("/me")
 	@ApiResponse
 	public ResponseEntity<EmployeeResponseDto> getMe() {
 		return ResponseEntity.ok(employeeService.getById(UUID.randomUUID()));

@@ -1,12 +1,13 @@
-CREATE TABLE employee_role(
+
+CREATE TABLE role_to_employee(
 	role_id UUID,
 	employee_id UUID,
 
-	CONSTRAINT role_employee_to_role_fk
+	CONSTRAINT role_of_role_to_employee_fk
 	FOREIGN KEY (role_id)
 	REFERENCES role(id),
 
-	CONSTRAINT employee_employee_to_role_fk
+	CONSTRAINT employee_of_role_to_employee_fk
 	FOREIGN KEY (employee_id)
 	REFERENCES employee(id),
 

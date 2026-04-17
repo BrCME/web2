@@ -14,7 +14,7 @@ import com.web2.safia.work.internal.WorkService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/works/")
+@RequestMapping("/api/works")
 public class WorkController {
 	private final WorkService workService;
 

@@ -12,15 +12,15 @@ import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.api.CommitType;
 import com.web2.safia.commit.api.CreateCommitEvent;
-import com.web2.safia.common.BaseService;
 import com.web2.safia.employee.internal.Employee;
-import com.web2.safia.exceptions.InputValidationException;
+import com.web2.safia.shared.base.BaseService;
+import com.web2.safia.shared.exception.DomainException;
+import com.web2.safia.shared.exception.EntityNotFoundException;
+import com.web2.safia.shared.exception.InputValidationException;
 import com.web2.safia.task.api.BriefTaskResponseDto;
 import com.web2.safia.task.api.CreateTaskRequestDto;
 import com.web2.safia.task.api.TaskResponseDto;
 import com.web2.safia.task.api.UpdateTaskRequestDto;
-import com.web2.safia.exceptions.DomainException;
-import com.web2.safia.exceptions.EntityNotFoundException;
 
 @Service
 public class TaskService extends BaseService {
