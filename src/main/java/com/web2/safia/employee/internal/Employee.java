@@ -77,7 +77,7 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 	private Set<Task> tasks = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "role_to_employee", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
 	public Employee() {

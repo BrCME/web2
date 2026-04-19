@@ -57,7 +57,7 @@ public class SecurityConfig implements AuditorAware<Employee> {
 						.requestMatchers(HttpMethod.DELETE).permitAll()
 						.requestMatchers(HttpMethod.PUT).permitAll()
 						.requestMatchers(HttpMethod.PATCH).permitAll()
-						// .requestMatchers(ADMIN_LIST).hasRole("ADMIN")
+						.requestMatchers(ADMIN_LIST).hasRole("ADMIN")
 						// .anyRequest().authenticated()
 						.anyRequest().permitAll())
 				.sessionManagement(session -> session

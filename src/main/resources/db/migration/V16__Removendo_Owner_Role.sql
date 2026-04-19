@@ -1,6 +1,5 @@
 -- Removendo a role 'OWNER'
-
-DELETE FROM employee_role 
+DELETE FROM role_to_employee
 WHERE role_id = (SELECT id FROM role WHERE type = 'OWNER');
 
 DELETE FROM role WHERE type = 'OWNER';
