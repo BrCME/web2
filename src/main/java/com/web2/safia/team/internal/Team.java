@@ -8,7 +8,7 @@ import java.util.UUID;
 import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.project.internal.Project;
 import com.web2.safia.shared.base.BaseEntity;
-import com.web2.safia.team.api.CreateTeamRequestDto;
+import com.web2.safia.team.api.dto.CreateTeamRequestDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -39,7 +39,13 @@ public class Team extends BaseEntity {
 	@OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
 	private final Set<Project> projects = new HashSet<>();
 
-	public Team() {}
+	public Team() {
+		super();
+	}
+
+	public Team(UUID id) {
+		super(id);
+	}
 
 	public Team(
 			UUID id,
@@ -99,37 +105,6 @@ public class Team extends BaseEntity {
 
 	public boolean removeProject(Project project) {
 		return projects.remove(project);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Team other = (Team) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		return true;
 	}
 
 	@Override

@@ -7,9 +7,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.web2.safia.employee.internal.Employee;
-import com.web2.safia.project.api.CreateProjectRequestDto;
+import com.web2.safia.project.api.dto.CreateProjectRequestDto;
 import com.web2.safia.shared.base.BaseEntity;
 import com.web2.safia.task.internal.Task;
+import com.web2.safia.task.internal.TaskStatus;
 import com.web2.safia.team.internal.Team;
 
 import jakarta.persistence.Column;
@@ -54,6 +55,10 @@ public class Project extends BaseEntity {
 
 	public Project() {
 		super();
+	}
+
+	public Project(UUID id) {
+		super(id);
 	}
 
 	public Project(
@@ -112,37 +117,6 @@ public class Project extends BaseEntity {
 		this.manager = manager;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((team == null) ? 0 : team.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Project other = (Project) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (team == null) {
-			if (other.team != null)
-				return false;
-		} else if (!team.equals(other.team))
-			return false;
-		return true;
-	}
-
 	public Set<Employee> getAllEmployees() {
 		return Set.copyOf(employees);
 	}
@@ -159,14 +133,14 @@ public class Project extends BaseEntity {
 		return Set.copyOf(tasks);
 	}
 
-	public Set<Task> getAllTasks(String status) {
+	public Set<Task> getAllTasks(String statusName) {
 		return tasks
 				.stream()
-				.filter(task -> task.getStatus().equals(Task.Status.valueOf(status)))
+				.filter(task -> task.getStatus().equals(TaskStatus.valueOf(statusName)))
 				.collect(Collectors.toSet());
 	}
 
-	public Set<Task> getAllTasks(Task.Status status) {
+	public Set<Task> getAllTasks(TaskStatus status) {
 		return tasks
 				.stream()
 				.filter(task -> task.getStatus().equals(status))

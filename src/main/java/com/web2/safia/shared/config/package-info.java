@@ -1,6 +1,6 @@
 @org.springframework.modulith.ApplicationModule(
 	type = Type.OPEN,
-	displayName = "config"
+	displayName = "shared.config"
 )
 package com.web2.safia.shared.config;
 

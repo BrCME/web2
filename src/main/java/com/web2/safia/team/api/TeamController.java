@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.team.api.dto.BriefTeamResponseDto;
+import com.web2.safia.team.api.dto.CreateTeamRequestDto;
+import com.web2.safia.team.api.dto.UpdateTeamRequestDto;
 import com.web2.safia.team.internal.TeamService;
 
 import jakarta.validation.Valid;
@@ -37,18 +39,18 @@ public class TeamController {
 
 	@GetMapping("/me")
 	public ResponseEntity<Page<BriefTeamResponseDto>> getAllByIssuer(Pageable pageable) {
-		return ResponseEntity.ok(teamService.getAllByIssuer(pageable, new Employee()));
+		return ResponseEntity.ok(teamService.getAllByIssuer(pageable, UUID.randomUUID()));
 	}
 
 	@PostMapping
 	public ResponseEntity<Void> create(@Valid @RequestBody CreateTeamRequestDto requestDto) {
-		var response = teamService.create(requestDto, new Employee());
+		var response = teamService.create(requestDto, UUID.randomUUID());
 		return ResponseEntity.created(URI.create(response.id().toString())).build();
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
-		teamService.deleteById(id, new Employee());
+		teamService.deleteById(id, UUID.randomUUID());
 		return ResponseEntity.noContent().build();
 	}
 
@@ -57,7 +59,7 @@ public class TeamController {
 			@PathVariable UUID id,
 			@Valid @RequestBody UpdateTeamRequestDto requestDto) {
 
-		return ResponseEntity.ok(teamService.updateById(id, requestDto, new Employee()));
+		return ResponseEntity.ok(teamService.updateById(id, requestDto, UUID.randomUUID()));
 	}
 
 	@PatchMapping("/{id}/add-employee/{employeeId}")
@@ -65,7 +67,7 @@ public class TeamController {
 			@PathVariable UUID id,
 			@PathVariable UUID employeeId) {
 
-		return ResponseEntity.ok(teamService.addEmployee(id, employeeId, new Employee()));
+		return ResponseEntity.ok(teamService.addEmployee(id, employeeId, UUID.randomUUID()));
 	}
 
 	@PatchMapping("/{id}/remove-employee/{employeeId}")
@@ -73,6 +75,6 @@ public class TeamController {
 		@PathVariable UUID id,
 		@PathVariable UUID employeeId) {
 		
-		return ResponseEntity.ok(teamService.removeEmployee(id, employeeId, new Employee()));
+		return ResponseEntity.ok(teamService.removeEmployee(id, employeeId, UUID.randomUUID()));
 	}
 }

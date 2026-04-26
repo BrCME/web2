@@ -12,7 +12,7 @@ import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.project.internal.Project;
 import com.web2.safia.shared.base.BaseEntity;
-import com.web2.safia.task.api.CreateTaskRequestDto;
+import com.web2.safia.task.api.dto.CreateTaskRequestDto;
 import com.web2.safia.work.internal.Work;
 
 import jakarta.persistence.Column;
@@ -41,7 +41,7 @@ public class Task extends BaseEntity {
 	@JdbcType(value = PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
-	private Status status;
+	private TaskStatus status;
 
 	@ManyToOne
 	@JoinColumn(name = "project_id")
@@ -54,6 +54,11 @@ public class Task extends BaseEntity {
 	private final Set<Work> works = new HashSet<>();
 
 	public Task() {
+		super();
+	}
+
+	public Task(UUID id) {
+		super(id);
 	}
 
 	public Task(UUID id,
@@ -63,7 +68,7 @@ public class Task extends BaseEntity {
 			LocalDateTime deletedAt,
 			String name,
 			String description,
-			Status status,
+			TaskStatus status,
 			Project project,
 			LocalDateTime deadLine) {
 
@@ -80,10 +85,6 @@ public class Task extends BaseEntity {
 		this.name = requestDto.name();
 		this.description = requestDto.description();
 		this.deadLine = requestDto.deadLine();
-	}
-
-	public static enum Status {
-		TO_DO, DOING, IN_ANALYSYS, DONE;
 	}
 
 	public String getName() {
@@ -106,11 +107,11 @@ public class Task extends BaseEntity {
 		this.description = description;
 	}
 
-	public Status getStatus() {
+	public TaskStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(TaskStatus status) {
 		this.status = status;
 	}
 
@@ -134,50 +135,10 @@ public class Task extends BaseEntity {
 		this.deadLine = deadLine;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + ((project == null) ? 0 : project.hashCode());
-		result = prime * result + ((deadLine == null) ? 0 : deadLine.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Task other = (Task) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (status != other.status)
-			return false;
-		if (project == null) {
-			if (other.project != null)
-				return false;
-		} else if (!project.equals(other.project))
-			return false;
-		if (deadLine == null) {
-			if (other.deadLine != null)
-				return false;
-		} else if (!deadLine.equals(other.deadLine))
-			return false;
-		return true;
-	}
-
 	public Set<Employee> getAllEmployees() {
 		return works
 				.stream()
-				.map(work -> work.getEmployee())
+				.map(Work::getEmployee)
 				.collect(Collectors.toSet());
 	}
 
@@ -194,14 +155,14 @@ public class Task extends BaseEntity {
 	}
 
 	public boolean promote() {
-		if (this.status.equals(Task.Status.DONE)) {
+		if (this.status.equals(TaskStatus.DONE)) {
 			return false;
 		}
 
 		this.status = switch (this.status) {
-			case Task.Status.TO_DO -> Task.Status.DOING;
-			case Task.Status.DOING -> Task.Status.IN_ANALYSYS;
-			case Task.Status.IN_ANALYSYS -> Task.Status.DONE;
+			case TaskStatus.TO_DO -> TaskStatus.DOING;
+			case TaskStatus.DOING -> TaskStatus.IN_ANALYSYS;
+			case TaskStatus.IN_ANALYSYS -> TaskStatus.DONE;
 			default -> this.status;
 		};
 
@@ -209,14 +170,14 @@ public class Task extends BaseEntity {
 	}
 
 	public boolean demote() {
-		if (this.status.equals(Task.Status.TO_DO)) {
+		if (this.status.equals(TaskStatus.TO_DO)) {
 			return false;
 		}
 
 		this.status = switch (this.status) {
-			case Task.Status.DONE -> Task.Status.IN_ANALYSYS;
-			case Task.Status.IN_ANALYSYS -> Task.Status.DOING;
-			case Task.Status.DOING -> Task.Status.TO_DO;
+			case TaskStatus.DONE -> TaskStatus.IN_ANALYSYS;
+			case TaskStatus.IN_ANALYSYS -> TaskStatus.DOING;
+			case TaskStatus.DOING -> TaskStatus.TO_DO;
 			default -> this.status;
 		};
 
@@ -230,7 +191,7 @@ public class Task extends BaseEntity {
 				", creator=" + creator.getName() +
 				", description=" + description +
 				", createdAt=" + createdAt +
-				", status=" + status +
+				", status=" + status.name() +
 				", updatedAt=" + updatedAt +
 				", deletedAt=" + deletedAt +
 				", project=" + project +

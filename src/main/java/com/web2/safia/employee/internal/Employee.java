@@ -13,7 +13,7 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.web2.safia.auth.api.SignUpUserRequestDto;
+import com.web2.safia.auth.api.dto.SignUpUserRequestDto;
 import com.web2.safia.auth.internal.Role;
 import com.web2.safia.project.internal.Project;
 import com.web2.safia.shared.base.BaseEntity;
@@ -61,7 +61,7 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 	@JdbcType(value = PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
-	private Status status = Status.PENDING;
+	private EmployeeStatus status = EmployeeStatus.PENDING;
 
 	@ManyToMany(mappedBy = "employees")
 	private Set<Team> teams = new HashSet<>();
@@ -84,6 +84,10 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 		super();
 	}
 
+	public Employee(UUID id) {
+		super(id);
+	}
+
 	public Employee(
 			UUID id,
 			Employee creator,
@@ -101,7 +105,7 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 			Set<Work> works,
 			Set<Task> tasks,
 			Set<Role> roles,
-			Status status) {
+			EmployeeStatus status) {
 
 		super(id, creator, createdAt, updatedAt, deletedAt);
 		this.name = name;
@@ -126,11 +130,7 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 		this.phoneNumber = requestDto.phoneNumber();
 		this.cpf = requestDto.cpf();
 		this.birthDate = requestDto.birthDate();
-		this.status = Employee.Status.ACTIVE;
-	}
-
-	public static enum Status {
-		PENDING, ACTIVE, BLOCKED;
+		this.status = EmployeeStatus.PENDING;
 	}
 
 	public String getName() {
@@ -194,11 +194,11 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 		this.birthDate = birthDate;
 	}
 
-	public Status getStatus() {
+	public EmployeeStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(EmployeeStatus status) {
 		this.status = status;
 	}
 
@@ -263,43 +263,6 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Employee other = (Employee) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (cpf == null) {
-			if (other.cpf != null)
-				return false;
-		} else if (!cpf.equals(other.cpf))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "Employee [name=" + name +
 				", id=" + id +
@@ -312,6 +275,7 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 				", deletedAt=" + deletedAt +
 				", cpf=" + cpf +
 				", birthDate=" + birthDate +
+				", status=" + status.name() +
 				// ", teams=" + teams +
 				// ", projects=" + projects +
 				// ", works=" + works +
@@ -331,6 +295,6 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 
 	@Override
 	public String getUsername() {
-		return email;
+		return getEmail();
 	}
 }

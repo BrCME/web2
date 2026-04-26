@@ -8,28 +8,28 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.web2.safia.commit.api.CommitResponseDto;
-import com.web2.safia.commit.api.CreateCommitEvent;
+import com.web2.safia.commit.api.dto.CommitResponseDto;
+import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
 
 @Service
 public class CommitService {
 	private static final Logger logger = LoggerFactory.getLogger(CommitService.class);
 
-	private final JpaCommitRepository commitRepository;
+	private final CommitRepository commitRepository;
 
-	public CommitService(JpaCommitRepository commitRepository) {
+	public CommitService(CommitRepository commitRepository) {
 		this.commitRepository = commitRepository;
 	}
 
 	public Page<CommitResponseDto> getAll(Pageable pageable) {
 		return commitRepository
 				.findAll(pageable)
-				.map(commit -> new CommitResponseDto(commit));
+				.map(CommitResponseDto::new);
 	}
 
 	@Async
 	@EventListener
-	public void onCreateCommitEvent(CreateCommitEvent event) {
+	public void onSystemCommitOcurredEvent(SystemCommitOcurredEvent event) {
 		logger.info("Occurred event: {}", event);
 
 		var commit = new Commit(event);

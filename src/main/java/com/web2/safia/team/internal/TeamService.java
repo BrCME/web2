@@ -11,24 +11,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.api.CommitType;
-import com.web2.safia.commit.api.CreateCommitEvent;
+import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
 import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.project.internal.Project;
 import com.web2.safia.shared.base.BaseService;
 import com.web2.safia.shared.exception.DomainException;
 import com.web2.safia.shared.exception.EntityNotFoundException;
-import com.web2.safia.team.api.BriefTeamResponseDto;
-import com.web2.safia.team.api.CreateTeamRequestDto;
-import com.web2.safia.team.api.UpdateTeamRequestDto;
+import com.web2.safia.team.api.dto.BriefTeamResponseDto;
+import com.web2.safia.team.api.dto.CreateTeamRequestDto;
+import com.web2.safia.team.api.dto.UpdateTeamRequestDto;
 
 @Service
 public class TeamService extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(TeamService.class);
 
-	private final JpaTeamRepository teamRepository;
+	private final TeamRepository teamRepository;
 
 	public TeamService(
 			ApplicationEventPublisher eventPublisher,
-			JpaTeamRepository teamRepository) {
+			TeamRepository teamRepository) {
 
 		super(eventPublisher);
 		this.teamRepository = teamRepository;
@@ -37,50 +38,52 @@ public class TeamService extends BaseService {
 	public Page<BriefTeamResponseDto> getAll(Pageable pageable) {
 		return teamRepository
 				.findAll(pageable)
-				.map(team -> new BriefTeamResponseDto(team));
+				.map(BriefTeamResponseDto::new);
 	}
 
-	public Page<BriefTeamResponseDto> getAllByIssuer(Pageable pageable, Employee user) {
+	public Page<BriefTeamResponseDto> getAllByIssuer(Pageable pageable, UUID issuerId) {
 		return teamRepository
-				.findAllByCreator(pageable, user)
-				.map(team -> new BriefTeamResponseDto(team));
+				.findAllByIssuerId(pageable, issuerId)
+				.map(BriefTeamResponseDto::new);
 	}
 
 	public BriefTeamResponseDto getById(UUID id) {
 		return teamRepository
 				.findById(id)
-				.map(team -> new BriefTeamResponseDto(team))
+				.map(BriefTeamResponseDto::new)
 				.orElseThrow(() -> {
 					logger.error("Team with id '{}' not found", id);
 					throw new EntityNotFoundException(String.format("Team with id '%s' not found", id));
 				});
 	}
 
-	public BriefTeamResponseDto create(CreateTeamRequestDto requestDto, Employee user) {
+	public BriefTeamResponseDto create(CreateTeamRequestDto requestDto, UUID issuerId) {
 		var team = new Team(requestDto);
 
 		requestDto.employeesId()
-				.forEach(id -> logger.info("Employee to add: {}", id));
+				.forEach(employeeId -> team.addEmployee(new Employee(employeeId)));
 
 		requestDto.projectsId()
-				.forEach(id -> logger.info("Project to add: {}", id));
+				.forEach(projectId -> team.addProject(new Project(projectId)));
 
-		team.setCreator(user);
-		team.addEmployee(user);
+		var issuer = new Employee(issuerId);
+
+		team.setCreator(issuer);
+		team.addEmployee(issuer);
 
 		teamRepository.save(team);
-		logger.info("Team created with name '{}' by '{}", team.getName(), user.getEmail());
+		logger.info("Team created with name '{}' by '{}", team.getName(), issuerId);
 
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Team created with name '%s'", team.getName()),
 						CommitType.CREATE,
-						user));
+						issuer));
 
 		return new BriefTeamResponseDto(team);
 	}
 
-	public void deleteById(UUID id, Employee user) {
+	public void deleteById(UUID id, UUID issuerId) {
 		var team = teamRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -93,13 +96,13 @@ public class TeamService extends BaseService {
 		teamRepository.save(team);
 
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Team with id '%s' deactivated", id.toString()),
 						CommitType.DEACTIVATE,
-						user));
+						new Employee(issuerId)));
 	}
 
-	public BriefTeamResponseDto updateById(UUID id, UpdateTeamRequestDto requestDto, Employee user) {
+	public BriefTeamResponseDto updateById(UUID id, UpdateTeamRequestDto requestDto, UUID issuerId) {
 		var team = teamRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -116,51 +119,54 @@ public class TeamService extends BaseService {
 
 		requestDto
 				.name()
-				.ifPresent(name -> team.setName(name));
+				.ifPresent(team::setName);
 
 		requestDto
 				.description()
-				.ifPresent(description -> team.setDescription(description));
+				.ifPresent(team::setDescription);
 
 		teamRepository.save(team);
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Team with id '%s' updated", id.toString()),
 						CommitType.UPDATE,
-						user));
+						new Employee(issuerId)));
 
 		return new BriefTeamResponseDto(team);
 	}
 
-	public BriefTeamResponseDto addEmployee(UUID id, UUID employeeId, Employee user) {
+	public BriefTeamResponseDto addEmployee(UUID id, UUID employeeId, UUID issuerId) {
 		var team = teamRepository
 				.findById(id)
 				.orElseThrow(() -> {
 					logger.error("Team with id '{}' not found to add employee '{}'", id, employeeId);
 					throw new EntityNotFoundException(
-							String.format("Team with id '%s' not found to add employee '%d'",
+							String.format("Team with id '%s' not found to add employee '%s'",
 									id.toString(), employeeId.toString()));
 				});
 
 		if (!team.isEnabled()) {
 			logger.error("Team with id '{}' is not able to add employee", id);
-			throw new DomainException(String.format("Team with id '{}' is not able to add employee", id.toString()));
+			throw new DomainException(String.format("Team with id '%s' is not able to add employee", id.toString()));
 		}
 
-		// var employee = employeeRepository.findByEmail(employeeEmail);
+		if (!team.addEmployee(new Employee(employeeId))) {
+			logger.error("Could not add employee to team '{}'", team.getName());
+			throw new DomainException(String.format("Could not add employee to team '%s'", team.getName()));
+		}
 
 		teamRepository.save(team);
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Team with id '%s' updated with new employee with id '%s'",
 								id.toString(), employeeId.toString()),
 						CommitType.UPDATE,
-						user));
+						new Employee(issuerId)));
 
 		return new BriefTeamResponseDto(team);
 	}
 
-	public BriefTeamResponseDto removeEmployee(UUID id, UUID employeeId, Employee user) {
+	public BriefTeamResponseDto removeEmployee(UUID id, UUID employeeId, UUID issuerId) {
 		var team = teamRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -177,27 +183,19 @@ public class TeamService extends BaseService {
 							id.toString(), employeeId.toString()));
 		}
 
+		if (!team.removeEmployee(new Employee(employeeId))) {
+			logger.error("Could not remove employee of team '{}'", team.getName());
+			throw new DomainException(String.format("Could not remove employee of team '%s'", team.getName()));
+		}
+
 		teamRepository.save(team);
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Team with id '%s' update without employee with id '%s'",
 								id.toString(), employeeId.toString()),
 						CommitType.UPDATE,
-						user));
+						new Employee(issuerId)));
 
 		return new BriefTeamResponseDto(team);
 	}
-
-	// @EventListener
-	// public void onGetTeamByIdRequestEvent(GetTeamByIdRequestEvent requestEvent) {
-	// 	var team = teamRepository
-	// 			.findById(requestEvent.id())
-	// 			.orElseThrow(() -> {
-	// 				logger.error("Team with id '{}' not found", requestEvent.id());
-	// 				throw new EntityNotFoundException(
-	// 						String.format("Team with id '%s' not found", requestEvent.id().toString()));
-	// 			});
-
-	// 	eventPublisher.publishEvent(new GetTeamByIdResponseEvent(team));
-	// }
 }

@@ -1,6 +1,6 @@
 @org.springframework.modulith.ApplicationModule(
 	type = Type.OPEN,
-	displayName = "task"
+	displayName = "task.api"
 )
 package com.web2.safia.task.api;
 

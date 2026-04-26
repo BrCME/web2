@@ -1,9 +1,11 @@
 package com.web2.safia.auth.internal;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,41 +16,40 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.web2.safia.auth.api.RoleType;
-import com.web2.safia.auth.api.SignInUserRequestDto;
-import com.web2.safia.auth.api.SignUpUserRequestDto;
-import com.web2.safia.auth.api.SignUpUserResponseDto;
+import com.web2.safia.auth.api.dto.SignInUserRequestDto;
+import com.web2.safia.auth.api.dto.SignUpUserRequestDto;
+import com.web2.safia.auth.api.dto.SignUpUserResponseDto;
+import com.web2.safia.auth.api.event.UserCreatedEvent;
 import com.web2.safia.commit.api.CommitType;
-import com.web2.safia.commit.api.CreateCommitEvent;
+import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
 import com.web2.safia.employee.internal.Employee;
-import com.web2.safia.employee.internal.JpaEmployeeRepository;
-import com.web2.safia.employee.internal.JpaRoleRepository;
 import com.web2.safia.shared.base.BaseService;
 
 @Service
 public class AuthService extends BaseService implements UserDetailsService {
 	private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
+	@Value("${pepper:SAFIACustomPasswordEncoderPepperV1.0}")
+	private String pepper;
+
 	private final PasswordEncoder passwordEncoder;
-	private final JpaEmployeeRepository employeeRepository;
-	private final JpaRoleRepository roleRepository;
+	private final AuthRepository authRepository;
 
 	public AuthService(
 			ApplicationEventPublisher eventPublisher,
 			PasswordEncoder passwordEncoder,
-			JpaEmployeeRepository employeeRepository,
-			JpaRoleRepository roleRepository) {
+			AuthRepository authRepository) {
 
 		super(eventPublisher);
 		this.passwordEncoder = passwordEncoder;
-		this.employeeRepository = employeeRepository;
-		this.roleRepository = roleRepository;
+		this.authRepository = authRepository;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public UserDetails loadUserByUsername(String username) {
-		return employeeRepository
-				.findByEmail(username)
+		return authRepository
+				.findUserByUsername(username)
 				.orElseThrow(() -> {
 					logger.error("User with username '{}' not found", username);
 					throw new UsernameNotFoundException(String.format("User with username '%s' not found", username));
@@ -56,30 +57,43 @@ public class AuthService extends BaseService implements UserDetailsService {
 	}
 
 	public SignUpUserResponseDto signUp(SignUpUserRequestDto requestDto) {
-		var encodedPassword = passwordEncoder.encode(requestDto.password());
+		var encodedPassword = passwordEncoder.encode(requestDto.password().concat(pepper));
 		var user = new Employee(requestDto, encodedPassword);
 
-		var roles = roleRepository
-				.findAllByTypes(Set.of(RoleType.EMPLOYEE.name(), RoleType.NEWCOMER.name()));
+		var roles = authRepository
+				.findAllRolesByName(Set.of(RoleType.EMPLOYEE.name(), RoleType.NEWCOMER.name()));
 
 		roles
 				.stream()
-				.forEach(role -> user.addRole(role));
+				.forEach(user::addRole);
 
-		employeeRepository.save(user);
+		authRepository.save(user);
 
 		var newUser = new SignUpUserResponseDto(user);
 
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("User created '%s'", newUser.username()),
 						CommitType.CREATE,
 						user));
+
+		eventPublisher
+				.publishEvent(new UserCreatedEvent(UUID.randomUUID(), requestDto.email()));
 
 		return newUser;
 	}
 
 	public void signIn(SignInUserRequestDto requestDto) {
-		loadUserByUsername(requestDto.username());
+		authRepository
+				.findUserByUsername(requestDto.username())
+				.filter(employee -> passwordEncoder.matches(requestDto.password().concat(pepper),
+						employee.getPassword()))
+				.orElseThrow(() -> {
+					logger.error("Invalid user credentials");
+					throw new UsernameNotFoundException("Invalid user credentials");
+				});
+
+		eventPublisher
+				.publishEvent(new UserCreatedEvent(UUID.randomUUID(), requestDto.username()));
 	}
 }

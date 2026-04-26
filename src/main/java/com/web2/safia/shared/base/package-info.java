@@ -1,6 +1,6 @@
 @org.springframework.modulith.ApplicationModule(
 	type = Type.OPEN,
-	displayName = "base"
+	displayName = "shared.base"
 )
 package com.web2.safia.shared.base;
 

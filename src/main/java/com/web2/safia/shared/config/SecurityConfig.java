@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -52,11 +51,6 @@ public class SecurityConfig implements AuditorAware<Employee> {
 		return http
 				.authorizeHttpRequests(request -> request
 						.requestMatchers(WHITE_LIST).permitAll()
-						.requestMatchers(HttpMethod.GET).permitAll()
-						.requestMatchers(HttpMethod.POST).permitAll()
-						.requestMatchers(HttpMethod.DELETE).permitAll()
-						.requestMatchers(HttpMethod.PUT).permitAll()
-						.requestMatchers(HttpMethod.PATCH).permitAll()
 						.requestMatchers(ADMIN_LIST).hasRole("ADMIN")
 						// .anyRequest().authenticated()
 						.anyRequest().permitAll())
@@ -77,14 +71,14 @@ public class SecurityConfig implements AuditorAware<Employee> {
 	}
 
 	@Bean
-	UserDetailsService UserDetailsService(DataSource datasource) {
+	UserDetailsService userDetailsService(DataSource datasource) {
 		var userDetailsManager = new JdbcUserDetailsManager(datasource);
 
 		userDetailsManager.setUsersByUsernameQuery(
-				"SELECT e.name, e.email, e.birth_date, (e.deleted_at IS NULL) FROM employee e WHERE e.email LIKE ?");
+				"SELECT e.id, e.name, e.email, e.birth_date, (e.deleted_at IS NULL) FROM employee e WHERE e.email LIKE ?");
 
 		userDetailsManager.setAuthoritiesByUsernameQuery(
-				"SELECT e.email, r.type FROM employee e INNER JOIN role_to_employee rte ON rte.employee_id = e.id INNER JOIN role r ON rte.role_id = r.id WHERE e.email LIKE ?");
+				"SELECT e.id, e.email, r.type FROM employee e INNER JOIN role_to_employee rte ON rte.employee_id = e.id INNER JOIN role r ON rte.role_id = r.id WHERE e.email LIKE ?");
 
 		userDetailsManager.setRolePrefix("ROLE_");
 

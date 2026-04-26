@@ -10,28 +10,28 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.web2.safia.commit.api.CreateCommitEvent;
 import com.web2.safia.commit.api.CommitType;
-import com.web2.safia.employee.api.GetEmployeeToAddByIdRequestEvent;
+import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
 import com.web2.safia.employee.internal.Employee;
-import com.web2.safia.project.api.BriefProjectResponseDto;
-import com.web2.safia.project.api.CreateProjectRequestDto;
-import com.web2.safia.project.api.ProjectResponseDto;
-import com.web2.safia.project.api.UpdateProjectRequestDto;
+import com.web2.safia.project.api.dto.BriefProjectResponseDto;
+import com.web2.safia.project.api.dto.CreateProjectRequestDto;
+import com.web2.safia.project.api.dto.ProjectResponseDto;
+import com.web2.safia.project.api.dto.UpdateProjectRequestDto;
 import com.web2.safia.shared.base.BaseService;
 import com.web2.safia.shared.exception.DomainException;
 import com.web2.safia.shared.exception.EntityNotFoundException;
 import com.web2.safia.shared.exception.InputValidationException;
+import com.web2.safia.team.internal.Team;
 
 @Service
 public class ProjectService extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
 
-	private final JpaProjectRepository projectRepository;
+	private final ProjectRepository projectRepository;
 
 	public ProjectService(
 			ApplicationEventPublisher eventPublisher,
-			JpaProjectRepository projectRepository) {
+			ProjectRepository projectRepository) {
 
 		super(eventPublisher);
 		this.projectRepository = projectRepository;
@@ -40,57 +40,57 @@ public class ProjectService extends BaseService {
 	public Page<ProjectResponseDto> getAll(Pageable pageable) {
 		return projectRepository
 				.findAll(pageable)
-				.map(project -> new ProjectResponseDto(project));
+				.map(ProjectResponseDto::new);
 	}
 
-	public Page<ProjectResponseDto> getAllByIssuer(Pageable pageable, Employee user) {
+	public Page<ProjectResponseDto> getAllByIssuer(Pageable pageable, UUID issuerId) {
 		return projectRepository
-				.findAllByCreator(pageable, user)
-				.map(project -> new ProjectResponseDto(project));
+				.findAllByIssuerId(pageable, issuerId)
+				.map(ProjectResponseDto::new);
 	}
 
 	public ProjectResponseDto getById(UUID id) {
 		return projectRepository
 				.findById(id)
-				.map(project -> new ProjectResponseDto(project))
+				.map(ProjectResponseDto::new)
 				.orElseThrow(() -> {
 					logger.error("Project with id '{}' not found", id);
 					throw new EntityNotFoundException(String.format("Project with id '%s' not found", id));
 				});
 	}
 
-	// @EventListener(classes = { GetTeamByIdRequestEvent.class })
-	public BriefProjectResponseDto create(CreateProjectRequestDto requestDto, Employee user) {
+	public BriefProjectResponseDto create(CreateProjectRequestDto requestDto, UUID issuerId) {
 		var project = new Project(requestDto);
 
-		// eventPublisher.publishEvent(new GetTeamByIdRequestEvent(requestDto.teamId()));
-		// project.setTeam(team);
+		var team = new Team(requestDto.teamId());
+		project.setTeam(team);
+
+		var issuer = new Employee(issuerId);
+		project.setCreator(issuer);
+		project.addEmployee(issuer);
 
 		requestDto
 				.managerId()
-				.ifPresent((managerId) -> {
-					// eventPublisher.publishEvent(new GetManagerByIdRequestEvent(managerId));
-					// employeeRepository.findByEmail(project.getManager().getEmail());
-					// project.setManager(manager);
-					// project.addEmployee(manager);
+				.ifPresent(managerId -> {
+					var manager = new Employee(managerId);
+
+					project.setManager(manager);
+					project.addEmployee(manager);
 				});
 
-		project.setCreator(user);
-		project.addEmployee(user);
-
 		projectRepository.save(project);
-		logger.info("Project created with name '{}' by '{}'", project.getName(), user.getEmail());
+		logger.info("Project created with name '{}' by '{}'", project.getName(), issuerId);
 
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Project created with name '%s'", project.getName()),
 						CommitType.CREATE,
-						user));
+						issuer));
 
 		return new BriefProjectResponseDto(project);
 	}
 
-	public void deleteById(UUID id, Employee user) {
+	public void deleteById(UUID id, UUID issuerId) {
 		var project = projectRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -103,13 +103,13 @@ public class ProjectService extends BaseService {
 		projectRepository.save(project);
 
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Project with id '%s' deactivated", id.toString()),
 						CommitType.DEACTIVATE,
-						user));
+						new Employee(issuerId)));
 	}
 
-	public ProjectResponseDto updateById(UUID id, UpdateProjectRequestDto requestDto, Employee user) {
+	public ProjectResponseDto updateById(UUID id, UpdateProjectRequestDto requestDto, UUID issuerId) {
 		var project = projectRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -129,24 +129,23 @@ public class ProjectService extends BaseService {
 
 		requestDto
 				.managerId()
-				.ifPresent(managerId -> logger.info("Manager to update: {}", managerId));
+				.ifPresent(managerId -> project.setManager(new Employee(managerId)));
 
 		requestDto
 				.teamId()
-				.ifPresent(teamId -> logger.info("Team to update: {}", teamId));
+				.ifPresent(teamId -> project.setTeam(new Team(teamId)));
 
 		projectRepository.save(project);
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Project with id '%s' updated", id.toString()),
 						CommitType.UPDATE,
-						user));
+						new Employee(issuerId)));
 
 		return new ProjectResponseDto(project);
 	}
 
-	// @EventListener(classes = { GetEmployeeToAddByIdResponseEvent.class })
-	public ProjectResponseDto addEmployee(UUID id, UUID employeeId, Employee user) {
+	public ProjectResponseDto addEmployee(UUID id, UUID employeeId, UUID issuerId) {
 		var project = projectRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -156,22 +155,23 @@ public class ProjectService extends BaseService {
 									id.toString(), employeeId.toString()));
 				});
 
-		eventPublisher.publishEvent(new GetEmployeeToAddByIdRequestEvent(employeeId));
-		// var employee = employeeRepository.findByEmail(employeeEmail);
+		if (!project.addEmployee(new Employee(employeeId))) {
+			logger.error("Could not add employee to project '{}'", project.getName());
+			throw new DomainException(String.format("Could not add employee to project '%s'", project.getName()));
+		}
 
 		projectRepository.save(project);
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Project with id '%s' updated with new employee with id '%s'",
 								id.toString(), employeeId.toString()),
 						CommitType.UPDATE,
-						user));
+						new Employee(issuerId)));
 
 		return new ProjectResponseDto(project);
 	}
 
-	// @EventListener(classes = { GetEmployeeToRemoveByIdResponseEvent.class })
-	public ProjectResponseDto removeEmployee(UUID id, UUID employeeId, Employee user) {
+	public ProjectResponseDto removeEmployee(UUID id, UUID employeeId, UUID issuerId) {
 		var project = projectRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -187,16 +187,18 @@ public class ProjectService extends BaseService {
 					String.format("Project with id '%s' is not able to remove employee", id.toString()));
 		}
 
-		// eventPublisher.publishEvent(new GetEmployeeToRemoveByIdRequestEvent(employeeId));
-		// var employee = employeeRepository.findByEmail(employeeEmail);
+		if (!project.removeEmployee(new Employee(employeeId))) {
+			logger.error("Could not remove employee of project '{}'", project.getName());
+			throw new DomainException(String.format("Could not remove employee of project '%s'", project.getName()));
+		}
 
 		projectRepository.save(project);
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Project with id '%s' updated without employee with id '%s'",
 								id.toString(), employeeId.toString()),
 						CommitType.UPDATE,
-						user));
+						new Employee(issuerId)));
 
 		return new ProjectResponseDto(project);
 	}

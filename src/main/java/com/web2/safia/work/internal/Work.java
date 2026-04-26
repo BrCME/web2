@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.task.internal.Task;
-import com.web2.safia.work.api.CreateWorkRequestDto;
+import com.web2.safia.work.api.dto.CreateWorkRequestDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,6 +47,11 @@ public class Work implements Serializable {
 	private LocalDateTime endedAt;
 
 	public Work() {
+		this.startedAt = LocalDateTime.now();
+	}
+
+	public Work(UUID id) {
+		setId(id);
 	}
 
 	public Work(
@@ -67,6 +72,7 @@ public class Work implements Serializable {
 
 	public Work(CreateWorkRequestDto requestDto) {
 		this.description = requestDto.description();
+		this.startedAt = LocalDateTime.now();
 	}
 
 	public UUID getId() {
@@ -127,16 +133,19 @@ public class Work implements Serializable {
 		this.endedAt = endedAt;
 	}
 
+	public boolean isFinished() {
+		return this.endedAt != null;
+	}
+
+	public void finish() {
+		this.endedAt = LocalDateTime.now();
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((employee == null) ? 0 : employee.hashCode());
-		result = prime * result + ((task == null) ? 0 : task.hashCode());
-		result = prime * result + ((startedAt == null) ? 0 : startedAt.hashCode());
-		result = prime * result + ((endedAt == null) ? 0 : endedAt.hashCode());
 		return result;
 	}
 
@@ -154,37 +163,16 @@ public class Work implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (employee == null) {
-			if (other.employee != null)
-				return false;
-		} else if (!employee.equals(other.employee))
-			return false;
-		if (task == null) {
-			if (other.task != null)
-				return false;
-		} else if (!task.equals(other.task))
-			return false;
-		if (startedAt == null) {
-			if (other.startedAt != null)
-				return false;
-		} else if (!startedAt.equals(other.startedAt))
-			return false;
-		if (endedAt == null) {
-			if (other.endedAt != null)
-				return false;
-		} else if (!endedAt.equals(other.endedAt))
-			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Work [id=" + id + ", description=" + description + ", employee=" + employee + ", task=" + task
-				+ ", startedAt=" + startedAt + ", endedAt=" + endedAt + "]";
+		return "Work [id=" + id +
+				", description=" + description +
+				", employee=" + employee +
+				", task=" + task.getName() +
+				", startedAt=" + startedAt +
+				", endedAt=" + endedAt + "]";
 	}
 }

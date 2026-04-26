@@ -7,7 +7,7 @@ import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 
 import com.web2.safia.commit.api.CommitType;
-import com.web2.safia.commit.api.CreateCommitEvent;
+import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
 import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.shared.base.BaseEntity;
 
@@ -56,7 +56,7 @@ public class Commit extends BaseEntity {
         this.type = type;
     }
 
-    public Commit(CreateCommitEvent event) {
+    public Commit(SystemCommitOcurredEvent event) {
         this.description = event.description();
         this.type = event.type();
         this.creator = event.creator();
@@ -111,7 +111,7 @@ public class Commit extends BaseEntity {
     public String toString() {
         return "Commit [description=" + description +
                 ", id=" + id +
-                ", type=" + type +
+                ", type=" + type.name() +
                 ", creator=" + creator +
                 ", createdAt=" + createdAt + "]";
     }

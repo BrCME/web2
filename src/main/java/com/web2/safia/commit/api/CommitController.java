@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web2.safia.commit.api.dto.CommitResponseDto;
 import com.web2.safia.commit.internal.CommitService;
 
 @RestController

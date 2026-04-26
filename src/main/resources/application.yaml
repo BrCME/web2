@@ -35,9 +35,9 @@ server:
   port: 8080
 
   tomcat:
-    max-connections: 256
+    max-connections: 1024
     threads:
-      max: 20
+      max: 128
 
 spring:
   application:
@@ -72,9 +72,9 @@ spring:
       maximum-pool-size: 20
 
   jpa:
-    show-sql: true
+    # show-sql: true
+    # open-in-view: false
     generate-ddl: false
-    open-in-view: false
     hibernate:
       ddl-auto: none
     properties:
@@ -85,7 +85,7 @@ spring:
       hibernate:
         format-sql: true
         ddl-auto: none
-        generate_statistics: true
+        '[generate_statistics]': true
 
   lifecycle:
     timeout-per-shutdown-phase: "30s"
@@ -95,7 +95,7 @@ spring:
       enabled: true
 
   modulith:
-    detection-strategy: explicitly-annotated
+    detection-strategy: direct-sub-packages
     runtime:
       verification-enabled: true
       flyway-enabled: false
@@ -113,6 +113,10 @@ spring:
       password: SPR1NG_4DM1N
       roles:
         - ADMIN
+
+  threads:
+    virtual:
+      enabled: true
 
   web:
     error:

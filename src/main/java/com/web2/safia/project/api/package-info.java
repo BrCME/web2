@@ -1,6 +1,6 @@
 @org.springframework.modulith.ApplicationModule(
 	type = Type.OPEN,
-	displayName = "project"
+	displayName = "project.api"
 )
 package com.web2.safia.project.api;
 

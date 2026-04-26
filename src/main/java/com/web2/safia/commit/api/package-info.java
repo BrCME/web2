@@ -1,6 +1,6 @@
 @org.springframework.modulith.ApplicationModule(
 	type = Type.OPEN,
-	displayName = "commit"
+	displayName = "commit.api"
 )
 package com.web2.safia.commit.api;
 

@@ -1,6 +1,6 @@
 @org.springframework.modulith.ApplicationModule(
 	type = Type.OPEN,
-	displayName = "auth"
+	displayName = "auth.api"
 )
 package com.web2.safia.auth.api;
 

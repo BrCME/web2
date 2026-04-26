@@ -11,26 +11,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.api.CommitType;
-import com.web2.safia.commit.api.CreateCommitEvent;
+import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
 import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.project.internal.Project;
 import com.web2.safia.shared.base.BaseService;
 import com.web2.safia.shared.exception.DomainException;
 import com.web2.safia.shared.exception.EntityNotFoundException;
 import com.web2.safia.shared.exception.InputValidationException;
-import com.web2.safia.task.api.BriefTaskResponseDto;
-import com.web2.safia.task.api.CreateTaskRequestDto;
-import com.web2.safia.task.api.TaskResponseDto;
-import com.web2.safia.task.api.UpdateTaskRequestDto;
+import com.web2.safia.task.api.dto.BriefTaskResponseDto;
+import com.web2.safia.task.api.dto.CreateTaskRequestDto;
+import com.web2.safia.task.api.dto.TaskResponseDto;
+import com.web2.safia.task.api.dto.UpdateTaskRequestDto;
 
 @Service
 public class TaskService extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
-	private final JpaTaskRepository taskRepository;
+	private final TaskRepository taskRepository;
 
 	public TaskService(
 			ApplicationEventPublisher eventPublisher,
-			JpaTaskRepository taskRepository) {
+			TaskRepository taskRepository) {
 
 		super(eventPublisher);
 		this.taskRepository = taskRepository;
@@ -39,13 +40,13 @@ public class TaskService extends BaseService {
 	public Page<TaskResponseDto> getAll(Pageable pageable) {
 		return taskRepository
 				.findAll(pageable)
-				.map(task -> new TaskResponseDto(task));
+				.map(TaskResponseDto::new);
 	}
 
-	public Page<TaskResponseDto> getAllByIssuer(Pageable pageable, Employee user) {
+	public Page<TaskResponseDto> getAllByIssuer(Pageable pageable, UUID issuerId) {
 		return taskRepository
-				.findAllByCreator(pageable, user)
-				.map(task -> new TaskResponseDto(task));
+				.findAllByIssuerId(pageable, issuerId)
+				.map(TaskResponseDto::new);
 	}
 
 	public Task getById(UUID id) {
@@ -57,36 +58,28 @@ public class TaskService extends BaseService {
 				});
 	}
 
-	public TaskResponseDto create(CreateTaskRequestDto requestDto, Employee user) {
-
-		// eventPublisher.publishEvent(new
-		// GetProjectByIdRequestEvent(requestDto.projectId()));
-
-		// var actualProject = projectRepository.findById();
-		// if (!actualProject.isPresent()) {
-		// logger.error("Projeto com id '{}' não encontrado", project.getId());
-		// throw new DomainException(String.format("Projeto com id '%s' não encontrado",
-		// project.getId()));
-		// }
-
+	public TaskResponseDto create(CreateTaskRequestDto requestDto, UUID issuerId) {
 		var task = new Task(requestDto);
-		// task.setProject(null);
 
-		task.setId(null);
-		task.setCreator(user);
+		var project = new Project(requestDto.projectId());
+		task.setProject(project);
+
+		var issuer = new Employee(issuerId);
+		task.setCreator(issuer);
+
 		taskRepository.save(task);
-		logger.info("Criada atividade '{}' nova por '{}", task.getName(), user.getEmail());
+		logger.info("Criada atividade '{}' nova por '{}", task.getName(), issuerId);
 
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Criada atividade '%s' novo", task.getId().toString()),
 						CommitType.CREATE,
-						user));
+						issuer));
 
 		return new TaskResponseDto(task);
 	}
 
-	public BriefTaskResponseDto promote(UUID id, Employee user) {
+	public BriefTaskResponseDto promote(UUID id, UUID issuerId) {
 		var task = taskRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -105,15 +98,15 @@ public class TaskService extends BaseService {
 		logger.info("Task with id '{}' promoted to '{}'", id, task.getStatus().name());
 
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Task with id '%s' promoted to '%s'", id, task.getStatus().name()),
 						CommitType.UPDATE,
-						user));
+						new Employee(issuerId)));
 
 		return new BriefTaskResponseDto(task);
 	}
 
-	public BriefTaskResponseDto demote(UUID id, Employee user) {
+	public BriefTaskResponseDto demote(UUID id, UUID issuerId) {
 		var task = taskRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -132,15 +125,15 @@ public class TaskService extends BaseService {
 		logger.info("Task with id '{}' demoted to '{}'", id, task.getStatus().name());
 
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Task with id '%s' demoted to '%s'", id, task.getStatus().name()),
 						CommitType.UPDATE,
-						user));
+						new Employee(issuerId)));
 
 		return new BriefTaskResponseDto(task);
 	}
 
-	public void deleteById(UUID id, Employee user) {
+	public void deleteById(UUID id, UUID issuerId) {
 		var task = taskRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -153,13 +146,13 @@ public class TaskService extends BaseService {
 		taskRepository.save(task);
 
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Task with id '%s' deactivated", id),
 						CommitType.DEACTIVATE,
-						user));
+						new Employee(issuerId)));
 	}
 
-	public BriefTaskResponseDto updateById(UUID id, UpdateTaskRequestDto requestDto, Employee user) {
+	public BriefTaskResponseDto updateById(UUID id, UpdateTaskRequestDto requestDto, UUID issuerId) {
 		var task = taskRepository
 				.findById(id)
 				.orElseThrow(() -> {
@@ -175,26 +168,26 @@ public class TaskService extends BaseService {
 
 		requestDto
 				.deadLine()
-				.ifPresent(deadline -> task.setDeadLine(deadline));
+				.ifPresent(task::setDeadLine);
 
 		requestDto
 				.description()
-				.ifPresent(description -> task.setDescription(description));
+				.ifPresent(task::setDescription);
 
 		requestDto
 				.name()
-				.ifPresent(name -> task.setName(name));
+				.ifPresent(task::setName);
 
 		requestDto
 				.projectId()
-				.ifPresent(projectId -> logger.info("Project to update: {}", projectId));
+				.ifPresent(projectId -> task.setProject(new Project(requestDto.projectId().get())));
 
 		taskRepository.save(task);
 		eventPublisher.publishEvent(
-				new CreateCommitEvent(
+				new SystemCommitOcurredEvent(
 						String.format("Task with id '%s' updated", id.toString()),
 						CommitType.UPDATE,
-						user));
+						new Employee(issuerId)));
 
 		return new BriefTaskResponseDto(task);
 	}

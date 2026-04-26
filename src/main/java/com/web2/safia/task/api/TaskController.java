@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.task.api.dto.BriefTaskResponseDto;
+import com.web2.safia.task.api.dto.CreateTaskRequestDto;
+import com.web2.safia.task.api.dto.TaskResponseDto;
+import com.web2.safia.task.api.dto.UpdateTaskRequestDto;
 import com.web2.safia.task.internal.TaskService;
 
 import jakarta.validation.Valid;
@@ -37,12 +40,12 @@ public class TaskController {
 
 	@GetMapping("/me")
 	public ResponseEntity<Page<TaskResponseDto>> getAllByIssuer(Pageable pageable) {
-		return ResponseEntity.ok(taskService.getAllByIssuer(pageable, new Employee()));
+		return ResponseEntity.ok(taskService.getAllByIssuer(pageable, UUID.randomUUID()));
 	}
 
 	@PostMapping
 	public ResponseEntity<Void> create(@Valid @RequestBody CreateTaskRequestDto requestDto) {
-		var response = taskService.create(requestDto, new Employee());
+		var response = taskService.create(requestDto, UUID.randomUUID());
 		return ResponseEntity.created(URI.create(response.id().toString())).build();
 	}
 
@@ -51,22 +54,22 @@ public class TaskController {
 			@PathVariable UUID id,
 			@Valid @RequestBody UpdateTaskRequestDto requestDto) {
 
-		return ResponseEntity.ok(taskService.updateById(id, requestDto, new Employee()));
+		return ResponseEntity.ok(taskService.updateById(id, requestDto, UUID.randomUUID()));
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
-		taskService.deleteById(id, new Employee());
+		taskService.deleteById(id, UUID.randomUUID());
 		return ResponseEntity.noContent().build();
 	}
 
 	@PatchMapping("/{id}/promote")
 	public ResponseEntity<BriefTaskResponseDto> promoteById(@PathVariable UUID id) {
-		return ResponseEntity.ok(taskService.promote(id, new Employee()));
+		return ResponseEntity.ok(taskService.promote(id, UUID.randomUUID()));
 	}
 
 	@PatchMapping("/{id}/demote")
 	public ResponseEntity<BriefTaskResponseDto> demoteById(@PathVariable UUID id) {
-		return ResponseEntity.ok(taskService.demote(id, new Employee()));
+		return ResponseEntity.ok(taskService.demote(id, UUID.randomUUID()));
 	}
 }
