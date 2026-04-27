@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.project.api.dto.ProjectResponseDto;
+import com.web2.safia.shared.entity.Employee;
 import com.web2.safia.task.api.dto.TaskResponseDto;
 import com.web2.safia.team.api.dto.BriefTeamResponseDto;
 import com.web2.safia.work.api.dto.BriefWorkResponseDto;

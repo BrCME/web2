@@ -9,12 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.web2.safia.commit.api.CommitType;
 import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
-import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.shared.base.BaseService;
+import com.web2.safia.shared.entity.CommitType;
+import com.web2.safia.shared.entity.Employee;
+import com.web2.safia.shared.entity.Task;
+import com.web2.safia.shared.entity.Work;
 import com.web2.safia.shared.exception.DomainException;
-import com.web2.safia.task.internal.Task;
 import com.web2.safia.work.api.dto.BriefWorkResponseDto;
 import com.web2.safia.work.api.dto.CreateWorkRequestDto;
 import com.web2.safia.work.api.event.WorkFinishedEvent;

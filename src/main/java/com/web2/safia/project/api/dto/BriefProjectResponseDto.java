@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.web2.safia.employee.api.dto.BriefEmployeeResponseDto;
-import com.web2.safia.project.internal.Project;
+import com.web2.safia.shared.entity.Project;
 
 public record BriefProjectResponseDto(
 		UUID id,

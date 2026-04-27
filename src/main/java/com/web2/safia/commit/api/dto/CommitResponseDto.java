@@ -3,9 +3,9 @@ package com.web2.safia.commit.api.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.web2.safia.commit.api.CommitType;
-import com.web2.safia.commit.internal.Commit;
 import com.web2.safia.employee.api.dto.BriefEmployeeResponseDto;
+import com.web2.safia.shared.entity.Commit;
+import com.web2.safia.shared.entity.CommitType;
 
 public record CommitResponseDto(
 		UUID id,

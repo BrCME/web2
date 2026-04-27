@@ -4,8 +4,8 @@ import java.time.Duration;
 import java.util.UUID;
 
 import com.web2.safia.employee.api.dto.BriefEmployeeResponseDto;
+import com.web2.safia.shared.entity.Work;
 import com.web2.safia.task.api.dto.BriefTaskResponseDto;
-import com.web2.safia.work.internal.Work;
 
 public record BriefWorkResponseDto(
 	UUID id,

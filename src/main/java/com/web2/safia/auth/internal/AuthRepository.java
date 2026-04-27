@@ -4,14 +4,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.shared.entity.Employee;
+import com.web2.safia.shared.entity.Role;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.repository.query.Param;
 
 public interface AuthRepository extends JpaRepository<Employee, UUID> {
-	@NativeQuery("SELECT e.id, e.email, e.password, (e.deleted_at IS NULL) AS non_expired, (e.status != 'BLOCKED') AS non_locked, (e.status != 'BLOCKED' AND e.deleted_at IS NULL) AS enabled" +
+	@NativeQuery("SELECT e.*, (e.deleted_at IS NULL) AS non_expired, (e.status != 'BLOCKED') AS non_locked, (e.status != 'BLOCKED' AND e.deleted_at IS NULL) AS enabled " +
 		"FROM employee e " +
 		"WHERE e.email LIKE :username")
 	public Optional<Employee> findUserByUsername(@Param("username") String username);

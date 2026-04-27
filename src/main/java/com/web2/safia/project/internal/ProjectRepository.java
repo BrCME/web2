@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.repository.query.Param;
 
+import com.web2.safia.shared.entity.Project;
+
 public interface ProjectRepository extends JpaRepository<Project, UUID> {
 	@NativeQuery("SELECT p " +
 		"FROM project p " +

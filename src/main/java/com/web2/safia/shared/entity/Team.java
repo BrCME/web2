@@ -1,12 +1,10 @@
-package com.web2.safia.team.internal;
+package com.web2.safia.shared.entity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import com.web2.safia.employee.internal.Employee;
-import com.web2.safia.project.internal.Project;
 import com.web2.safia.shared.base.BaseEntity;
 import com.web2.safia.team.api.dto.CreateTeamRequestDto;
 
@@ -45,20 +43,6 @@ public class Team extends BaseEntity {
 
 	public Team(UUID id) {
 		super(id);
-	}
-
-	public Team(
-			UUID id,
-			Employee creator,
-			LocalDateTime createdAt,
-			LocalDateTime updatedAt,
-			LocalDateTime deletedAt,
-			String name,
-			String description) {
-
-		super(id, creator, createdAt, updatedAt, deletedAt);
-		this.name = name;
-		this.description = description;
 	}
 
 	public Team(CreateTeamRequestDto requestDto) {

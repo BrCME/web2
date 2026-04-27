@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.repository.query.Param;
 
+import com.web2.safia.shared.entity.Team;
+
 public interface TeamRepository extends JpaRepository<Team, UUID> {
 	@NativeQuery("SELECT t.* " +
 		"FROM team t " +

@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.repository.query.Param;
 
+import com.web2.safia.shared.entity.Task;
+
 public interface TaskRepository extends JpaRepository<Task, UUID> {
 	@NativeQuery("SELECT t.* " +
 		"FROM task t " +

@@ -22,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 import org.springframework.session.web.http.HttpSessionIdResolver;
 
-import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.shared.entity.Employee;
 
 @Configuration
 public class SecurityConfig implements AuditorAware<Employee> {

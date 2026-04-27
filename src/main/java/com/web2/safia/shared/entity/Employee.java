@@ -1,7 +1,6 @@
-package com.web2.safia.employee.internal;
+package com.web2.safia.shared.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,12 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.web2.safia.auth.api.dto.SignUpUserRequestDto;
-import com.web2.safia.auth.internal.Role;
-import com.web2.safia.project.internal.Project;
 import com.web2.safia.shared.base.BaseEntity;
-import com.web2.safia.task.internal.Task;
-import com.web2.safia.team.internal.Team;
-import com.web2.safia.work.internal.Work;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -86,40 +80,6 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 
 	public Employee(UUID id) {
 		super(id);
-	}
-
-	public Employee(
-			UUID id,
-			Employee creator,
-			LocalDateTime createdAt,
-			LocalDateTime updatedAt,
-			LocalDateTime deletedAt,
-			String name,
-			String email,
-			String password,
-			String phoneNumber,
-			String cpf,
-			LocalDate birthDate,
-			Set<Team> teams,
-			Set<Project> projects,
-			Set<Work> works,
-			Set<Task> tasks,
-			Set<Role> roles,
-			EmployeeStatus status) {
-
-		super(id, creator, createdAt, updatedAt, deletedAt);
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.phoneNumber = phoneNumber;
-		this.cpf = cpf;
-		this.birthDate = birthDate;
-		this.teams = new HashSet<>(teams);
-		this.projects = new HashSet<>(projects);
-		this.works = new HashSet<>(works);
-		this.tasks = new HashSet<>(tasks);
-		this.roles = new HashSet<>(roles);
-		this.status = status;
 	}
 
 	public Employee(SignUpUserRequestDto requestDto, String encodedPassword) {

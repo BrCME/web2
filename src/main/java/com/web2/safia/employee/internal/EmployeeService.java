@@ -15,6 +15,7 @@ import com.web2.safia.auth.api.event.UserCreatedEvent;
 import com.web2.safia.employee.api.dto.EmployeeResponseDto;
 import com.web2.safia.shared.base.BaseEntity;
 import com.web2.safia.shared.base.BaseService;
+import com.web2.safia.shared.entity.Employee;
 import com.web2.safia.shared.exception.EntityNotFoundException;
 import com.web2.safia.shared.exception.InputValidationException;
 

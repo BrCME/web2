@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.repository.query.Param;
 
+import com.web2.safia.shared.entity.Work;
+
 public interface WorkRepository extends JpaRepository<Work, UUID> {
 	@NativeQuery("SELECT w.* " +
 		"FROM work w " +

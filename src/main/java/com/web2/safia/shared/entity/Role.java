@@ -1,4 +1,4 @@
-package com.web2.safia.auth.internal;
+package com.web2.safia.shared.entity;
 
 import java.util.UUID;
 
@@ -32,11 +32,7 @@ public class Role implements GrantedAuthority {
 	private RoleType type;
 
 	public Role() {
-	}
-
-	public Role(UUID id, RoleType type) {
-		this.id = id;
-		this.type = type;
+		super();
 	}
 
 	public UUID getId() {

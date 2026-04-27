@@ -20,10 +20,10 @@ import com.web2.safia.auth.api.dto.SignInUserRequestDto;
 import com.web2.safia.auth.api.dto.SignUpUserRequestDto;
 import com.web2.safia.auth.api.dto.SignUpUserResponseDto;
 import com.web2.safia.auth.api.event.UserCreatedEvent;
-import com.web2.safia.commit.api.CommitType;
 import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
-import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.shared.base.BaseService;
+import com.web2.safia.shared.entity.CommitType;
+import com.web2.safia.shared.entity.Employee;
 
 @Service
 public class AuthService extends BaseService implements UserDetailsService {

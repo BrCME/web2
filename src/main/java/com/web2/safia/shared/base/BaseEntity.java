@@ -8,7 +8,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.shared.entity.Employee;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,26 +43,12 @@ public abstract class BaseEntity implements Serializable {
 	protected LocalDateTime deletedAt;
 
 	protected BaseEntity() {
-		setId(UUID.randomUUID());
-		setCreatedAt(LocalDateTime.now());
+		this.id = UUID.randomUUID();
+		this.createdAt = LocalDateTime.now();
 	}
 
 	protected BaseEntity(UUID id) {
 		setId(id);
-	}
-
-	protected BaseEntity(
-			UUID id,
-			Employee creator,
-			LocalDateTime createdAt,
-			LocalDateTime updatedAt,
-			LocalDateTime deletedAt) {
-
-		setId(id);
-		setCreator(creator);
-		setCreatedAt(createdAt);
-		setUpdatedAt(updatedAt);
-		setDeletedAt(deletedAt);
 	}
 
 	public boolean isEnabled() {

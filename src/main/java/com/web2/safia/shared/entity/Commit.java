@@ -1,4 +1,4 @@
-package com.web2.safia.commit.internal;
+package com.web2.safia.shared.entity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -6,9 +6,7 @@ import java.util.UUID;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 
-import com.web2.safia.commit.api.CommitType;
 import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
-import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.shared.base.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -38,20 +36,6 @@ public class Commit extends BaseEntity {
             String description,
             CommitType type) {
 
-        this.description = description;
-        this.type = type;
-    }
-
-    public Commit(
-            UUID id,
-            Employee creator,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt,
-            LocalDateTime deletedAt,
-            String description,
-            CommitType type) {
-
-        super(id, creator, createdAt, updatedAt, deletedAt);
         this.description = description;
         this.type = type;
     }

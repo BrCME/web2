@@ -1,11 +1,9 @@
-package com.web2.safia.work.internal;
+package com.web2.safia.shared.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.web2.safia.employee.internal.Employee;
-import com.web2.safia.task.internal.Task;
 import com.web2.safia.work.api.dto.CreateWorkRequestDto;
 
 import jakarta.persistence.Column;
@@ -52,22 +50,6 @@ public class Work implements Serializable {
 
 	public Work(UUID id) {
 		setId(id);
-	}
-
-	public Work(
-			UUID id,
-			String description,
-			Employee employee,
-			Task task,
-			LocalDateTime startedAt,
-			LocalDateTime endedAt) {
-
-		this.id = id;
-		this.description = description;
-		this.employee = employee;
-		this.task = task;
-		this.startedAt = startedAt;
-		this.endedAt = endedAt;
 	}
 
 	public Work(CreateWorkRequestDto requestDto) {

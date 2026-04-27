@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.web2.safia.employee.api.dto.BriefEmployeeResponseDto;
 import com.web2.safia.project.api.dto.BriefProjectResponseDto;
-import com.web2.safia.task.internal.Task;
+import com.web2.safia.shared.entity.Task;
 
 public record TaskResponseDto(
 		UUID id,

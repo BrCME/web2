@@ -1,4 +1,4 @@
-package com.web2.safia.task.internal;
+package com.web2.safia.shared.entity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -9,11 +9,9 @@ import java.util.stream.Collectors;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 
-import com.web2.safia.employee.internal.Employee;
-import com.web2.safia.project.internal.Project;
 import com.web2.safia.shared.base.BaseEntity;
 import com.web2.safia.task.api.dto.CreateTaskRequestDto;
-import com.web2.safia.work.internal.Work;
+import com.web2.safia.task.internal.TaskStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -59,25 +57,6 @@ public class Task extends BaseEntity {
 
 	public Task(UUID id) {
 		super(id);
-	}
-
-	public Task(UUID id,
-			Employee creator,
-			LocalDateTime createdAt,
-			LocalDateTime updatedAt,
-			LocalDateTime deletedAt,
-			String name,
-			String description,
-			TaskStatus status,
-			Project project,
-			LocalDateTime deadLine) {
-
-		super(id, creator, createdAt, updatedAt, deletedAt);
-		this.name = name;
-		this.description = description;
-		this.status = status;
-		this.project = project;
-		this.deadLine = deadLine;
 	}
 
 	public Task(CreateTaskRequestDto requestDto) {

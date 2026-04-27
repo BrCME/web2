@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.web2.safia.commit.api.dto.CommitResponseDto;
 import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
+import com.web2.safia.shared.entity.Commit;
 
 @Service
 public class CommitService {

@@ -1,4 +1,4 @@
-package com.web2.safia.project.internal;
+package com.web2.safia.shared.entity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -6,12 +6,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.project.api.dto.CreateProjectRequestDto;
 import com.web2.safia.shared.base.BaseEntity;
-import com.web2.safia.task.internal.Task;
 import com.web2.safia.task.internal.TaskStatus;
-import com.web2.safia.team.internal.Team;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -59,24 +56,6 @@ public class Project extends BaseEntity {
 
 	public Project(UUID id) {
 		super(id);
-	}
-
-	public Project(
-			UUID id,
-			Employee creator,
-			LocalDateTime createdAt,
-			LocalDateTime updatedAt,
-			LocalDateTime deletedAt,
-			String name,
-			String description,
-			Team team,
-			Employee manager) {
-
-		super(id, creator, createdAt, updatedAt, deletedAt);
-		this.name = name;
-		this.description = description;
-		this.team = team;
-		this.manager = manager;
 	}
 
 	public Project(CreateProjectRequestDto requestDto) {

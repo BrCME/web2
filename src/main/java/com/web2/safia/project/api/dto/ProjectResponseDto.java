@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.web2.safia.employee.api.dto.BriefEmployeeResponseDto;
-import com.web2.safia.project.internal.Project;
+import com.web2.safia.shared.entity.Project;
 import com.web2.safia.task.api.dto.BriefTaskResponseDto;
 import com.web2.safia.team.api.dto.BriefTeamResponseDto;
 

@@ -2,8 +2,8 @@ package com.web2.safia.commit.api.event;
 
 import java.time.LocalDateTime;
 
-import com.web2.safia.commit.api.CommitType;
-import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.shared.entity.CommitType;
+import com.web2.safia.shared.entity.Employee;
 
 public record SystemCommitOcurredEvent(
 		String description,

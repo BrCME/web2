@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.web2.safia.employee.api.dto.BriefEmployeeResponseDto;
 import com.web2.safia.project.api.dto.BriefProjectResponseDto;
-import com.web2.safia.team.internal.Team;
+import com.web2.safia.shared.entity.Team;
 
 public record BriefTeamResponseDto(
 		UUID id,

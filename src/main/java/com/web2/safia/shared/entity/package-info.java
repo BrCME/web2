@@ -1,7 +1,7 @@
 @org.springframework.modulith.ApplicationModule(
-	type = Type.CLOSED,
-	displayName = "auth.internal"
+	type = Type.OPEN,
+	displayName = "shared.entity"
 )
-package com.web2.safia.auth.internal;
+package com.web2.safia.shared.entity;
 
 import org.springframework.modulith.ApplicationModule.Type;

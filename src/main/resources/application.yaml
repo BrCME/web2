@@ -95,7 +95,7 @@ spring:
       enabled: true
 
   modulith:
-    detection-strategy: direct-sub-packages
+    detection-strategy: explicitly-annotated
     runtime:
       verification-enabled: true
       flyway-enabled: false

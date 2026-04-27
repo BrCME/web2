@@ -10,18 +10,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.web2.safia.commit.api.CommitType;
 import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
-import com.web2.safia.employee.internal.Employee;
 import com.web2.safia.project.api.dto.BriefProjectResponseDto;
 import com.web2.safia.project.api.dto.CreateProjectRequestDto;
 import com.web2.safia.project.api.dto.ProjectResponseDto;
 import com.web2.safia.project.api.dto.UpdateProjectRequestDto;
 import com.web2.safia.shared.base.BaseService;
+import com.web2.safia.shared.entity.CommitType;
+import com.web2.safia.shared.entity.Employee;
+import com.web2.safia.shared.entity.Project;
+import com.web2.safia.shared.entity.Team;
 import com.web2.safia.shared.exception.DomainException;
 import com.web2.safia.shared.exception.EntityNotFoundException;
 import com.web2.safia.shared.exception.InputValidationException;
-import com.web2.safia.team.internal.Team;
 
 @Service
 public class ProjectService extends BaseService {

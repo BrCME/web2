@@ -3,7 +3,7 @@ package com.web2.safia.employee.api.dto;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import com.web2.safia.employee.internal.Employee;
+import com.web2.safia.shared.entity.Employee;
 
 public record BriefEmployeeResponseDto(
 		UUID id,
