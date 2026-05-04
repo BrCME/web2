@@ -13,17 +13,15 @@ import com.web2.safia.shared.entity.Team;
 
 public interface TeamRepository extends JpaRepository<Team, UUID> {
 	@NativeQuery("SELECT t.* " +
-		"FROM team t " +
-		"INNER JOIN employee e ON t.creator_id = e.id " +
-		"WHERE e.id = :issuerId " +
-		"GROUP BY t.created_at 'ASC'"
-	)
+			"FROM team t " +
+			"INNER JOIN employee e ON t.creator_id = e.id " +
+			"WHERE e.id = :issuerId " +
+			"GROUP BY t.created_at 'ASC'")
 	Page<Team> findAllByIssuerId(Pageable pageable, UUID issuerId);
 
-	@NativeQuery(
-		"SELECT t FROM team t " +
-		"INNER JOIN employee_to_team ett ON t.id = ett.team_id " +
-		"INNER JOIN employee e ON e.id = ett.employee_id " +
-		"WHERE t.deleted_at IS NULL AND e.id = :employeeId;")
+	@NativeQuery("SELECT t FROM team t " +
+			"INNER JOIN employee_to_team ett ON t.id = ett.team_id " +
+			"INNER JOIN employee e ON e.id = ett.employee_id " +
+			"WHERE t.deleted_at IS NULL AND e.id = :employeeId;")
 	Set<Team> findByUserId(@Param("employeeId") UUID employeeId);
 }

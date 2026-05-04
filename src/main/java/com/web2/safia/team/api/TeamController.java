@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web2.safia.team.api.dto.BriefTeamResponseDto;
-import com.web2.safia.team.api.dto.CreateTeamRequestDto;
-import com.web2.safia.team.api.dto.UpdateTeamRequestDto;
+import com.web2.safia.team.api.dto.BriefTeamResponse;
+import com.web2.safia.team.api.dto.CreateTeamRequest;
+import com.web2.safia.team.api.dto.UpdateTeamRequest;
 import com.web2.safia.team.internal.TeamService;
 
 import jakarta.validation.Valid;
@@ -33,18 +33,18 @@ public class TeamController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<BriefTeamResponseDto>> getAll(Pageable pageable) {
+	public ResponseEntity<Page<BriefTeamResponse>> getAll(Pageable pageable) {
 		return ResponseEntity.ok(teamService.getAll(pageable));
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<Page<BriefTeamResponseDto>> getAllByIssuer(Pageable pageable) {
+	public ResponseEntity<Page<BriefTeamResponse>> getAllByIssuer(Pageable pageable) {
 		return ResponseEntity.ok(teamService.getAllByIssuer(pageable, UUID.randomUUID()));
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> create(@Valid @RequestBody CreateTeamRequestDto requestDto) {
-		var response = teamService.create(requestDto, UUID.randomUUID());
+	public ResponseEntity<Void> create(@Valid @RequestBody CreateTeamRequest request) {
+		var response = teamService.create(request, UUID.randomUUID());
 		return ResponseEntity.created(URI.create(response.id().toString())).build();
 	}
 
@@ -55,15 +55,15 @@ public class TeamController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<BriefTeamResponseDto> updateById(
+	public ResponseEntity<BriefTeamResponse> updateById(
 			@PathVariable UUID id,
-			@Valid @RequestBody UpdateTeamRequestDto requestDto) {
+			@Valid @RequestBody UpdateTeamRequest request) {
 
-		return ResponseEntity.ok(teamService.updateById(id, requestDto, UUID.randomUUID()));
+		return ResponseEntity.ok(teamService.updateById(id, request, UUID.randomUUID()));
 	}
 
 	@PatchMapping("/{id}/add-employee/{employeeId}")
-	public ResponseEntity<BriefTeamResponseDto> addEmployee(
+	public ResponseEntity<BriefTeamResponse> addEmployee(
 			@PathVariable UUID id,
 			@PathVariable UUID employeeId) {
 
@@ -71,10 +71,10 @@ public class TeamController {
 	}
 
 	@PatchMapping("/{id}/remove-employee/{employeeId}")
-	public ResponseEntity<BriefTeamResponseDto> removeEmployee(
-		@PathVariable UUID id,
-		@PathVariable UUID employeeId) {
-		
+	public ResponseEntity<BriefTeamResponse> removeEmployee(
+			@PathVariable UUID id,
+			@PathVariable UUID employeeId) {
+
 		return ResponseEntity.ok(teamService.removeEmployee(id, employeeId, UUID.randomUUID()));
 	}
 }

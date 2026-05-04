@@ -17,7 +17,12 @@ public class EntityNotFoundException extends RuntimeException {
 		super(message, cause);
 	}
 
-	protected EntityNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	protected EntityNotFoundException(
+			String message,
+			Throwable cause,
+			boolean enableSuppression,
+			boolean writableStackTrace) {
+
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 }

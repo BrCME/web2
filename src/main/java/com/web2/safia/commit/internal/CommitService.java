@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.web2.safia.commit.api.dto.CommitResponseDto;
-import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
+import com.web2.safia.commit.api.dto.CommitResponse;
+import com.web2.safia.commit.api.event.SystemCommitOcurred;
 import com.web2.safia.shared.entity.Commit;
 
 @Service
@@ -22,15 +22,15 @@ public class CommitService {
 		this.commitRepository = commitRepository;
 	}
 
-	public Page<CommitResponseDto> getAll(Pageable pageable) {
+	public Page<CommitResponse> getAll(Pageable pageable) {
 		return commitRepository
 				.findAll(pageable)
-				.map(CommitResponseDto::new);
+				.map(CommitResponse::new);
 	}
 
 	@Async
 	@EventListener
-	public void onSystemCommitOcurredEvent(SystemCommitOcurredEvent event) {
+	public void onSystemCommitOcurredEvent(SystemCommitOcurred event) {
 		logger.info("Occurred event: {}", event);
 
 		var commit = new Commit(event);

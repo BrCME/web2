@@ -25,8 +25,9 @@ public class GlobalExceptionHandler {
 			MethodArgumentNotValidException.class,
 			IllegalArgumentException.class })
 	public ProblemDetail handleBusinessExceptions(Exception ex, WebRequest request) {
-		logger.error("{}: {}", ex.getClass().getCanonicalName(), ex);
-		logger.error("Request: ", request);
+		logger.debug("Business Exception: ", ex);
+		logger.debug("{}: {}", ex.getClass().getCanonicalName(), ex);
+		logger.debug("Request: ", request);
 
 		var response = ProblemDetail
 				.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
@@ -36,12 +37,9 @@ public class GlobalExceptionHandler {
 		return response;
 	}
 
-	@ExceptionHandler({
-			InputValidationException.class,
-			ValidationException.class
-	})
+	@ExceptionHandler({ InputValidationException.class, ValidationException.class })
 	public ProblemDetail handleValidationExceptions(Exception ex, WebRequest request) {
-		logger.error("Validation Exception: ", ex);
+		logger.debug("Validation Exception: ", ex);
 
 		var response = ProblemDetail
 				.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
@@ -51,11 +49,9 @@ public class GlobalExceptionHandler {
 		return response;
 	}
 
-	@ExceptionHandler({
-			DataAccessException.class
-	})
+	@ExceptionHandler({ DataAccessException.class })
 	public ProblemDetail handleJpaExceptions(Exception ex, WebRequest request) {
-		logger.error("JPA Exception: ", ex);
+		logger.debug("JPA Exception: ", ex);
 
 		var response = ProblemDetail
 				.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -67,7 +63,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler({ Exception.class })
 	public ProblemDetail handleGenericExceptions(Exception ex, WebRequest request) {
-		logger.error("Unhandled Generic Exception: ", ex);
+		logger.debug("Unhandled Generic Exception: ", ex);
 
 		var response = ProblemDetail
 				.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -78,12 +74,12 @@ public class GlobalExceptionHandler {
 	}
 
 	private void setWebProperties(ProblemDetail problemDetail, WebRequest request) {
-		problemDetail.setProperty("session", request.getSessionId());
-		problemDetail.setProperty("remote", request.getRemoteUser());
-		problemDetail.setProperty("principal", request.getUserPrincipal());
-		problemDetail.setProperty("secure", request.isSecure());
-		problemDetail.setProperty("locale", request.getLocale());
-		problemDetail.setProperty("context", request.getContextPath());
+		problemDetail.setProperty(ExceptionWebAttributeType.SESSION.getNameInLowerCase(), request.getSessionId());
+		problemDetail.setProperty(ExceptionWebAttributeType.REMOTE.getNameInLowerCase(), request.getRemoteUser());
+		problemDetail.setProperty(ExceptionWebAttributeType.PRINCIPAL.getNameInLowerCase(), request.getUserPrincipal());
+		problemDetail.setProperty(ExceptionWebAttributeType.SECURE.getNameInLowerCase(), request.isSecure());
+		problemDetail.setProperty(ExceptionWebAttributeType.LOCALE.getNameInLowerCase(), request.getLocale());
+		problemDetail.setProperty(ExceptionWebAttributeType.CONTEXT.getNameInLowerCase(), request.getContextPath());
 
 		var headers = request.getHeaderNames();
 		while (headers.hasNext()) {
@@ -91,6 +87,6 @@ public class GlobalExceptionHandler {
 			headers.next();
 		}
 
-		problemDetail.setProperty("timestamp", LocalDateTime.now());
+		problemDetail.setProperty(ExceptionWebAttributeType.TIMESTAMP.getNameInLowerCase(), LocalDateTime.now());
 	}
 }

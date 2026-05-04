@@ -9,16 +9,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
+import com.web2.safia.commit.api.event.SystemCommitOcurred;
 import com.web2.safia.shared.base.BaseService;
 import com.web2.safia.shared.entity.CommitType;
 import com.web2.safia.shared.entity.Employee;
 import com.web2.safia.shared.entity.Task;
 import com.web2.safia.shared.entity.Work;
 import com.web2.safia.shared.exception.DomainException;
-import com.web2.safia.work.api.dto.BriefWorkResponseDto;
-import com.web2.safia.work.api.dto.CreateWorkRequestDto;
-import com.web2.safia.work.api.event.WorkFinishedEvent;
+import com.web2.safia.work.api.dto.BriefWorkResponse;
+import com.web2.safia.work.api.dto.CreateWorkRequest;
+import com.web2.safia.work.api.event.WorkFinished;
 
 @Service
 public class WorkService extends BaseService {
@@ -34,49 +34,49 @@ public class WorkService extends BaseService {
 		this.workRepository = workRepository;
 	}
 
-	public Page<BriefWorkResponseDto> getAll(Pageable pageable) {
+	public Page<BriefWorkResponse> getAll(Pageable pageable) {
 		return workRepository
 				.findAll(pageable)
-				.map(BriefWorkResponseDto::new);
+				.map(BriefWorkResponse::new);
 	}
 
-	public Page<BriefWorkResponseDto> getAllByIssuer(Pageable pageable, UUID issuerId) {
+	public Page<BriefWorkResponse> getAllByIssuer(Pageable pageable, UUID issuerId) {
 		return workRepository
 				.findAllByIssuerId(pageable, issuerId)
-				.map(BriefWorkResponseDto::new);
+				.map(BriefWorkResponse::new);
 	}
 
-	public BriefWorkResponseDto create(CreateWorkRequestDto requestDto, UUID issuerId) {
-		var work = new Work(requestDto);
+	public BriefWorkResponse create(CreateWorkRequest request, UUID issuerId) {
+		var work = new Work(request);
 
-		work.setTask(new Task(requestDto.taskId()));
+		work.setTask(new Task(request.taskId()));
 
 		var issuer = new Employee(issuerId);
-		
+
 		work.setEmployee(issuer);
 		workRepository.save(work);
-		logger.info("Criado trabalho '{}' novo por '{}", work.getDescription(), issuer.getEmail());
+		logger.debug("New Work '{}' created by '{}", work.getDescription(), issuer.getEmail());
 
 		eventPublisher.publishEvent(
-				new SystemCommitOcurredEvent(
-						String.format("Criado trabalho '%s' novo", work.getDescription()),
+				new SystemCommitOcurred(
+						String.format("New Work '%s' created", work.getDescription()),
 						CommitType.CREATE,
 						issuer));
 
-		return new BriefWorkResponseDto(work);
+		return new BriefWorkResponse(work);
 	}
 
-	public void finish(UUID id) {
+	public void finish(UUID id, UUID issuerId) {
 		var work = new Work(id);
 
 		if (work.isFinished()) {
-			logger.error("");
+			logger.debug("");
 			throw new DomainException("");
 		}
 
 		work.finish();
 		workRepository.save(work);
 
-		eventPublisher.publishEvent(new WorkFinishedEvent(id));
+		eventPublisher.publishEvent(new WorkFinished(id, issuerId));
 	}
 }

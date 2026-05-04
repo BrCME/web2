@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import com.web2.safia.shared.entity.Employee;
 
-public record SignUpUserResponseDto(UUID id, String username) {
-	public SignUpUserResponseDto(Employee employee) {
+public record SignUpUserResponse(UUID id, String username) {
+	public SignUpUserResponse(Employee employee) {
 		this(employee.getId(), employee.getEmail());
 	}
 }

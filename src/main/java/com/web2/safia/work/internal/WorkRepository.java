@@ -13,16 +13,14 @@ import com.web2.safia.shared.entity.Work;
 
 public interface WorkRepository extends JpaRepository<Work, UUID> {
 	@NativeQuery("SELECT w.* " +
-		"FROM work w " +
-		"INNER JOIN employee e ON w.creator_id = e.id " +
-		"WHERE e.id = :issuerId " +
-		"GROUP BY w.created_at 'ASC'"
-	)
+			"FROM work w " +
+			"INNER JOIN employee e ON w.creator_id = e.id " +
+			"WHERE e.id = :issuerId " +
+			"GROUP BY w.created_at 'ASC'")
 	Page<Work> findAllByIssuerId(Pageable pageable, UUID issuerId);
 
-	@NativeQuery(
-		"SELECT w FROM work w " +
-		"INNER JOIN employee e ON e.id = w.employee_id " +
-		"WHERE e.id = :issuerId")
+	@NativeQuery("SELECT w FROM work w " +
+			"INNER JOIN employee e ON e.id = w.employee_id " +
+			"WHERE e.id = :issuerId")
 	Set<Work> findByIssuerId(@Param("employeeId") UUID issuerId);
 }

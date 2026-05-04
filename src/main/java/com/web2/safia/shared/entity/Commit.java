@@ -1,12 +1,9 @@
 package com.web2.safia.shared.entity;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 
-import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
+import com.web2.safia.commit.api.event.SystemCommitOcurred;
 import com.web2.safia.shared.base.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -32,15 +29,13 @@ public class Commit extends BaseEntity {
         super();
     }
 
-    public Commit(
-            String description,
-            CommitType type) {
-
+    public Commit(String description, CommitType type) {
+        super();
         this.description = description;
         this.type = type;
     }
 
-    public Commit(SystemCommitOcurredEvent event) {
+    public Commit(SystemCommitOcurred event) {
         this.description = event.description();
         this.type = event.type();
         this.creator = event.creator();
@@ -51,9 +46,7 @@ public class Commit extends BaseEntity {
         return description;
     }
 
-    public void setDescription(
-            @Valid @NotBlank(message = "Description cannot be blank") String description) {
-
+    public void setDescription(@Valid @NotBlank(message = "Description cannot be blank") String description) {
         this.description = description;
     }
 

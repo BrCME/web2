@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web2.safia.commit.api.dto.CommitResponseDto;
+import com.web2.safia.commit.api.dto.CommitResponse;
 import com.web2.safia.commit.internal.CommitService;
 
 @RestController
@@ -20,7 +20,7 @@ public class CommitController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<CommitResponseDto>> getAll(Pageable pageable) {
+	public ResponseEntity<Page<CommitResponse>> getAll(Pageable pageable) {
 		return ResponseEntity.ok(commitService.getAll(pageable));
 	}
 }

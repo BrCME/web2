@@ -5,7 +5,7 @@ import java.util.UUID;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateWorkRequestDto(
+public record CreateWorkRequest(
 		@NotBlank(message = "Description is required") String description,
 		@NotNull(message = "Task Id is required") UUID taskId) {
 }

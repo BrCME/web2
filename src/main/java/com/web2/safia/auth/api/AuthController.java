@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web2.safia.auth.api.dto.SignInUserRequestDto;
-import com.web2.safia.auth.api.dto.SignUpUserRequestDto;
+import com.web2.safia.auth.api.dto.SignInUserRequest;
+import com.web2.safia.auth.api.dto.SignUpUserRequest;
 import com.web2.safia.auth.internal.AuthService;
 
 import jakarta.validation.Valid;
@@ -29,16 +29,16 @@ public class AuthController {
 	}
 
 	@PostMapping("/sign-up")
-	public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpUserRequestDto requestDto) {
-		logger.info("User trying to sign up: {}", requestDto);
-		var response = authService.signUp(requestDto);
+	public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpUserRequest request) {
+		logger.info("User trying to sign up: {}", request);
+		var response = authService.signUp(request);
 		return ResponseEntity.created(URI.create(response.username())).build();
 	}
 
 	@PostMapping("/sign-in")
-	public ResponseEntity<Void> signIn(@Valid @RequestBody SignInUserRequestDto requestDto) {
-		logger.info("User trying to sign in: {}", requestDto);
-		authService.signIn(requestDto);
+	public ResponseEntity<Void> signIn(@Valid @RequestBody SignInUserRequest request) {
+		logger.info("User trying to sign in: {}", request);
+		authService.signIn(request);
 		return ResponseEntity.noContent().build();
 	}
 

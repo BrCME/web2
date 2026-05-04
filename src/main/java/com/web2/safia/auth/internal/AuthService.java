@@ -1,7 +1,6 @@
 package com.web2.safia.auth.internal;
 
 import java.util.Set;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,15 +14,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.web2.safia.auth.api.RoleType;
-import com.web2.safia.auth.api.dto.SignInUserRequestDto;
-import com.web2.safia.auth.api.dto.SignUpUserRequestDto;
-import com.web2.safia.auth.api.dto.SignUpUserResponseDto;
-import com.web2.safia.auth.api.event.UserCreatedEvent;
-import com.web2.safia.commit.api.event.SystemCommitOcurredEvent;
+import com.web2.safia.auth.api.dto.SignInUserRequest;
+import com.web2.safia.auth.api.dto.SignUpUserRequest;
+import com.web2.safia.auth.api.dto.SignUpUserResponse;
+import com.web2.safia.auth.api.event.UserCreated;
+import com.web2.safia.commit.api.event.SystemCommitOcurred;
 import com.web2.safia.shared.base.BaseService;
 import com.web2.safia.shared.entity.CommitType;
 import com.web2.safia.shared.entity.Employee;
+import com.web2.safia.shared.entity.RoleType;
 
 @Service
 public class AuthService extends BaseService implements UserDetailsService {
@@ -51,14 +50,14 @@ public class AuthService extends BaseService implements UserDetailsService {
 		return authRepository
 				.findUserByUsername(username)
 				.orElseThrow(() -> {
-					logger.error("User with username '{}' not found", username);
+					logger.debug("User with username '{}' not found", username);
 					throw new UsernameNotFoundException(String.format("User with username '%s' not found", username));
 				});
 	}
 
-	public SignUpUserResponseDto signUp(SignUpUserRequestDto requestDto) {
-		var encodedPassword = passwordEncoder.encode(requestDto.password().concat(pepper));
-		var user = new Employee(requestDto, encodedPassword);
+	public SignUpUserResponse signUp(SignUpUserRequest request) {
+		var encodedPassword = passwordEncoder.encode(request.password().concat(pepper));
+		var user = new Employee(request, encodedPassword);
 
 		var roles = authRepository
 				.findAllRolesByName(Set.of(RoleType.EMPLOYEE.name(), RoleType.NEWCOMER.name()));
@@ -69,31 +68,28 @@ public class AuthService extends BaseService implements UserDetailsService {
 
 		authRepository.save(user);
 
-		var newUser = new SignUpUserResponseDto(user);
+		var newUser = new SignUpUserResponse(user);
 
 		eventPublisher.publishEvent(
-				new SystemCommitOcurredEvent(
+				new SystemCommitOcurred(
 						String.format("User created '%s'", newUser.username()),
 						CommitType.CREATE,
 						user));
 
 		eventPublisher
-				.publishEvent(new UserCreatedEvent(UUID.randomUUID(), requestDto.email()));
+				.publishEvent(new UserCreated(user.getId(), user.getEmail()));
 
 		return newUser;
 	}
 
-	public void signIn(SignInUserRequestDto requestDto) {
+	public void signIn(SignInUserRequest request) {
 		authRepository
-				.findUserByUsername(requestDto.username())
-				.filter(employee -> passwordEncoder.matches(requestDto.password().concat(pepper),
+				.findUserByUsername(request.username())
+				.filter(employee -> passwordEncoder.matches(request.password().concat(pepper),
 						employee.getPassword()))
 				.orElseThrow(() -> {
-					logger.error("Invalid user credentials");
+					logger.debug("Invalid user credentials");
 					throw new UsernameNotFoundException("Invalid user credentials");
 				});
-
-		eventPublisher
-				.publishEvent(new UserCreatedEvent(UUID.randomUUID(), requestDto.username()));
 	}
 }

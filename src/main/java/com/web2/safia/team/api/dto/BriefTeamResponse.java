@@ -4,25 +4,25 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import com.web2.safia.employee.api.dto.BriefEmployeeResponseDto;
-import com.web2.safia.project.api.dto.BriefProjectResponseDto;
+import com.web2.safia.employee.api.dto.BriefEmployeeResponse;
+import com.web2.safia.project.api.dto.BriefProjectResponse;
 import com.web2.safia.shared.entity.Team;
 
-public record BriefTeamResponseDto(
+public record BriefTeamResponse(
 		UUID id,
-		BriefEmployeeResponseDto creator,
+		BriefEmployeeResponse creator,
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt,
 		LocalDateTime deletedAt,
 		String name,
 		String description,
-		List<BriefEmployeeResponseDto> employees,
-		List<BriefProjectResponseDto> projects) {
+		List<BriefEmployeeResponse> employees,
+		List<BriefProjectResponse> projects) {
 
-	public BriefTeamResponseDto(Team team) {
+	public BriefTeamResponse(Team team) {
 		this(
 				team.getId(),
-				new BriefEmployeeResponseDto(team.getCreator()),
+				new BriefEmployeeResponse(team.getCreator()),
 				team.getCreatedAt(),
 				team.getUpdatedAt(),
 				team.getDeletedAt(),
@@ -30,11 +30,11 @@ public record BriefTeamResponseDto(
 				team.getDescription(),
 				team.getAllEmployees()
 						.stream()
-						.map(BriefEmployeeResponseDto::new)
+						.map(BriefEmployeeResponse::new)
 						.toList(),
 				team.getAllProjects()
 						.stream()
-						.map(BriefProjectResponseDto::new)
+						.map(BriefProjectResponse::new)
 						.toList());
 	}
 }

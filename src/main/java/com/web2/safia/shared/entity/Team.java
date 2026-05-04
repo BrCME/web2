@@ -1,12 +1,11 @@
 package com.web2.safia.shared.entity;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 import com.web2.safia.shared.base.BaseEntity;
-import com.web2.safia.team.api.dto.CreateTeamRequestDto;
+import com.web2.safia.team.api.dto.CreateTeamRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -45,10 +44,10 @@ public class Team extends BaseEntity {
 		super(id);
 	}
 
-	public Team(CreateTeamRequestDto requestDto) {
+	public Team(CreateTeamRequest request) {
 		super();
-		this.name = requestDto.name();
-		this.description = requestDto.description();
+		this.name = request.name();
+		this.description = request.description();
 	}
 
 	public String getName() {
@@ -70,7 +69,7 @@ public class Team extends BaseEntity {
 	public Set<Employee> getAllEmployees() {
 		return Set.copyOf(employees);
 	}
-	
+
 	public boolean addEmployee(Employee employee) {
 		return employees.add(employee);
 	}

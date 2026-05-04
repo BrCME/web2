@@ -3,28 +3,28 @@ package com.web2.safia.project.api.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.web2.safia.employee.api.dto.BriefEmployeeResponseDto;
+import com.web2.safia.employee.api.dto.BriefEmployeeResponse;
 import com.web2.safia.shared.entity.Project;
 
-public record BriefProjectResponseDto(
+public record BriefProjectResponse(
 		UUID id,
-		BriefEmployeeResponseDto creator,
+		BriefEmployeeResponse creator,
 		LocalDateTime createdAt,
 		String name,
 		String description,
-		BriefEmployeeResponseDto manager) {
+		BriefEmployeeResponse manager) {
 
-	public BriefProjectResponseDto(Project project) {
+	public BriefProjectResponse(Project project) {
 		this(
 				project.getId(),
-				new BriefEmployeeResponseDto(project.getCreator()),
+				new BriefEmployeeResponse(project.getCreator()),
 				project.getCreatedAt(),
 				project.getName(),
 				project.getDescription(),
-				new BriefEmployeeResponseDto(project.getManager()));
+				new BriefEmployeeResponse(project.getManager()));
 	}
 
-	public BriefProjectResponseDto(ProjectResponseDto project) {
+	public BriefProjectResponse(ProjectResponse project) {
 		this(
 				project.id(),
 				project.creator(),

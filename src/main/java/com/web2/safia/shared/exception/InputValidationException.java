@@ -17,7 +17,12 @@ public class InputValidationException extends RuntimeException {
 		super(message, cause);
 	}
 
-	protected InputValidationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	protected InputValidationException(
+			String message,
+			Throwable cause,
+			boolean enableSuppression,
+			boolean writableStackTrace) {
+
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 }

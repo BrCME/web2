@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web2.safia.project.api.dto.CreateProjectRequestDto;
-import com.web2.safia.project.api.dto.ProjectResponseDto;
-import com.web2.safia.project.api.dto.UpdateProjectRequestDto;
+import com.web2.safia.project.api.dto.CreateProjectRequest;
+import com.web2.safia.project.api.dto.ProjectResponse;
+import com.web2.safia.project.api.dto.UpdateProjectRequest;
 import com.web2.safia.project.internal.ProjectService;
 
 import jakarta.validation.Valid;
@@ -33,18 +33,18 @@ public class ProjectController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<ProjectResponseDto>> getAll(Pageable pageable) {
+	public ResponseEntity<Page<ProjectResponse>> getAll(Pageable pageable) {
 		return ResponseEntity.ok(projectService.getAll(pageable));
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<Page<ProjectResponseDto>> getAllByIssuer(Pageable pageable) {
+	public ResponseEntity<Page<ProjectResponse>> getAllByIssuer(Pageable pageable) {
 		return ResponseEntity.ok(projectService.getAllByIssuer(pageable, UUID.randomUUID()));
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> create(@Valid @RequestBody CreateProjectRequestDto requestDto) {
-		var response = projectService.create(requestDto, UUID.randomUUID());
+	public ResponseEntity<Void> create(@Valid @RequestBody CreateProjectRequest request) {
+		var response = projectService.create(request, UUID.randomUUID());
 		return ResponseEntity.created(URI.create(response.id().toString())).build();
 	}
 
@@ -55,15 +55,15 @@ public class ProjectController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ProjectResponseDto> updateById(
+	public ResponseEntity<ProjectResponse> updateById(
 			@PathVariable UUID id,
-			@Valid @RequestBody UpdateProjectRequestDto requestDto) {
+			@Valid @RequestBody UpdateProjectRequest request) {
 
-		return ResponseEntity.ok(projectService.updateById(id, requestDto, UUID.randomUUID()));
+		return ResponseEntity.ok(projectService.updateById(id, request, UUID.randomUUID()));
 	}
 
 	@PatchMapping("/{id}/add-employee/{employeeId}")
-	public ResponseEntity<ProjectResponseDto> addEmployee(
+	public ResponseEntity<ProjectResponse> addEmployee(
 			@PathVariable UUID id,
 			@PathVariable UUID employeeId) {
 
@@ -71,7 +71,7 @@ public class ProjectController {
 	}
 
 	@PatchMapping("/{id}/remove-employee/{employeeId}")
-	public ResponseEntity<ProjectResponseDto> removeEmployee(
+	public ResponseEntity<ProjectResponse> removeEmployee(
 			@PathVariable UUID id,
 			@PathVariable UUID employeeId) {
 

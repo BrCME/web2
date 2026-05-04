@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-import com.web2.safia.work.api.dto.BriefWorkResponseDto;
-import com.web2.safia.work.api.dto.CreateWorkRequestDto;
+import com.web2.safia.work.api.dto.BriefWorkResponse;
+import com.web2.safia.work.api.dto.CreateWorkRequest;
 import com.web2.safia.work.internal.WorkService;
 
 import jakarta.validation.Valid;
@@ -31,19 +31,19 @@ public class WorkController {
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<Page<BriefWorkResponseDto>> getMe(Pageable pageable, WebRequest request) {
+	public ResponseEntity<Page<BriefWorkResponse>> getMe(Pageable pageable, WebRequest request) {
 		return ResponseEntity.ok(workService.getAllByIssuer(pageable, UUID.randomUUID()));
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> create(@Valid @RequestBody CreateWorkRequestDto requestDto) {
-		var response = workService.create(requestDto, UUID.randomUUID());
+	public ResponseEntity<Void> create(@Valid @RequestBody CreateWorkRequest request) {
+		var response = workService.create(request, UUID.randomUUID());
 		return ResponseEntity.created(URI.create(response.id().toString())).build();
 	}
 
 	@PatchMapping("/{id}/finish")
 	public ResponseEntity<Void> finish(@PathVariable UUID id) {
-		workService.finish(id);
+		workService.finish(id, UUID.randomUUID());
 		return ResponseEntity.noContent().build();
 	}
 }

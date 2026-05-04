@@ -1,7 +1,4 @@
-@org.springframework.modulith.ApplicationModule(
-	type = Type.OPEN,
-	displayName = "shared.exception"
-)
+@org.springframework.modulith.ApplicationModule(type = Type.OPEN, displayName = "shared.exception")
 package com.web2.safia.shared.exception;
 
 import org.springframework.modulith.ApplicationModule.Type;

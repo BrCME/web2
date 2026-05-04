@@ -1,12 +1,11 @@
 package com.web2.safia.shared.entity;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.web2.safia.project.api.dto.CreateProjectRequestDto;
+import com.web2.safia.project.api.dto.CreateProjectRequest;
 import com.web2.safia.shared.base.BaseEntity;
 import com.web2.safia.task.internal.TaskStatus;
 
@@ -58,10 +57,10 @@ public class Project extends BaseEntity {
 		super(id);
 	}
 
-	public Project(CreateProjectRequestDto requestDto) {
+	public Project(CreateProjectRequest request) {
 		super();
-		this.name = requestDto.name();
-		this.description = requestDto.description();
+		this.name = request.name();
+		this.description = request.description();
 	}
 
 	public String getName() {
@@ -84,7 +83,7 @@ public class Project extends BaseEntity {
 		return team;
 	}
 
-	public void setTeam(@Valid @NotNull(message = "Team cannot be null") Team team) {
+	public void joinTeam(@Valid @NotNull(message = "Team cannot be null") Team team) {
 		this.team = team;
 	}
 

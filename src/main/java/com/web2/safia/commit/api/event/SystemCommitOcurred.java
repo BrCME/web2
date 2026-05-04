@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 import com.web2.safia.shared.entity.CommitType;
 import com.web2.safia.shared.entity.Employee;
 
-public record SystemCommitOcurredEvent(
+public record SystemCommitOcurred(
 		String description,
 		CommitType type,
 		Employee creator,
 		LocalDateTime createdAt) {
 
-	public SystemCommitOcurredEvent(String description, CommitType type, Employee creator) {
+	public SystemCommitOcurred(String description, CommitType type, Employee creator) {
 		this(description, type, creator, LocalDateTime.now());
 	}
 }

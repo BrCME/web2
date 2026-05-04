@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.web2.safia.work.api.dto.CreateWorkRequestDto;
+import com.web2.safia.work.api.dto.CreateWorkRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,15 +45,17 @@ public class Work implements Serializable {
 	private LocalDateTime endedAt;
 
 	public Work() {
+		this.id = UUID.randomUUID();
 		this.startedAt = LocalDateTime.now();
 	}
 
 	public Work(UUID id) {
-		setId(id);
+		this.id = id;
 	}
 
-	public Work(CreateWorkRequestDto requestDto) {
-		this.description = requestDto.description();
+	public Work(CreateWorkRequest request) {
+		this.id = UUID.randomUUID();
+		this.description = request.description();
 		this.startedAt = LocalDateTime.now();
 	}
 
@@ -69,9 +71,7 @@ public class Work implements Serializable {
 		return description;
 	}
 
-	public void setDescription(
-			@Valid @NotBlank(message = "Description is required") String description) {
-
+	public void setDescription(@Valid @NotBlank(message = "Description is required") String description) {
 		this.description = description;
 	}
 
@@ -79,9 +79,7 @@ public class Work implements Serializable {
 		return employee;
 	}
 
-	public void setEmployee(
-			@Valid @NotNull(message = "Employee is required") Employee employee) {
-
+	public void setEmployee(@Valid @NotNull(message = "Employee is required") Employee employee) {
 		this.employee = employee;
 	}
 
@@ -89,9 +87,7 @@ public class Work implements Serializable {
 		return task;
 	}
 
-	public void setTask(
-			@Valid @NotNull(message = "Task is required") Task task) {
-
+	public void setTask(@Valid @NotNull(message = "Task is required") Task task) {
 		this.task = task;
 	}
 
@@ -99,9 +95,7 @@ public class Work implements Serializable {
 		return startedAt;
 	}
 
-	public void setStartedAt(
-			@Valid @NotNull(message = "Started At is required") LocalDateTime startedAt) {
-
+	public void setStartedAt(@Valid @NotNull(message = "Started At is required") LocalDateTime startedAt) {
 		this.startedAt = startedAt;
 	}
 
@@ -109,9 +103,7 @@ public class Work implements Serializable {
 		return endedAt;
 	}
 
-	public void setEndedAt(
-			@Valid @NotNull(message = "Ended At is required") LocalDateTime endedAt) {
-
+	public void setEndedAt(@Valid @NotNull(message = "Ended At is required") LocalDateTime endedAt) {
 		this.endedAt = endedAt;
 	}
 

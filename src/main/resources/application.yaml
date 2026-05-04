@@ -90,6 +90,9 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: "30s"
 
+  main:
+    keep-alive: true
+
   mvc:
     problemdetails:
       enabled: true

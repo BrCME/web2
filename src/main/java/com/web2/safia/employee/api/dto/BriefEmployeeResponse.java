@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.web2.safia.shared.entity.Employee;
 
-public record BriefEmployeeResponseDto(
+public record BriefEmployeeResponse(
 		UUID id,
 		String name,
 		String email,
@@ -13,7 +13,7 @@ public record BriefEmployeeResponseDto(
 		String cpf,
 		LocalDate birthDate) {
 
-	public BriefEmployeeResponseDto(Employee employee) {
+	public BriefEmployeeResponse(Employee employee) {
 		this(
 				employee.getId(),
 				employee.getName(),
@@ -23,7 +23,7 @@ public record BriefEmployeeResponseDto(
 				employee.getBirthDate());
 	}
 
-	public BriefEmployeeResponseDto(EmployeeResponseDto responseDto) {
+	public BriefEmployeeResponse(EmployeeResponse responseDto) {
 		this(
 				responseDto.id(),
 				responseDto.name(),

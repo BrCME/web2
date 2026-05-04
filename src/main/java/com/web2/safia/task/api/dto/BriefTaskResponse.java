@@ -3,33 +3,33 @@ package com.web2.safia.task.api.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.web2.safia.employee.api.dto.BriefEmployeeResponseDto;
-import com.web2.safia.project.api.dto.BriefProjectResponseDto;
+import com.web2.safia.employee.api.dto.BriefEmployeeResponse;
+import com.web2.safia.project.api.dto.BriefProjectResponse;
 import com.web2.safia.shared.entity.Task;
 
-public record BriefTaskResponseDto(
+public record BriefTaskResponse(
 		UUID id,
-		BriefEmployeeResponseDto creator,
+		BriefEmployeeResponse creator,
 		LocalDateTime createdAt,
 		String name,
 		String description,
 		String status,
-		BriefProjectResponseDto project,
+		BriefProjectResponse project,
 		LocalDateTime deadLine) {
 
-	public BriefTaskResponseDto(Task task) {
+	public BriefTaskResponse(Task task) {
 		this(
 				task.getId(),
-				new BriefEmployeeResponseDto(task.getCreator()),
+				new BriefEmployeeResponse(task.getCreator()),
 				task.getCreatedAt(),
 				task.getName(),
 				task.getDescription(),
 				task.getStatus().name(),
-				new BriefProjectResponseDto(task.getProject()),
+				new BriefProjectResponse(task.getProject()),
 				task.getDeadLine());
 	}
 
-	public BriefTaskResponseDto(TaskResponseDto task) {
+	public BriefTaskResponse(TaskResponse task) {
 		this(
 				task.id(),
 				task.creator(),

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateTaskRequestDto(
+public record CreateTaskRequest(
 		@NotBlank(message = "Name cannot be blank") String name,
 		@NotBlank(message = "Description cannot be blank") String description,
 		@NotNull(message = "Project Id is required") UUID projectId,

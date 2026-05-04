@@ -10,7 +10,7 @@ import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 
 import com.web2.safia.shared.base.BaseEntity;
-import com.web2.safia.task.api.dto.CreateTaskRequestDto;
+import com.web2.safia.task.api.dto.CreateTaskRequest;
 import com.web2.safia.task.internal.TaskStatus;
 
 import jakarta.persistence.Column;
@@ -59,20 +59,18 @@ public class Task extends BaseEntity {
 		super(id);
 	}
 
-	public Task(CreateTaskRequestDto requestDto) {
+	public Task(CreateTaskRequest request) {
 		super();
-		this.name = requestDto.name();
-		this.description = requestDto.description();
-		this.deadLine = requestDto.deadLine();
+		this.name = request.name();
+		this.description = request.description();
+		this.deadLine = request.deadLine();
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(
-			@Valid @NotBlank(message = "Name cannot be blank") String name) {
-
+	public void setName(@Valid @NotBlank(message = "Name cannot be blank") String name) {
 		this.name = name;
 	}
 
@@ -80,9 +78,7 @@ public class Task extends BaseEntity {
 		return description;
 	}
 
-	public void setDescription(
-			@Valid @NotBlank(message = "Description cannot be blank") String description) {
-
+	public void setDescription(@Valid @NotBlank(message = "Description cannot be blank") String description) {
 		this.description = description;
 	}
 
@@ -98,9 +94,7 @@ public class Task extends BaseEntity {
 		return project;
 	}
 
-	public void setProject(
-			@Valid @NotNull(message = "Project cannot be null") Project project) {
-
+	public void setProject(@Valid @NotNull(message = "Project cannot be null") Project project) {
 		this.project = project;
 	}
 
@@ -108,9 +102,7 @@ public class Task extends BaseEntity {
 		return deadLine;
 	}
 
-	public void setDeadLine(
-			@Valid @Future(message = "Deadline must be in future") LocalDateTime deadLine) {
-
+	public void setDeadLine(@Valid @Future(message = "Deadline must be in future") LocalDateTime deadLine) {
 		this.deadLine = deadLine;
 	}
 

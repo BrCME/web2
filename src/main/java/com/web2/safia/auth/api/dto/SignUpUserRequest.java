@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
-public record SignUpUserRequestDto(
+public record SignUpUserRequest(
 		@NotBlank(message = "Name cannot be blank") String name,
 		@Email(message = "Invalid email format") String email,
 		@Size(max = 20, min = 8, message = "Password must have between 8 and 20 characters") String password,

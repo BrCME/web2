@@ -34,7 +34,8 @@ public class CacheConfig {
 		return RedisCacheConfiguration
 				.defaultCacheConfig()
 				.entryTtl(Duration.ofMinutes(5))
-				.serializeValuesWith(SerializationPair.fromSerializer(new GenericJacksonJsonRedisSerializer(new ObjectMapper())))
+				.serializeValuesWith(
+						SerializationPair.fromSerializer(new GenericJacksonJsonRedisSerializer(new ObjectMapper())))
 				.disableCachingNullValues();
 	}
 }

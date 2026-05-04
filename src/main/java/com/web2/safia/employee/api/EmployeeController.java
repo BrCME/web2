@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web2.safia.employee.api.dto.EmployeeResponseDto;
+import com.web2.safia.employee.api.dto.EmployeeResponse;
 import com.web2.safia.employee.internal.EmployeeService;
 
 @RestController
@@ -22,12 +22,12 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<EmployeeResponseDto> getMe() {
+	public ResponseEntity<EmployeeResponse> getMe() {
 		return ResponseEntity.ok(employeeService.getById(UUID.randomUUID()));
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<EmployeeResponseDto>> getAll(Pageable pageable) {
+	public ResponseEntity<Page<EmployeeResponse>> getAll(Pageable pageable) {
 		return ResponseEntity.ok(employeeService.getAll(pageable));
 	}
 }

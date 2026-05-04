@@ -27,7 +27,7 @@ public class SafiaApplication {
 				.of(SafiaApplication.class);
 
 		modules.forEach(System.out::println);
-		// modules.detectViolations();
+		modules.detectViolations();
 
 		SpringApplication.run(SafiaApplication.class, args);
 	}

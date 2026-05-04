@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public record CreateProjectRequestDto(
+public record CreateProjectRequest(
 		String name,
 		String description,
 		UUID teamId,
 		Optional<UUID> managerId,
-		List<UUID> employeesId) {}
+		List<UUID> employeesId) {
+}

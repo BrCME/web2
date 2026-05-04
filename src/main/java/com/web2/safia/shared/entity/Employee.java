@@ -12,7 +12,7 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.web2.safia.auth.api.dto.SignUpUserRequestDto;
+import com.web2.safia.auth.api.dto.SignUpUserRequest;
 import com.web2.safia.shared.base.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -82,14 +82,14 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 		super(id);
 	}
 
-	public Employee(SignUpUserRequestDto requestDto, String encodedPassword) {
+	public Employee(SignUpUserRequest request, String encodedPassword) {
 		super();
-		this.name = requestDto.name();
-		this.email = requestDto.email();
+		this.name = request.name();
+		this.email = request.email();
 		this.password = encodedPassword;
-		this.phoneNumber = requestDto.phoneNumber();
-		this.cpf = requestDto.cpf();
-		this.birthDate = requestDto.birthDate();
+		this.phoneNumber = request.phoneNumber();
+		this.cpf = request.cpf();
+		this.birthDate = request.birthDate();
 		this.status = EmployeeStatus.PENDING;
 	}
 
@@ -97,9 +97,7 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 		return name;
 	}
 
-	public void setName(
-			@Valid @NotBlank(message = "Name cannot be blank") String name) {
-
+	public void setName(@Valid @NotBlank(message = "Name cannot be blank") String name) {
 		this.name = name;
 	}
 
@@ -107,9 +105,7 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 		return email;
 	}
 
-	public void setEmail(
-			@Valid @Email(message = "Invalid email") String email) {
-
+	public void setEmail(@Valid @Email(message = "Invalid email") String email) {
 		this.email = email;
 	}
 
@@ -129,7 +125,7 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 	}
 
 	public void setPhoneNumber(
-			@Size(max = 11, min = 11, message = "Phone number must have 11 characters") String phoneNumber) {
+			@Valid @Size(max = 11, min = 11, message = "Phone number must have 11 characters") String phoneNumber) {
 
 		this.phoneNumber = phoneNumber;
 	}
@@ -138,9 +134,7 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 		return cpf;
 	}
 
-	public void setCpf(
-			@Valid @Size(max = 11, min = 11, message = "CPF must have 11 characters") String cpf) {
-
+	public void setCpf(@Valid @Size(max = 11, min = 11, message = "CPF must have 11 characters") String cpf) {
 		this.cpf = cpf;
 	}
 
@@ -148,9 +142,7 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 		return birthDate;
 	}
 
-	public void setBirthDate(
-			@Valid @Past(message = "Birth date must be in past") LocalDate birthDate) {
-
+	public void setBirthDate(@Valid @Past(message = "Birth date must be in past") LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 
@@ -166,11 +158,11 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 		return Set.copyOf(teams);
 	}
 
-	public void addTeam(Team team) {
+	public void joinTeam(Team team) {
 		teams.add(team);
 	}
 
-	public void removeTeam(Team team) {
+	public void exitsTeam(Team team) {
 		teams.remove(team);
 	}
 
@@ -178,11 +170,11 @@ public class Employee extends BaseEntity implements UserDetails, CredentialsCont
 		return Set.copyOf(projects);
 	}
 
-	public void addProject(Project project) {
+	public void joinProject(Project project) {
 		projects.add(project);
 	}
 
-	public void removeProject(Project project) {
+	public void exitsProject(Project project) {
 		projects.remove(project);
 	}
 
