@@ -1,3 +1,11 @@
+custom:
+  security:
+    salt-length: 20
+    hash-length: 44
+    parallelism: 16
+    memory: 32768
+    iterations: 16
+
 logging:
   log4j2:
     config:
