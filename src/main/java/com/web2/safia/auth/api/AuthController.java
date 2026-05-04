@@ -2,8 +2,6 @@ package com.web2.safia.auth.api;
 
 import java.net.URI;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +18,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
-
 	private final AuthService authService;
 
 	public AuthController(AuthService authService) {
@@ -30,14 +26,12 @@ public class AuthController {
 
 	@PostMapping("/sign-up")
 	public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpUserRequest request) {
-		logger.info("User trying to sign up: {}", request);
 		var response = authService.signUp(request);
 		return ResponseEntity.created(URI.create(response.username())).build();
 	}
 
 	@PostMapping("/sign-in")
 	public ResponseEntity<Void> signIn(@Valid @RequestBody SignInUserRequest request) {
-		logger.info("User trying to sign in: {}", request);
 		authService.signIn(request);
 		return ResponseEntity.noContent().build();
 	}

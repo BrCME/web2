@@ -56,6 +56,7 @@ public class AuthService extends BaseService implements UserDetailsService {
 	}
 
 	public SignUpUserResponse signUp(SignUpUserRequest request) {
+		logger.info("User trying to sign up: {}", request);
 		var encodedPassword = passwordEncoder.encode(request.password().concat(pepper));
 		var user = new Employee(request, encodedPassword);
 
@@ -83,7 +84,8 @@ public class AuthService extends BaseService implements UserDetailsService {
 	}
 
 	public void signIn(SignInUserRequest request) {
-		authRepository
+		logger.info("User trying to sign in: {}", request);
+		var user = authRepository
 				.findUserByUsername(request.username())
 				.filter(employee -> passwordEncoder.matches(request.password().concat(pepper),
 						employee.getPassword()))
@@ -91,5 +93,7 @@ public class AuthService extends BaseService implements UserDetailsService {
 					logger.debug("Invalid user credentials");
 					throw new UsernameNotFoundException("Invalid user credentials");
 				});
+		
+		logger.info("User logged id: '{}'", user);
 	}
 }

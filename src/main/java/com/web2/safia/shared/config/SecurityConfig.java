@@ -26,19 +26,19 @@ import com.web2.safia.shared.entity.Employee;
 
 @Configuration
 public class SecurityConfig implements AuditorAware<Employee> {
-	@Value("${security.salt-length:20}")
+	@Value("${custom.security.salt-length:20}")
 	private int securitySaltLength;
 
-	@Value("${security.hash-length:44}")
+	@Value("${custom.security.hash-length:44}")
 	private int securityHashLength;
 
-	@Value("${security.parallelism:16}")
+	@Value("${custom.security.parallelism:16}")
 	private int securityParallelism;
 
-	@Value("${security.memory:16384}")
+	@Value("${custom.security.memory:16384}")
 	private int securityMemory;
 
-	@Value("${security.iterations:16}")
+	@Value("${custom.security.iterations:16}")
 	private int securityIterations;
 
 	private static final String[] WHITE_LIST = { "/**", "/actuator", "/actuator/**", "/api/auth/sign-in",
