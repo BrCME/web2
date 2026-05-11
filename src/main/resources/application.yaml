@@ -5,6 +5,10 @@ custom:
     parallelism: 16
     memory: 32768
     iterations: 16
+  id-generator:
+    name: "SAFIA-API"
+    instance: 1
+    version: "1.0"
 
 logging:
   log4j2:

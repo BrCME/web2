@@ -19,6 +19,7 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 import org.springframework.session.web.http.HttpSessionIdResolver;
 
@@ -41,7 +42,7 @@ public class SecurityConfig implements AuditorAware<Employee> {
 	@Value("${custom.security.iterations:16}")
 	private int securityIterations;
 
-	private static final String[] WHITE_LIST = { "/**", "/actuator", "/actuator/**", "/api/auth/sign-in",
+	private static final String[] WHITE_LIST = { "/actuator", "/actuator/**", "/api/auth/sign-in",
 			"/api/auth/sign-up", "/api/auth/sign-out", "/swagger-ui/index.html" };
 	private static final String[] ADMIN_LIST = { "/api/teams/**", "/api/employees/**", "/api/commits/**",
 			"/api/projects/**", "/api/works/**", "/api/tasks/**" };
@@ -64,6 +65,11 @@ public class SecurityConfig implements AuditorAware<Employee> {
 				// customizer.jwt(Customizer.withDefaults()))
 				.build();
 	}
+
+	// @Bean
+	// JwtDecoder jwtDecoder() {
+	// return NimbusJwtDecoder.withKey(this.key);
+	// }
 
 	@Bean
 	HttpSessionIdResolver sessionIdResolver() {
