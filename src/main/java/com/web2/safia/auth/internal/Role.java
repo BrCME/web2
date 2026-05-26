@@ -1,4 +1,4 @@
-package com.web2.safia.shared.entity;
+package com.web2.safia.auth.internal;
 
 import java.util.UUID;
 
@@ -15,8 +15,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity
-@Table(name = "role", schema = "public")
+@Entity(name = "auth.role")
+@Table(name = "role", schema = "auth")
 public class Role implements GrantedAuthority {
 	private static final long serialVersionUID = 1L;
 
@@ -27,11 +27,15 @@ public class Role implements GrantedAuthority {
 	@JdbcType(value = PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
-	private RoleType type;
+	private Type type;
 
 	public Role() {
 		super();
 	}
+
+	public enum Type {
+	ADMIN, MANAGER, EMPLOYEE, NEWCOMER;
+}
 
 	public UUID getId() {
 		return id;
@@ -41,11 +45,11 @@ public class Role implements GrantedAuthority {
 		this.id = id;
 	}
 
-	public RoleType getType() {
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(RoleType type) {
+	public void setType(Role.Type type) {
 		this.type = type;
 	}
 

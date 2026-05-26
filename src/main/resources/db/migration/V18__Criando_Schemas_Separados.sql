@@ -1,0 +1,15 @@
+CREATE SCHEMA auth AUTHORIZATION user_safia;
+
+CREATE SCHEMA commit AUTHORIZATION user_safia;
+
+CREATE SCHEMA employee AUTHORIZATION user_safia;
+
+CREATE SCHEMA project AUTHORIZATION user_safia;
+
+CREATE SCHEMA report AUTHORIZATION user_safia;
+
+CREATE SCHEMA task AUTHORIZATION user_safia;
+
+CREATE SCHEMA team AUTHORIZATION user_safia;
+
+CREATE SCHEMA work AUTHORIZATION user_safia;
