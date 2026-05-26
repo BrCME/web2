@@ -1,28 +1,28 @@
 package com.web2.safia.auth.internal;
 
-import java.util.UUID;
-
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 import org.springframework.security.core.GrantedAuthority;
 
+import com.web2.safia.shared.vo.RoleId;
+import com.web2.safia.shared.vo.converter.RoleIdConverter;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity(name = "auth.role")
+@Entity(name = "role")
 @Table(name = "role", schema = "auth")
-public class Role implements GrantedAuthority {
+public class Role implements GrantedAuthority  {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	protected UUID id;
+	@Convert(converter = RoleIdConverter.class)
+	private RoleId id;
 
 	@JdbcType(value = PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.STRING)
@@ -37,11 +37,11 @@ public class Role implements GrantedAuthority {
 	ADMIN, MANAGER, EMPLOYEE, NEWCOMER;
 }
 
-	public UUID getId() {
+	public RoleId getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(RoleId id) {
 		this.id = id;
 	}
 

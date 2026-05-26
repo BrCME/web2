@@ -22,8 +22,10 @@ import com.web2.safia.task.api.dto.TaskResponse;
 import com.web2.safia.task.api.dto.UpdateTaskRequest;
 import com.web2.safia.task.internal.TaskService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Task")
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {

@@ -50,10 +50,10 @@ public class RequestInfoFilter implements Filter {
 
 				var httpRequest = (HttpServletRequest) request;
 
-				logger.info("Cookies");
-				for (var cookie : httpRequest.getCookies()) {
-					logger.info("{}: {}", cookie.getName(), cookie.getValue());
-				}
+				// logger.info("Cookies");
+				// for (var cookie : httpRequest.getCookies()) {
+				// 	logger.info("{}: {}", cookie.getName(), cookie.getValue());
+				// }
 
 				logger.info("Auth type: {}", httpRequest.getAuthType());
 

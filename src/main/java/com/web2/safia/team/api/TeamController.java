@@ -21,8 +21,10 @@ import com.web2.safia.team.api.dto.CreateTeamRequest;
 import com.web2.safia.team.api.dto.UpdateTeamRequest;
 import com.web2.safia.team.internal.TeamService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Team")
 @RestController
 @RequestMapping("/api/teams")
 public class TeamController {

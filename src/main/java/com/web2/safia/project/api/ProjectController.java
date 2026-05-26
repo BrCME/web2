@@ -21,8 +21,10 @@ import com.web2.safia.project.api.dto.ProjectResponse;
 import com.web2.safia.project.api.dto.UpdateProjectRequest;
 import com.web2.safia.project.internal.ProjectService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Project")
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {

@@ -1,11 +1,12 @@
 package com.web2.safia.auth.internal;
 
 import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.web2.safia.auth.api.dto.SignInUserRequest;
 import com.web2.safia.auth.api.dto.SignUpUserRequest;
 import com.web2.safia.auth.api.dto.SignUpUserResponse;
+import com.web2.safia.auth.api.dto.UserRoleResponse;
 import com.web2.safia.auth.api.event.UserCreated;
+import com.web2.safia.auth.api.event.UserLoggedIn;
+import com.web2.safia.auth.api.event.UserLoggedOut;
 
 @Service
 public class AuthService implements UserDetailsService {
@@ -80,7 +84,7 @@ public class AuthService implements UserDetailsService {
 
 	public void signIn(SignInUserRequest requestBody) {
 		logger.info("User trying to sign in: {}", requestBody);
-		authRepository
+		var user = authRepository
 				.findUserByUsername(requestBody.username())
 				.filter(employee -> passwordEncoder.matches(requestBody.password().concat(pepper),
 						employee.getPassword()))
@@ -88,5 +92,31 @@ public class AuthService implements UserDetailsService {
 					logger.debug("Invalid user credentials");
 					throw new UsernameNotFoundException("Invalid user credentials");
 				});
+
+		this.eventPublisher
+				.publishEvent(new UserLoggedIn(user.getId(), requestBody.username()));
+	}
+
+	public void signOut() {
+		logger.info("User trying to sign out: ");
+		var user = authRepository
+				.findUserByUsername(pepper)
+				.orElseThrow(() -> {
+					logger.debug("User with username '{}' not found", pepper);
+					throw new UsernameNotFoundException(String.format("User with username '%s' not found", pepper));
+				});
+
+		this.eventPublisher
+				.publishEvent(new UserLoggedOut(user.getId(), user.getUsername()));
+	}
+
+	public Page<UserRoleResponse> getRoles() {
+		var roles = authRepository
+				.findAllRoles()
+				.stream()
+				.map(UserRoleResponse::new)
+				.toList();
+
+		return new PageImpl<>(roles);
 	}
 }

@@ -19,8 +19,10 @@ import com.web2.safia.work.api.dto.BriefWorkResponse;
 import com.web2.safia.work.api.dto.CreateWorkRequest;
 import com.web2.safia.work.internal.WorkService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Work")
 @RestController
 @RequestMapping("/api/works")
 public class WorkController {

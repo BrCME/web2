@@ -14,8 +14,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.web2.safia.auth.api.dto.SignUpUserRequest;
+import com.web2.safia.shared.vo.UserId;
+import com.web2.safia.shared.vo.Username;
+import com.web2.safia.shared.vo.converter.UserIdConverter;
+import com.web2.safia.shared.vo.converter.UsernameConverter;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,16 +34,18 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
-@Entity(name = "auth.user")
+@Entity(name = "user")
 @Table(name = "user", schema = "auth")
 public class User implements UserDetails, CredentialsContainer {
-	protected static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Convert(converter = UserIdConverter.class)
 	private UserId id;
 
 	@Column(name = "username", nullable = false, unique = true)
-	private String username;
+	@Convert(converter = UsernameConverter.class)
+	private Username username;
 
 	@Column(name = "password", nullable = false)
 	private String password;
@@ -73,7 +80,7 @@ public class User implements UserDetails, CredentialsContainer {
 	}
 
 	public User(SignUpUserRequest requestBody, String encodedPassword) {
-		this.username = requestBody.email();
+		this.username = new Username(requestBody.email());
 		this.password = encodedPassword;
 		this.status = Status.PENDING;
 		this.createdAt = LocalDateTime.now();
@@ -93,11 +100,11 @@ public class User implements UserDetails, CredentialsContainer {
 
 	@Override
 	public String getUsername() {
-		return username;
+		return username.value();
 	}
 
 	public void setUsername(@Valid @Email(message = "Invalid username") String username) {
-		this.username = username;
+		this.username = new Username(username);
 	}
 
 	@Override

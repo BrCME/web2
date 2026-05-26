@@ -3,100 +3,34 @@ package com.web2.safia.shared.util;
 import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import com.web2.safia.shared.entity.CommitId;
-import com.web2.safia.shared.entity.EmployeeId;
-import com.web2.safia.shared.entity.ProjectId;
-import com.web2.safia.shared.entity.RoleId;
-import com.web2.safia.shared.entity.TaskId;
-import com.web2.safia.shared.entity.TeamId;
-import com.web2.safia.shared.entity.WorkId;
-
+@Component
 public class CustomIdUtils {
+	private static String customName;
+	private static Integer customInstance;
+	private static String customVersion;
+
 	@Value("${custom.id-generator.name:Custom-Name}")
-	private String customName;
+	private void setCustomName(String customName) {
+		this.customName = customName;
+	}
 
 	@Value("${custom.id-generator.instance:0}")
-	private Integer customInstance;
+	private void setCustomInstance(Integer customInstance) {
+		this.customInstance = customInstance;
+	}
 
 	@Value("${custom.id-generator.version:0.0}")
-	private String customVersion;
-
-	private static CustomIdUtils instance;
-
-	private CustomIdUtils() {
+	private void setCustomVersion(String customVersion) {
+		this.customVersion = customVersion;
 	}
 
-	public static synchronized CustomIdUtils getInstance() {
-		if (instance == null) {
-			instance = new CustomIdUtils();
-		}
-
-		return instance;
-	}
-
-	private String createId(String value) {
+	public static String createId(String value) {
 		return customName.concat(":")
 				.concat(value).concat(":")
 				.concat(Instant.now().toString()).concat("-")
 				.concat(customInstance.toString()).concat(":")
 				.concat(customVersion);
-	}
-
-	public CommitId createCommitId() {
-		return new CommitId(createId("Commit"));
-	}
-
-	public CommitId createCommitId(String value) {
-		return new CommitId(value);
-	}
-
-	public EmployeeId createEmployeeId() {
-		return new EmployeeId(createId("Employee"));
-	}
-
-	public EmployeeId createEmployeeId(String value) {
-		return new EmployeeId(value);
-	}
-
-	public ProjectId createProjectId() {
-		return new ProjectId(createId("Project"));
-	}
-
-	public ProjectId createProjectId(String value) {
-		return new ProjectId(value);
-	}
-
-	public RoleId createRoleId() {
-		return new RoleId(createId("Role"));
-	}
-
-	public RoleId createRoleId(String value) {
-		return new RoleId(value);
-	}
-
-	public TaskId createTaskId() {
-		return new TaskId(createId("Task"));
-	}
-
-	public TaskId createTaskId(String value) {
-		return new TaskId(value);
-	}
-
-	public TeamId createTeamId() {
-		return new TeamId(createId("Team"));
-	}
-
-	public TeamId createTeamId(String value) {
-		return new TeamId(value);
-	}
-
-
-	public WorkId createWorkId() {
-		return new WorkId(createId("Work"));
-	}
-
-	public WorkId createWorkId(String value) {
-		return new WorkId(value);
 	}
 }

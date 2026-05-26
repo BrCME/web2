@@ -16,13 +16,6 @@ CREATE TABLE auth."role"(
 	type role_type NOT NULL
 );
 
-INSERT INTO auth."role"(type) 
-VALUES 
-	('ADMIN'),
-	('MANAGER'),
-	('EMPLOYEE'),
-	('NEWCOMER');
-
 CREATE TABLE auth."role_to_user"(
 	role_id UUID,
 	user_id UUID,

@@ -3,7 +3,7 @@ package com.web2.safia.auth.api.event;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.web2.safia.auth.internal.UserId;
+import com.web2.safia.shared.vo.UserId;
 
 public record UserCreated(
 		UserId id,

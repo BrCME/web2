@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web2.safia.commit.api.dto.CommitResponse;
 import com.web2.safia.commit.internal.CommitService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Commit")
 @RestController
 @RequestMapping("/api/commits")
 public class CommitController {

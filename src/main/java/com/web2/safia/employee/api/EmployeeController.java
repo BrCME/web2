@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web2.safia.employee.api.dto.EmployeeResponse;
 import com.web2.safia.employee.internal.EmployeeService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Employee")
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
