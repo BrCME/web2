@@ -1,6 +1,6 @@
 # web2
 
-Trabalho Final da disciplina de Programação Web II.
+Trabalho Final da disciplina de Programação Web II. Incrementado com isolamento entre API e Clientes, usando a arquitetura de .
 
 ## Descrição
 
@@ -8,21 +8,19 @@ Com o **Sistema SAFIA** (Sistema de Apoio e Facilitação de Integração de Ati
 
 ## Requisitos
 
-- [ ] CRUD para Usuário
-- [ ] CRUD para Time
-- [ ] CRUD para Tarefa
-- [ ] CRUD para Projeto
-- [ ] CRUD para Trabalho
-- [ ] Painel Administrativo
-- [ ] Autenticação e Autorização
-- [ ] Logging
-- [ ] Telemetria
-- [ ] Docker
+- [x] CRUD para Usuário
+- [x] CRUD para Equipe
+- [x] CRUD para Tarefa
+- [x] CRUD para Projeto
+- [x] CRUD para Trabalho
+- [x] Autenticação e Autorização
+- [x] Logging
+- [x] Telemetria
+- [x] Docker
 - [x] Testes Unitários
 - [x] Cache
 - [x] Migrations
-- [x] MPA (Multi-Page Application)
-- [ ] Geração de Relatórios
+- [x] Geração de Relatórios
 
 ## Recursos Disponíveis
 
@@ -42,9 +40,17 @@ Este projeto disponibiliza fluxos de trabalho condicionados ao usuário logado:
 	- Pode gerar relatórios de dados por usuario
 	- Pode gerar relatórios de dados por time
 
-## Instalação
+## Arquitetura
 
-Para instalar o projeto é necessário 
+A arquitetura da API SAFIA está disposta utilizando SpringBoot Modular Monolith. Dessa forma, há o desacoplamento lógico entre módulos, como em microsserviços, enquanto o código fonte reside em um único projeto, como em monolito.
+
+Dessa forma, cada módulo mantém seus dados em um schema separado de um database centralizado, aproveitando somente a estrutura de dados útil para o próprio funcionamento.
+
+Detalhes de implementação e/ou abstração podem ser conferidos no arquivo `sketch.excalidraw`.
+
+<!-- ## Instalação -->
+
+<!-- Para instalar o projeto é necessário  -->
 
 ## Inicialização
 
@@ -68,10 +74,6 @@ Para realizar os testes, será necessário os seguintes comandos:
 
 Para a realização deste projeto, foram utilizadas as seguintes tecnologias:
 
-- TailWind
-- Thymeleaf
-- HTMX
-- JavaScript
 - Maven
 - Java
 - SpringBoot
