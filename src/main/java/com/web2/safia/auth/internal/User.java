@@ -16,16 +16,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.web2.safia.auth.api.dto.SignUpUserRequest;
 import com.web2.safia.shared.vo.UserId;
 import com.web2.safia.shared.vo.Username;
-import com.web2.safia.shared.vo.converter.UserIdConverter;
 import com.web2.safia.shared.vo.converter.UsernameConverter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -39,8 +37,7 @@ import jakarta.validation.constraints.Size;
 public class User implements UserDetails, CredentialsContainer {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Convert(converter = UserIdConverter.class)
+	@EmbeddedId
 	private UserId id;
 
 	@Column(name = "username", nullable = false, unique = true)
@@ -53,10 +50,10 @@ public class User implements UserDetails, CredentialsContainer {
 	@JdbcType(value = PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
-	private Status status = Status.PENDING;
+	private Status status;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "role_to_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@ManyToMany
+	@JoinTable(name = "role_to_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), schema = "auth")
 	private Set<Role> roles = new HashSet<>();
 
 	@CreatedDate
@@ -71,15 +68,19 @@ public class User implements UserDetails, CredentialsContainer {
 	private LocalDateTime deletedAt;
 
 	public User() {
+		this.id = new UserId();
+		this.status = Status.PENDING;
 		this.createdAt = LocalDateTime.now();
 	}
 
 	public User(UserId id) {
 		this.id = id;
+		this.status = Status.PENDING;
 		this.createdAt = LocalDateTime.now();
 	}
 
 	public User(SignUpUserRequest requestBody, String encodedPassword) {
+		this.id = new UserId();
 		this.username = new Username(requestBody.email());
 		this.password = encodedPassword;
 		this.status = Status.PENDING;
@@ -170,5 +171,13 @@ public class User implements UserDetails, CredentialsContainer {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles;
+	}
+
+	public void activate() {
+		this.status = Status.ACTIVE;
+	}
+
+	public boolean isActive() {
+		return status.equals(Status.ACTIVE);
 	}
 }

@@ -18,10 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.web2.safia.auth.api.dto.SignInUserRequest;
 import com.web2.safia.auth.api.dto.SignUpUserRequest;
 import com.web2.safia.auth.api.dto.SignUpUserResponse;
+import com.web2.safia.auth.api.dto.UserCredentialsResponse;
 import com.web2.safia.auth.api.dto.UserRoleResponse;
 import com.web2.safia.auth.api.event.UserCreated;
 import com.web2.safia.auth.api.event.UserLoggedIn;
 import com.web2.safia.auth.api.event.UserLoggedOut;
+import com.web2.safia.shared.exception.DomainException;
+import com.web2.safia.shared.exception.EntityNotFoundException;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class AuthService implements UserDetailsService {
@@ -42,6 +47,8 @@ public class AuthService implements UserDetailsService {
 		this.eventPublisher = eventPublisher;
 		this.passwordEncoder = passwordEncoder;
 		this.authRepository = authRepository;
+
+		logger.info("AuthService created!");
 	}
 
 	@Override
@@ -82,22 +89,60 @@ public class AuthService implements UserDetailsService {
 		return newUser;
 	}
 
-	public void signIn(SignInUserRequest requestBody) {
-		logger.info("User trying to sign in: {}", requestBody);
+	
+	public UserCredentialsResponse activate(SignInUserRequest requestBody) {
+		logger.info("User to activate: {}", requestBody.username());
+		var user = authRepository
+			.findUserByUsername(requestBody.username())
+			.orElseThrow(() -> {
+				logger.debug("User not found");
+				throw new EntityNotFoundException("Could not activate user");
+			});
+
+		if (user.isActive()) {
+			logger.debug("User already activated");
+			throw new DomainException("User already activated");
+		}
+
+		if (!passwordEncoder.matches(requestBody.password().concat(pepper), user.getPassword())) {
+			logger.debug("Invalid user credentials");
+			throw new DomainException("Could not activate user");
+		}
+
+		user.activate();
+		authRepository.save(user);
+
+		return new UserCredentialsResponse(user.getUsername(), user.getUsername());
+	}
+
+
+	public UserCredentialsResponse signIn(SignInUserRequest requestBody) {
+		logger.info("User trying to sign in: {}", requestBody.username());
 		var user = authRepository
 				.findUserByUsername(requestBody.username())
-				.filter(employee -> passwordEncoder.matches(requestBody.password().concat(pepper),
-						employee.getPassword()))
 				.orElseThrow(() -> {
 					logger.debug("Invalid user credentials");
 					throw new UsernameNotFoundException("Invalid user credentials");
 				});
 
+		if (!user.isActive() || !user.isEnabled() || !user.isAccountNonExpired() || !user.isAccountNonLocked()) {
+			logger.debug("User is not enabled or is expired");
+			throw new DomainException("User is not enabled or is expired");
+		}
+
+		if (!passwordEncoder.matches(requestBody.password().concat(pepper), user.getPassword())) {
+			logger.debug("Invalid user credentials");
+			throw new UsernameNotFoundException("Invalid user credentials");
+		}
+
 		this.eventPublisher
 				.publishEvent(new UserLoggedIn(user.getId(), requestBody.username()));
+
+		return new UserCredentialsResponse(requestBody.username(), requestBody.username());
 	}
 
-	public void signOut() {
+	public void signOut(HttpServletRequest request) {
+		logger.warn("Logged user: {}", request.getUserPrincipal());
 		logger.info("User trying to sign out: ");
 		var user = authRepository
 				.findUserByUsername(pepper)

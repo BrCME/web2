@@ -1,5 +1,7 @@
 package com.web2.safia.shared.config;
 
+import java.security.interfaces.RSAKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Optional;
 
 import javax.sql.DataSource;
@@ -17,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
@@ -26,6 +30,9 @@ import com.web2.safia.shared.entity.Employee;
 
 @Configuration
 public class SecurityConfig implements AuditorAware<Employee> {
+	// @Value("${custom.jwt.key.location}")
+	// private RSAPublicKey publicRsaKey;
+
 	@Value("${custom.security.salt-length:20}")
 	private int securitySaltLength;
 
@@ -41,8 +48,9 @@ public class SecurityConfig implements AuditorAware<Employee> {
 	@Value("${custom.security.iterations:16}")
 	private int securityIterations;
 
-	private static final String[] WHITE_LIST = { "/actuator", "/actuator/**", "/api/auth/sign-in",
-			"/api/auth/sign-up", "/api/auth/sign-out", "/swagger-ui/index.html" };
+	private static final String[] WHITE_LIST = { "/actuator", "/actuator/**", "/api/auth/*",
+			"/v3/api-docs/swagger-config", "/swagger-ui/index.html", "/v3/api-docs",
+			"/swagger-ui-bundle.js", "/swagger-ui-standalone-preset.js", "/swagger-initializer.js" };
 	private static final String[] ADMIN_LIST = { "/api/teams/**", "/api/employees/**", "/api/commits/**",
 			"/api/projects/**", "/api/works/**", "/api/tasks/**" };
 
@@ -52,22 +60,22 @@ public class SecurityConfig implements AuditorAware<Employee> {
 				.authorizeHttpRequests(request -> request
 						.requestMatchers(WHITE_LIST).permitAll()
 						.requestMatchers(ADMIN_LIST).hasRole("ADMIN")
-						// .anyRequest().authenticated()
 						.anyRequest().permitAll())
+						// .anyRequest().authenticated())
 				.sessionManagement(session -> session
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.cors(Customizer.withDefaults())
 				// .csrf(csrf -> csrf
 				// .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
 				.csrf(csrf -> csrf.disable())
-				// .oauth2ResourceServer(customizer ->
-				// customizer.jwt(Customizer.withDefaults()))
+				// .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+				.oauth2AuthorizationServer(oauth2 -> oauth2.oidc(Customizer.withDefaults()))
 				.build();
 	}
 
 	// @Bean
 	// JwtDecoder jwtDecoder() {
-	// return NimbusJwtDecoder.withKey(this.key);
+	// return NimbusJwtDecoder.withPublicKey(publicRsaKey).build();
 	// }
 
 	@Bean
@@ -79,11 +87,19 @@ public class SecurityConfig implements AuditorAware<Employee> {
 	UserDetailsService userDetailsService(DataSource datasource) {
 		var userDetailsManager = new JdbcUserDetailsManager(datasource);
 
-		userDetailsManager.setUsersByUsernameQuery(
-				"SELECT e.id, e.name, e.email, e.birth_date, (e.deleted_at IS NULL) FROM employee e WHERE e.email LIKE ?");
+		userDetailsManager.setUsersByUsernameQuery("""
+					SELECT u.id, u.username, (u.deleted_at IS NULL)
+					FROM auth."user" u
+					WHERE u.username LIKE ?
+				""");
 
-		userDetailsManager.setAuthoritiesByUsernameQuery(
-				"SELECT e.id, e.email, r.type FROM employee e INNER JOIN role_to_employee rte ON rte.employee_id = e.id INNER JOIN role r ON rte.role_id = r.id WHERE e.email LIKE ?");
+		userDetailsManager.setAuthoritiesByUsernameQuery("""
+					SELECT u.id, u.username, r.type
+					FROM auth."user" u
+						INNER JOIN auth."role_to_user" rtu ON rtu.user_id = u.id
+						INNER JOIN auth."role" r ON rtu.role_id = r.id
+					WHERE u.username LIKE ?"
+				""");
 
 		userDetailsManager.setRolePrefix("ROLE_");
 

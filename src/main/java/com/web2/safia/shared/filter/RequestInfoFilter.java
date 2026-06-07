@@ -22,6 +22,7 @@ public class RequestInfoFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+/*
 				logger.info("Local");
 				logger.info("Local Addr: {}", request.getLocalAddr());
 				logger.info("Local Name: {}", request.getLocalName());
@@ -63,7 +64,7 @@ public class RequestInfoFilter implements Filter {
 					var header = headers.next();
 					logger.info("{}: {}", header, httpRequest.getHeader(header));
 				}
-
+*/
 
 				chain.doFilter(request, response);
 	}

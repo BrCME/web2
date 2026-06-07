@@ -9,8 +9,13 @@ custom:
     name: "SAFIA-API"
     instance: 1
     version: "1.0"
+  # jwt:
+  #   key:
+  #     location: classpath:public_rsa.pub
 
 logging:
+  level:
+    '[org.springframework.security]': trace
   log4j2:
     config:
       override:
@@ -51,6 +56,7 @@ server:
     threads:
       max: 128
 
+
 spring:
   application:
     name: safia
@@ -84,8 +90,8 @@ spring:
       maximum-pool-size: 20
 
   jpa:
-    # show-sql: true
-    # open-in-view: false
+    show-sql: true
+    open-in-view: false
     generate-ddl: false
     hibernate:
       ddl-auto: none
@@ -123,6 +129,31 @@ spring:
     default: dev
 
   security:
+    oauth2:
+      authorizationserver:
+        client:
+        
+          oidc-client:
+            registration:
+              client-id: "oidc-client"
+              client-secret: "{noop}MySAFIASuperSecret"
+              client-authentication-methods:
+              - "client_secret_jwt"
+              authorization-grant-types:
+              - "authorization_code"
+              - "refresh_token"
+              redirect-uris:
+              - "http://localhost:8080/api/auth/sign-in"
+              # post-logout-redirect-uris:
+              # - "http://localhost:8080/"
+              scopes:
+              - "openid"
+              - "profile"
+            require-authorization-consent: true
+      # resourceserver:
+      #   jwt:
+      #     # issuer-uri: http://localhost:8080/api/issuer
+      #     public-key-location: classpath:public_rsa.pub
     user:
       name: admin
       password: SPR1NG_4DM1N

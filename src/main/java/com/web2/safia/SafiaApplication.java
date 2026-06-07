@@ -23,11 +23,9 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerial
 @Modulithic
 public class SafiaApplication {
 	public static void main(String[] args) {
-		var modules = ApplicationModules
-				.of(SafiaApplication.class);
-
-		modules.forEach(System.out::println);
-		modules.detectViolations();
+		ApplicationModules
+				.of(SafiaApplication.class)
+				.detectViolations();
 
 		SpringApplication.run(SafiaApplication.class, args);
 	}

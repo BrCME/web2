@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web2.safia.auth.api.dto.SignInUserRequest;
 import com.web2.safia.auth.api.dto.SignUpUserRequest;
+import com.web2.safia.auth.api.dto.UserCredentialsResponse;
 import com.web2.safia.auth.api.dto.UserRoleResponse;
 import com.web2.safia.auth.internal.AuthService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Tag(name = "Auth")
@@ -34,15 +36,19 @@ public class AuthController {
 		return ResponseEntity.created(URI.create(response.username())).build();
 	}
 
+	@PostMapping("/activate")
+	public ResponseEntity<UserCredentialsResponse> activate(@Valid @RequestBody SignInUserRequest requestBody) {
+		return ResponseEntity.ok(authService.activate(requestBody));
+	}
+
 	@PostMapping("/sign-in")
-	public ResponseEntity<Void> signIn(@Valid @RequestBody SignInUserRequest requestBody) {
-		authService.signIn(requestBody);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<UserCredentialsResponse> signIn(@Valid @RequestBody SignInUserRequest requestBody) {
+		return ResponseEntity.ok(authService.signIn(requestBody));
 	}
 
 	@PostMapping("/sign-out")
-	public ResponseEntity<Void> signOut() {
-		authService.signOut();
+	public ResponseEntity<Void> signOut(HttpServletRequest request) {
+		authService.signOut(request);
 		return ResponseEntity.noContent().build();
 	}
 

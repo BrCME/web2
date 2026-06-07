@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomIdUtils {
+	private static final String SEPARATOR = "$";
+	
 	private static String customName;
 	private static Integer customInstance;
 	private static String customVersion;
@@ -27,10 +29,12 @@ public class CustomIdUtils {
 	}
 
 	public static String createId(String value) {
-		return customName.concat(":")
-				.concat(value).concat(":")
-				.concat(Instant.now().toString()).concat("-")
-				.concat(customInstance.toString()).concat(":")
+		var instant = Long.valueOf(Instant.now().toEpochMilli());
+		
+		return customName.concat(SEPARATOR)
+				.concat(value).concat(SEPARATOR)
+				.concat(instant.toString()).concat(SEPARATOR)
+				.concat(customInstance.toString()).concat(SEPARATOR)
 				.concat(customVersion);
 	}
 }

@@ -5,23 +5,20 @@ import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.web2.safia.shared.vo.RoleId;
-import com.web2.safia.shared.vo.converter.RoleIdConverter;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity(name = "role")
 @Table(name = "role", schema = "auth")
-public class Role implements GrantedAuthority  {
+public class Role implements GrantedAuthority {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Convert(converter = RoleIdConverter.class)
+	@EmbeddedId
 	private RoleId id;
 
 	@JdbcType(value = PostgreSQLEnumJdbcType.class)
@@ -34,8 +31,8 @@ public class Role implements GrantedAuthority  {
 	}
 
 	public enum Type {
-	ADMIN, MANAGER, EMPLOYEE, NEWCOMER;
-}
+		ADMIN, MANAGER, EMPLOYEE, NEWCOMER;
+	}
 
 	public RoleId getId() {
 		return id;

@@ -3,6 +3,9 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+/logs
+public_rsa
+public_rsa.pub
 
 ### STS ###
 .apt_generated
