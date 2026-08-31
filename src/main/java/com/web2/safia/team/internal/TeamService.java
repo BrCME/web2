@@ -1,6 +1,7 @@
 package com.web2.safia.team.internal;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -93,7 +94,7 @@ public class TeamService extends BaseService {
 							String.format("Team with id '%s' not found to deactivate", id.toString()));
 				});
 
-		team.setDeletedAt(LocalDateTime.now());
+		team.setDeletedAt(LocalDateTime.now(ZoneOffset.UTC));
 		teamRepository.save(team);
 
 		eventPublisher.publishEvent(

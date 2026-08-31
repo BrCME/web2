@@ -25,15 +25,19 @@ class SafiaApplicationTests {
 
 	@Test
 	void generateUmlDocument() {
-		new Documenter(modules)
-			.writeModulesAsPlantUml()
-			.writeIndividualModulesAsPlantUml();
+		var document = new Documenter(modules)
+				.writeModulesAsPlantUml()
+				.writeIndividualModulesAsPlantUml();
+
+		assertNotNull(document);
 	}
 
 	@Test
 	void generateUmlDiagram() {
-		DiagramOptions
-			.defaults()
-			.withStyle(DiagramStyle.UML);
+		var diagram = DiagramOptions
+				.defaults()
+				.withStyle(DiagramStyle.UML);
+
+		assertNotNull(diagram);
 	}
 }

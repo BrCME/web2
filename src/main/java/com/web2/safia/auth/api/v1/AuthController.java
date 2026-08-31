@@ -1,4 +1,4 @@
-package com.web2.safia.auth.api;
+package com.web2.safia.auth.api.v1;
 
 import java.net.URI;
 
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web2.safia.auth.api.dto.SignInUserRequest;
-import com.web2.safia.auth.api.dto.SignUpUserRequest;
-import com.web2.safia.auth.api.dto.UserCredentialsResponse;
-import com.web2.safia.auth.api.dto.UserRoleResponse;
-import com.web2.safia.auth.internal.AuthService;
+import com.web2.safia.auth.api.v1.dtos.SignInUserRequest;
+import com.web2.safia.auth.api.v1.dtos.SignUpUserRequest;
+import com.web2.safia.auth.api.v1.dtos.UserCredentialsResponse;
+import com.web2.safia.auth.api.v1.dtos.UserRoleResponse;
+import com.web2.safia.auth.api.v1.services.AuthService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 
 @Tag(name = "Auth")
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 	private final AuthService authService;
 

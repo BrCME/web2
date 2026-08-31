@@ -1,4 +1,4 @@
-package com.web2.safia.auth.api.dto;
+package com.web2.safia.auth.api.v1.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;

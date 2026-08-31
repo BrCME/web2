@@ -1,6 +1,7 @@
 package com.web2.safia.project.internal;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -100,7 +101,7 @@ public class ProjectService extends BaseService {
 							String.format("Project with id '%s' not found to deactivate", id.toString()));
 				});
 
-		project.setDeletedAt(LocalDateTime.now());
+		project.setDeletedAt(LocalDateTime.now(ZoneOffset.UTC));
 		projectRepository.save(project);
 
 		eventPublisher.publishEvent(

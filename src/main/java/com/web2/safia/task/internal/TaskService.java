@@ -1,6 +1,7 @@
 package com.web2.safia.task.internal;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -143,7 +144,7 @@ public class TaskService extends BaseService {
 							String.format("Task with id '%s' not found to deactivate", id.toString()));
 				});
 
-		task.setDeletedAt(LocalDateTime.now());
+		task.setDeletedAt(LocalDateTime.now(ZoneOffset.UTC));
 		taskRepository.save(task);
 
 		eventPublisher.publishEvent(

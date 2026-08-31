@@ -12,7 +12,7 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.web2.safia.auth.api.dto.SignUpUserRequest;
+import com.web2.safia.auth.api.v1.dtos.SignUpUserRequest;
 import com.web2.safia.shared.base.BaseEntity;
 
 import jakarta.persistence.Column;

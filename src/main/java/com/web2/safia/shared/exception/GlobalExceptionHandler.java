@@ -1,6 +1,7 @@
 package com.web2.safia.shared.exception;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -118,6 +119,6 @@ public class GlobalExceptionHandler {
 			headers.next();
 		}
 
-		problemDetail.setProperty(WebExceptionAttributeType.TIMESTAMP.getNameInLowerCase(), LocalDateTime.now());
+		problemDetail.setProperty(WebExceptionAttributeType.TIMESTAMP.getNameInLowerCase(), LocalDateTime.now(ZoneOffset.UTC));
 	}
 }

@@ -1,13 +1,17 @@
-# Primeira tentativa de fazer um projeto SpringBoot rodar via docker
+FROM openjdk:21 AS BUILD
 
-FROM openjdk:21
+LABEL author="BrCME"
+
+WORKDIR /app
 
 VOLUME /tmp
 
-COPY . /usr/src/safia
+COPY .mnv mvnw src app/
 
-WORKDIR /usr/src/safia
+CMD ["./mvnw", "clean", "package"]
 
-# RUN ./mvnw test
+FROM BUILD AS RUN
 
-CMD ["./mvnw", "clean", "spring-boot:build"]
+EXPOSE 8443 8080
+
+CMD ["java", "-jar", "./target/safia-0.0.1-SNAPSHOT.jar"]

@@ -12,7 +12,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
 
 @Order(1)
 @Component
@@ -22,6 +21,7 @@ public class RequestInfoFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+
 /*
 				logger.info("Local");
 				logger.info("Local Addr: {}", request.getLocalAddr());
@@ -65,6 +65,8 @@ public class RequestInfoFilter implements Filter {
 					logger.info("{}: {}", header, httpRequest.getHeader(header));
 				}
 */
+
+				logger.info("Protocol: {}", request.getServletConnection().getProtocolConnectionId());
 
 				chain.doFilter(request, response);
 	}

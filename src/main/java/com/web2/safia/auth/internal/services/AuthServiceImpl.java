@@ -15,22 +15,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.web2.safia.auth.api.dto.SignInUserRequest;
-import com.web2.safia.auth.api.dto.SignUpUserRequest;
-import com.web2.safia.auth.api.dto.SignUpUserResponse;
-import com.web2.safia.auth.api.dto.UserCredentialsResponse;
-import com.web2.safia.auth.api.dto.UserRoleResponse;
-import com.web2.safia.auth.api.event.UserCreated;
-import com.web2.safia.auth.api.event.UserLoggedIn;
-import com.web2.safia.auth.api.event.UserLoggedOut;
+import com.web2.safia.auth.api.v1.dtos.SignInUserRequest;
+import com.web2.safia.auth.api.v1.dtos.SignUpUserRequest;
+import com.web2.safia.auth.api.v1.dtos.SignUpUserResponse;
+import com.web2.safia.auth.api.v1.dtos.UserCredentialsResponse;
+import com.web2.safia.auth.api.v1.dtos.UserRoleResponse;
+import com.web2.safia.auth.api.v1.events.UserCreated;
+import com.web2.safia.auth.api.v1.events.UserLoggedIn;
+import com.web2.safia.auth.api.v1.events.UserLoggedOut;
+import com.web2.safia.auth.api.v1.services.AuthService;
+import com.web2.safia.auth.internal.mappers.RoleMapper;
+import com.web2.safia.auth.internal.mappers.UserMapper;
 import com.web2.safia.shared.exception.DomainException;
 import com.web2.safia.shared.exception.EntityNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
-public class AuthService implements UserDetailsService {
-	private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+public class AuthServiceImpl implements AuthService, UserDetailsService {
+	private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
 	@Value("${pepper:SAFIACustomPasswordEncoderPepperV1.0}")
 	private String pepper;
@@ -38,17 +41,21 @@ public class AuthService implements UserDetailsService {
 	private final ApplicationEventPublisher eventPublisher;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthRepository authRepository;
+	private final UserMapper userMapper;
+	private final RoleMapper roleMapper;
 
-	public AuthService(
+	public AuthServiceImpl(
 			ApplicationEventPublisher eventPublisher,
 			PasswordEncoder passwordEncoder,
-			AuthRepository authRepository) {
+			AuthRepository authRepository,
+			UserMapper userMapper,
+			RoleMapper roleMapper) {
 
 		this.eventPublisher = eventPublisher;
 		this.passwordEncoder = passwordEncoder;
 		this.authRepository = authRepository;
-
-		logger.info("AuthService created!");
+		this.userMapper = userMapper;
+		this.roleMapper = roleMapper;
 	}
 
 	@Override
@@ -65,7 +72,7 @@ public class AuthService implements UserDetailsService {
 	public SignUpUserResponse signUp(SignUpUserRequest requestBody) {
 		logger.info("User trying to sign up: {}", requestBody);
 		var encodedPassword = passwordEncoder.encode(requestBody.password().concat(pepper));
-		var user = new User(requestBody, encodedPassword);
+		var user = userMapper.toEntity(requestBody, encodedPassword);
 
 		var roles = authRepository
 				.findAllRolesByName(Set.of(Role.Type.EMPLOYEE.name(), Role.Type.NEWCOMER.name()));
@@ -74,7 +81,7 @@ public class AuthService implements UserDetailsService {
 
 		authRepository.save(user);
 
-		var newUser = new SignUpUserResponse(user);
+		var newUser = userMapper.toSignUpUserResponse(user);
 
 		eventPublisher
 				.publishEvent(new UserCreated(
@@ -89,15 +96,14 @@ public class AuthService implements UserDetailsService {
 		return newUser;
 	}
 
-	
 	public UserCredentialsResponse activate(SignInUserRequest requestBody) {
 		logger.info("User to activate: {}", requestBody.username());
 		var user = authRepository
-			.findUserByUsername(requestBody.username())
-			.orElseThrow(() -> {
-				logger.debug("User not found");
-				throw new EntityNotFoundException("Could not activate user");
-			});
+				.findUserByUsername(requestBody.username())
+				.orElseThrow(() -> {
+					logger.debug("User not found");
+					throw new EntityNotFoundException("Could not activate user");
+				});
 
 		if (user.isActive()) {
 			logger.debug("User already activated");
@@ -114,7 +120,6 @@ public class AuthService implements UserDetailsService {
 
 		return new UserCredentialsResponse(user.getUsername(), user.getUsername());
 	}
-
 
 	public UserCredentialsResponse signIn(SignInUserRequest requestBody) {
 		logger.info("User trying to sign in: {}", requestBody.username());
@@ -159,7 +164,7 @@ public class AuthService implements UserDetailsService {
 		var roles = authRepository
 				.findAllRoles()
 				.stream()
-				.map(UserRoleResponse::new)
+				.map(roleMapper::toUserRoleResponse)
 				.toList();
 
 		return new PageImpl<>(roles);

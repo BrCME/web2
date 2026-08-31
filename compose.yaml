@@ -87,11 +87,6 @@ services:
   #   ports:
   #     - 8080:8080
   #     - 8433:8433
-    # healthcheck:
-    #   test: ["curl", "pg_isready", "-d", "db_safia"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 3
   #   depends_on:
   #     safia-cache:
   #       condition: service_healthy

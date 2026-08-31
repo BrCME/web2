@@ -2,6 +2,7 @@ package com.web2.safia.shared.base;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -44,7 +45,7 @@ public abstract class BaseEntity implements Serializable {
 
 	protected BaseEntity() {
 		this.id = UUID.randomUUID();
-		this.createdAt = LocalDateTime.now();
+		this.createdAt = LocalDateTime.now(ZoneOffset.UTC);
 	}
 
 	protected BaseEntity(UUID id) {

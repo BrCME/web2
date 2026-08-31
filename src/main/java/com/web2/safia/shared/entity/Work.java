@@ -2,6 +2,7 @@ package com.web2.safia.shared.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 import com.web2.safia.work.api.dto.CreateWorkRequest;
@@ -46,7 +47,7 @@ public class Work implements Serializable {
 
 	public Work() {
 		this.id = UUID.randomUUID();
-		this.startedAt = LocalDateTime.now();
+		this.startedAt = LocalDateTime.now(ZoneOffset.UTC);
 	}
 
 	public Work(UUID id) {
@@ -56,7 +57,7 @@ public class Work implements Serializable {
 	public Work(CreateWorkRequest request) {
 		this.id = UUID.randomUUID();
 		this.description = request.description();
-		this.startedAt = LocalDateTime.now();
+		this.startedAt = LocalDateTime.now(ZoneOffset.UTC);
 	}
 
 	public UUID getId() {
@@ -112,7 +113,7 @@ public class Work implements Serializable {
 	}
 
 	public void finish() {
-		this.endedAt = LocalDateTime.now();
+		this.endedAt = LocalDateTime.now(ZoneOffset.UTC);
 	}
 
 	@Override

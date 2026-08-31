@@ -1,7 +1,8 @@
-package com.web2.safia.auth.api.event;
+package com.web2.safia.auth.api.v1.events;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import com.web2.safia.shared.vo.UserId;
 
@@ -23,6 +24,6 @@ public record UserCreated(
 			String phoneNumber,
 			String cpf,
 			LocalDate birthDate) {
-		this(id, name, email, password, phoneNumber, cpf, birthDate, LocalDateTime.now());
+		this(id, name, email, password, phoneNumber, cpf, birthDate, LocalDateTime.now(ZoneOffset.UTC));
 	}
 }

@@ -1,8 +1,12 @@
 package com.web2.safia.shared.config;
 
-import java.security.interfaces.RSAKey;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -12,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,19 +25,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 import org.springframework.session.web.http.HttpSessionIdResolver;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
 import com.web2.safia.shared.entity.Employee;
 
 @Configuration
 public class SecurityConfig implements AuditorAware<Employee> {
-	// @Value("${custom.jwt.key.location}")
-	// private RSAPublicKey publicRsaKey;
-
 	@Value("${custom.security.salt-length:20}")
 	private int securitySaltLength;
 
@@ -48,11 +56,16 @@ public class SecurityConfig implements AuditorAware<Employee> {
 	@Value("${custom.security.iterations:16}")
 	private int securityIterations;
 
-	private static final String[] WHITE_LIST = { "/actuator", "/actuator/**", "/api/auth/*",
+	private static final String[] WHITE_LIST = { "/actuator", "/actuator/**", "/api/auth/**",
 			"/v3/api-docs/swagger-config", "/swagger-ui/index.html", "/v3/api-docs",
 			"/swagger-ui-bundle.js", "/swagger-ui-standalone-preset.js", "/swagger-initializer.js" };
 	private static final String[] ADMIN_LIST = { "/api/teams/**", "/api/employees/**", "/api/commits/**",
 			"/api/projects/**", "/api/works/**", "/api/tasks/**" };
+
+	// private static final List<String> ORIGINS_LIST = List.of("*");
+	// private static final List<String> METHODS_LIST = List.of("GET", "POST",
+	// "PATCH", "PUT", "DELETE");
+	// private static final List<String> HEADERS_LIST = List.of("*");
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -61,22 +74,17 @@ public class SecurityConfig implements AuditorAware<Employee> {
 						.requestMatchers(WHITE_LIST).permitAll()
 						.requestMatchers(ADMIN_LIST).hasRole("ADMIN")
 						.anyRequest().permitAll())
-						// .anyRequest().authenticated())
-				.sessionManagement(session -> session
-						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.cors(Customizer.withDefaults())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				// .cors(Customizer.withDefaults())
+				.cors(cors -> cors.disable())
 				// .csrf(csrf -> csrf
 				// .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
 				.csrf(csrf -> csrf.disable())
 				// .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
 				.oauth2AuthorizationServer(oauth2 -> oauth2.oidc(Customizer.withDefaults()))
+				// .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
-
-	// @Bean
-	// JwtDecoder jwtDecoder() {
-	// return NimbusJwtDecoder.withPublicKey(publicRsaKey).build();
-	// }
 
 	@Bean
 	HttpSessionIdResolver sessionIdResolver() {
@@ -88,13 +96,19 @@ public class SecurityConfig implements AuditorAware<Employee> {
 		var userDetailsManager = new JdbcUserDetailsManager(datasource);
 
 		userDetailsManager.setUsersByUsernameQuery("""
-					SELECT u.id, u.username, (u.deleted_at IS NULL)
+					SELECT
+						u.id,
+						u.username,
+						(u.deleted_at IS NULL)
 					FROM auth."user" u
 					WHERE u.username LIKE ?
 				""");
 
 		userDetailsManager.setAuthoritiesByUsernameQuery("""
-					SELECT u.id, u.username, r.type
+					SELECT
+						u.id,
+						u.username,
+						r.type
 					FROM auth."user" u
 						INNER JOIN auth."role_to_user" rtu ON rtu.user_id = u.id
 						INNER JOIN auth."role" r ON rtu.role_id = r.id
@@ -104,6 +118,32 @@ public class SecurityConfig implements AuditorAware<Employee> {
 		userDetailsManager.setRolePrefix("ROLE_");
 
 		return userDetailsManager;
+	}
+
+	@Bean
+	JWKSource<com.nimbusds.jose.proc.SecurityContext> jwkSource() {
+		KeyPair keyPair = generateRsaKey();
+		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+
+		var rsaKey = new com.nimbusds.jose.jwk.RSAKey.Builder(publicKey)
+				.privateKey(privateKey)
+				.keyID(UUID.randomUUID().toString())
+				.build();
+
+		var jwkSet = new JWKSet(rsaKey);
+
+		return new ImmutableJWKSet<>(jwkSet);
+	}
+
+	@Bean
+	JwtDecoder jwtDecoder(JWKSource<com.nimbusds.jose.proc.SecurityContext> jwkSource) {
+		return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+	}
+
+	@Bean
+	AuthorizationServerSettings authorizationServerSettings() {
+		return AuthorizationServerSettings.builder().build();
 	}
 
 	@Bean
@@ -125,4 +165,32 @@ public class SecurityConfig implements AuditorAware<Employee> {
 				.map(Authentication::getPrincipal)
 				.map(Employee.class::cast);
 	}
+
+	private static KeyPair generateRsaKey() {
+		KeyPair keyPair;
+
+		try {
+			var keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+			keyPairGenerator.initialize(2048);
+			keyPair = keyPairGenerator.generateKeyPair();
+		} catch (Exception ex) {
+			throw new IllegalStateException(ex);
+		}
+
+		return keyPair;
+	}
+
+	// @Bean
+	// CorsConfigurationSource corsConfigurationSource() {
+	// var corsConfiguration = new CorsConfiguration();
+	// corsConfiguration.setAllowedOrigins(ORIGINS_LIST);
+	// corsConfiguration.setAllowedMethods(METHODS_LIST);
+	// corsConfiguration.setAllowedHeaders(HEADERS_LIST);
+	// corsConfiguration.setAllowCredentials(true);
+
+	// var source = new UrlBasedCorsConfigurationSource();
+	// source.registerCorsConfiguration("/**", corsConfiguration);
+
+	// return source;
+	// }
 }

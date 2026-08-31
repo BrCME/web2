@@ -1,6 +1,7 @@
 package com.web2.safia.auth.internal;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +14,6 @@ import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.web2.safia.auth.api.dto.SignUpUserRequest;
 import com.web2.safia.shared.vo.UserId;
 import com.web2.safia.shared.vo.Username;
 import com.web2.safia.shared.vo.converter.UsernameConverter;
@@ -70,21 +70,13 @@ public class User implements UserDetails, CredentialsContainer {
 	public User() {
 		this.id = new UserId();
 		this.status = Status.PENDING;
-		this.createdAt = LocalDateTime.now();
+		this.createdAt = LocalDateTime.now(ZoneOffset.UTC);
 	}
 
 	public User(UserId id) {
 		this.id = id;
 		this.status = Status.PENDING;
-		this.createdAt = LocalDateTime.now();
-	}
-
-	public User(SignUpUserRequest requestBody, String encodedPassword) {
-		this.id = new UserId();
-		this.username = new Username(requestBody.email());
-		this.password = encodedPassword;
-		this.status = Status.PENDING;
-		this.createdAt = LocalDateTime.now();
+		this.createdAt = LocalDateTime.now(ZoneOffset.UTC);
 	}
 
 	public enum Status {
